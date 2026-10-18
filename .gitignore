@@ -1,0 +1,20 @@
+# Secrets: the Google Maps key lives only here and in Cloudflare's settings
+.env
+
+# Private source data: contains member-only fields (values, loans, equity, lender names)
+data/source/
+
+# Local Google Maps prototype: its data file includes member-only fields
+prototype/
+
+# Internal planning docs (pricing split, bot data contract); the repo is public
+docs/
+
+# Full-size aerial originals (the site uses the resized copies in site/photos)
+data/aerial/
+
+# Generated at build/serve time from the GOOGLE_MAPS_KEY setting
+site/config.js
+
+__pycache__/
+*.pyc
