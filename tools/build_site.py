@@ -42,6 +42,24 @@ def title(t):
     return " ".join(w if any(c.isdigit() for c in w) else w.capitalize() for w in t.split())
 
 
+def write_backdrop(public):
+    """site/assets/backdrop.svg: the Census TIGER county map (public domain) with every pin of the sale."""
+    import math
+    R = 6378137.0
+    merc = lambda lon, lat: (math.radians(lon) * R, math.log(math.tan(math.pi / 4 + math.radians(lat) / 2)) * R)
+    (x0, y0), (x1, y1) = merc(-95.98, 29.47), merc(-94.88, 30.19)  # the basemap's extent, 1000 x 755
+    colors = {"single_family": "#1E5BD8", "condo_townhome": "#8A4FD1", "multifamily": "#F28C1B", "commercial": "#D2141C", "vacant_land": "#3E9B47"}
+    pins = []
+    for r in public:
+        if r["lat"] is None:
+            continue
+        x, y = merc(r["lon"], r["lat"])
+        pins.append(f'<circle cx="{(x - x0) / (x1 - x0) * 1000:.1f}" cy="{(y1 - y) / (y1 - y0) * 755:.1f}" r="2.6" fill="{colors.get(r["type"], "#8A97AA")}"/>')
+    base = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "county_basemap.svg"), encoding="utf-8").read()
+    svg = base.replace("</svg>", '<g stroke="#fff" stroke-width=".8">' + "".join(pins) + "</g></svg>")
+    open(os.path.join(SITE, "assets", "backdrop.svg"), "w", encoding="utf-8").write(svg)
+
+
 def main(sale, data_csv, aerial_dir):
     rows = list(csv.DictReader(open(data_csv, encoding="utf-8")))
     idx = {r["doc_id"]: r for r in csv.DictReader(open(os.path.join(aerial_dir, "index.csv"), encoding="utf-8"))}
@@ -100,6 +118,7 @@ def main(sale, data_csv, aerial_dir):
     # what /notice/<id> may fetch, and the file name it saves under (functions/notice/[id].js)
     notices = {r["id"]: {"u": r["notice_url"], "f": notice_filename(r)} for r in public if r["notice_url"]}
     json.dump(notices, open(os.path.join(SITE, "data", "notices.json"), "w", encoding="utf-8"), separators=(",", ":"))
+    write_backdrop(public)
     pages = write_pages(SITE, sale, public, stats)
     print(f"{pages} property pages in site/property/")
     print(f"{len(public)} properties, {sum(1 for p in public if p['photo'])} photos, new this week {stats['new_this_week']} (since {new_cut})")

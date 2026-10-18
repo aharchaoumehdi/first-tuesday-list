@@ -78,3 +78,22 @@
   .nearby{grid-template-columns:minmax(0,1fr)}
   .auction .when{font-size:28px}
 }
+/* back to the map: sticky bar on every screen size */
+.backbar{position:sticky;top:62px;z-index:20;background:rgba(244,246,249,.94);backdrop-filter:saturate(1.4) blur(6px);border-bottom:1px solid var(--line)}
+.backbar .wrap{display:flex;align-items:center;gap:14px;min-height:58px;flex-wrap:wrap}
+.backbar .back{min-height:42px;padding:0 18px 0 12px;font-size:15px;gap:6px;box-shadow:0 4px 12px rgba(19,41,75,.25)}
+.backbar .hint{font-size:13px;color:var(--muted)}
+.gutter{display:none}
+/* wide screens: the page is a sheet over the map; the map on either side leads back to it */
+@media (min-width:1360px){
+  body[data-page=property]{background:#1B2A40 url(/assets/backdrop.svg) center 40%/cover fixed}
+  body[data-page=property] .site-footer{margin-top:0}
+  .sheet{position:relative;z-index:2;max-width:1240px;margin:18px auto 0;background:var(--bg);border-radius:20px 20px 0 0;box-shadow:0 0 0 1px rgba(14,26,43,.08),0 30px 80px rgba(14,26,43,.45);overflow:clip;padding-bottom:40px}
+  .backbar{top:62px;border-radius:20px 20px 0 0}
+  .gutter{display:flex;position:fixed;top:96px;bottom:0;z-index:1;width:calc((100vw - 1240px) / 2);align-items:center;justify-content:center;text-decoration:none;background:rgba(14,26,43,.38);transition:background .2s}
+  .gl{left:0}.gr{right:0}
+  .gutter span{writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font-weight:700;font-size:15px;letter-spacing:.04em;background:rgba(14,26,43,.78);padding:16px 9px;border-radius:999px;opacity:.85;transition:opacity .2s,transform .2s}
+  .gr span{transform:none}
+  .gutter:hover{background:rgba(14,26,43,.12)}
+  .gutter:hover span{opacity:1}
+}

@@ -119,7 +119,12 @@ def body(r, sale, stats, nearby, prev, nxt):
         f'<small>{d:.1f} mi away{" · New" if n["first"] >= stats["new_since"] else ""}</small></span></a>' for n, d in nearby)
     pn = (f'<a class="btn btn-ghost" href="/property/{e(prev["id"])}">‹ {e(prev["addr"])}</a>' if prev else "<span></span>") + \
          (f'<a class="btn btn-ghost" href="/property/{e(nxt["id"])}">{e(nxt["addr"])} ›</a>' if nxt else "")
+    back = f"/map#{e(r['id'])}"
     return f"""
+<a class="gutter gl" href="{back}" data-back aria-label="Back to the map"><span>‹ Back to the map</span></a>
+<a class="gutter gr" href="{back}" data-back aria-label="Back to the map"><span>Back to the map ›</span></a>
+<div class="sheet">
+<div class="backbar"><div class="wrap"><a class="btn btn-navy back" href="{back}" data-back><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back to the map</a><span class="hint">All {stats['total']} properties for {nice(sale)} · or press Esc</span></div></div>
 <div class="wrap crumbs"><a href="/map">{nice(sale, year=True)} sale</a> / <a href="/map?q={quote(r['zip'])}">{e(r['city'])} {e(r['zip'])}</a> / <span class="mono">{e(r['id'])}</span></div>
 
 <div class="wrap p-title">
@@ -130,9 +135,8 @@ def body(r, sale, stats, nearby, prev, nxt):
 <div class="see"><span>See it on</span>{ext}</div>
 </div>
 <div class="acts">
-{f'<a class="btn btn-navy" href="/notice/{e(r["id"])}" download="{e(notice_filename(r))}" title="Downloads the Harris County Clerk&#39;s official notice as {e(notice_filename(r))}">{DL}Save notice PDF</a>' if r['notice_url'] else ''}
+{f'<a class="btn btn-ghost" href="/notice/{e(r["id"])}" download="{e(notice_filename(r))}" title="Downloads the Harris County Clerk&#39;s official notice as {e(notice_filename(r))}">{DL}Save notice PDF</a>' if r['notice_url'] else ''}
 <a class="btn btn-ghost" href="{e(L['directions'])}" target="_blank" rel="noopener">Directions</a>
-<a class="btn btn-ghost" href="/map#{e(r['id'])}">See it on the big map</a>
 {'<div class="acts-note">Saves the county clerk&#39;s official notice, named with this address.</div>' if r['notice_url'] else ''}
 </div>
 </div>
@@ -255,6 +259,7 @@ def body(r, sale, stats, nearby, prev, nxt):
 <div class="nearby">{near}</div>
 <div class="pn">{pn}</div>
 </section>
+</div>
 """
 
 

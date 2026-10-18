@@ -5,6 +5,16 @@
   const lat = parseFloat(root.dataset.lat), lon = parseFloat(root.dataset.lon);
   const $ = k => root.querySelector(`[data-k="${k}"]`);
 
+  // Back to the map: return to the exact map view (zoom, filters) when we came from it,
+  // otherwise open the map on this property. Esc does the same.
+  const fromMap = (() => { try { const u = new URL(document.referrer); return u.origin === location.origin && (u.pathname === '/map' || u.pathname === '/'); } catch (e) { return false; } })();
+  const goBack = ev => { if (fromMap && history.length > 1) { if (ev) ev.preventDefault(); history.back(); } };
+  document.querySelectorAll('[data-back]').forEach(a => a.addEventListener('click', goBack));
+  document.addEventListener('keydown', ev => {
+    if (ev.key !== 'Escape' || /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) return;
+    if (fromMap && history.length > 1) history.back(); else location.href = '/map#' + encodeURIComponent(root.dataset.id);
+  });
+
   // stagger the sheen on the locked bars so it travels down each card, top to bottom
   root.querySelectorAll('.card').forEach(card => card.querySelectorAll('.redact i').forEach((bar, i) => bar.style.setProperty('--d', (i * 0.22).toFixed(2) + 's')));
 
