@@ -5,6 +5,9 @@
   const lat = parseFloat(root.dataset.lat), lon = parseFloat(root.dataset.lon);
   const $ = k => root.querySelector(`[data-k="${k}"]`);
 
+  // stagger the sheen on the locked bars so it travels down each card, top to bottom
+  root.querySelectorAll('.card').forEach(card => card.querySelectorAll('.redact i').forEach((bar, i) => bar.style.setProperty('--d', (i * 0.22).toFixed(2) + 's')));
+
   const sale = new Date(root.dataset.sale + 'T10:00:00-06:00');
   const days = Math.ceil((sale - new Date()) / 864e5);
   $('days').textContent = days > 1 ? `${days} days away` : days === 1 ? 'Tomorrow' : days === 0 ? 'Today' : 'Sale date passed';
