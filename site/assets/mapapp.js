@@ -93,8 +93,10 @@ window.FTLMap = (function () {
     function streetView(r) {
       if (!map) { window.open(links(r).street, '_blank', 'noopener'); return; }
       const target = new google.maps.LatLng(r.lat, r.lon);
-      sv.getPanorama({ location: target, radius: 80, source: google.maps.StreetViewSource.OUTDOOR }, (res, status) => {
-        if (status !== 'OK') { window.open(links(r).street, '_blank', 'noopener'); return; }
+      // nearest first: Google's "best" image near a lot can be a freeway overpass
+      const find = (radius, preference) => new Promise(ok => sv.getPanorama({ location: target, radius, preference, source: google.maps.StreetViewSource.OUTDOOR }, (res, status) => ok(status === 'OK' ? res : null)));
+      find(60, google.maps.StreetViewPreference.NEAREST).then(res => res || find(120, google.maps.StreetViewPreference.BEST)).then(res => {
+        if (!res) { window.open(links(r).street, '_blank', 'noopener'); return; }
         const p = map.getStreetView();
         p.setPano(res.location.pano);
         p.setPov({ heading: google.maps.geometry.spherical.computeHeading(res.location.latLng, target), pitch: 4 });

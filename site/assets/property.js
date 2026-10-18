@@ -38,11 +38,13 @@
     const el = $('pano');
     try {
       await loadMaps();
-      const { StreetViewPanorama, StreetViewService, StreetViewSource } = await google.maps.importLibrary('streetView');
+      const { StreetViewPanorama, StreetViewService, StreetViewSource, StreetViewPreference } = await google.maps.importLibrary('streetView');
       const { spherical } = await google.maps.importLibrary('geometry');
-      const target = new google.maps.LatLng(lat, lon);
-      new StreetViewService().getPanorama({ location: target, radius: 80, source: StreetViewSource.OUTDOOR }, (res, status) => {
-        if (status !== 'OK') { fallback(el, 'Google has no Street View image within 80 m of this lot.'); return; }
+      const target = new google.maps.LatLng(lat, lon), svs = new StreetViewService();
+      // the nearest image is usually the street in front; Google's "best" one can be a freeway nearby
+      const find = (radius, preference) => new Promise(ok => svs.getPanorama({ location: target, radius, preference, source: StreetViewSource.OUTDOOR }, (res, status) => ok(status === 'OK' ? res : null)));
+      Promise.resolve(find(60, StreetViewPreference.NEAREST)).then(res => res || find(120, StreetViewPreference.BEST)).then(res => {
+        if (!res) { fallback(el, 'Google has no Street View image near this lot.'); return; }
         new StreetViewPanorama(el, {
           pano: res.location.pano, pov: { heading: spherical.computeHeading(res.location.latLng, target), pitch: 4 }, zoom: 1,
           addressControl: false, fullscreenControl: true, motionTracking: false
