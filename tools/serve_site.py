@@ -8,6 +8,8 @@ import http.server
 import json
 import os
 import socketserver
+import urllib.parse
+import urllib.request
 
 WEBSITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT = os.path.join(WEBSITE, "site")
@@ -39,11 +41,33 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if path.startswith("/notice/"):
+            self.send_notice(path.rsplit("/", 1)[-1])
+            return
         if "." not in os.path.basename(path) and path != "/" and os.path.exists(os.path.join(ROOT, path.strip("/") + ".html")):
             self.path = path + ".html"
         elif not os.path.exists(os.path.join(ROOT, path.lstrip("/"))) and path != "/":
             self.path = "/404.html"
         super().do_GET()
+
+
+    def send_notice(self, doc_id):
+        """Local stand-in for functions/notice/[id].js: the county PDF, saved under the address."""
+        notices = json.load(open(os.path.join(ROOT, "data", "notices.json"), encoding="utf-8"))
+        n = notices.get(doc_id)
+        if not n or urllib.parse.urlparse(n["u"]).hostname != "cclerk.hctx.net":
+            self.send_error(404, "Notice not found")
+            return
+        req = urllib.request.Request(n["u"], headers={"User-Agent": "FirstTuesdayList/1.0 (+https://firsttuesdaylist.com)"})
+        with urllib.request.urlopen(req, timeout=30) as res:
+            body = res.read()
+        ascii_name = n["f"].encode("ascii", "ignore").decode().replace('"', "")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/pdf")
+        self.send_header("Content-Disposition", f"attachment; filename=\"{ascii_name}\"; filename*=UTF-8''{urllib.parse.quote(n['f'])}")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
 
 socketserver.ThreadingTCPServer.allow_reuse_address = True

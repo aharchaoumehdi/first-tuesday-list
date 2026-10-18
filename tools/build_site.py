@@ -18,7 +18,7 @@ from collections import Counter
 
 from PIL import Image
 
-from property_pages import write_pages
+from property_pages import notice_filename, write_pages
 
 SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
 PHOTO_W = 800
@@ -97,6 +97,9 @@ def main(sale, data_csv, aerial_dir):
     # every public field must be on the free list; anything else is member data
     leaked = set(public[0]) - FREE_FIELDS
     assert not leaked, f"member fields in public data: {leaked}"
+    # what /notice/<id> may fetch, and the file name it saves under (functions/notice/[id].js)
+    notices = {r["id"]: {"u": r["notice_url"], "f": notice_filename(r)} for r in public if r["notice_url"]}
+    json.dump(notices, open(os.path.join(SITE, "data", "notices.json"), "w", encoding="utf-8"), separators=(",", ":"))
     pages = write_pages(SITE, sale, public, stats)
     print(f"{pages} property pages in site/property/")
     print(f"{len(public)} properties, {sum(1 for p in public if p['photo'])} photos, new this week {stats['new_this_week']} (since {new_cut})")

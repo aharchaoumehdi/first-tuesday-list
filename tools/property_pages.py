@@ -5,6 +5,7 @@ appear as locked rows with a grey bar, never with a value: the public build has
 no member data to leak.
 """
 import html
+import re
 import math
 import os
 import shutil
@@ -19,6 +20,12 @@ DL = ('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="curre
 SITE_URL = "https://firsttuesdaylist.com"
 
 e = html.escape
+
+
+def notice_filename(r):
+    """e.g. "934 Autumn Oaks Dr, Houston TX 77079 - foreclosure notice FRCL-2026-7447.pdf" """
+    name = f"{r['addr']}, {r['city']} TX {r['zip']} - {'HOA lien' if r['notice'] == 'hoa' else 'foreclosure'} notice {r['id']}.pdf"
+    return re.sub(r'[<>:"/\|?*#]+', ' ', name).replace('  ', ' ')
 
 
 def kind(r):
@@ -103,7 +110,7 @@ def body(r, sale, stats, nearby, prev, nxt):
            f'<a class="ext" href="{e(L["realtor"])}" target="_blank" rel="noopener"><img src="{FAV}realtor.com" alt="">Realtor.com</a>'
            f'<a class="ext" href="{e(L["redfin"])}" target="_blank" rel="noopener"><img src="{FAV}redfin.com" alt="">Redfin</a>'
            + (f'<a class="ext" href="{e(L["street"])}" target="_blank" rel="noopener"><img src="{FAV}maps.google.com" alt="">Street View</a>' if L["street"] else ""))
-    research = [("Save the foreclosure notice (PDF)", "County Clerk copy", r["notice_url"]), ("Flood map for this address", "FEMA", L["fema"]),
+    research = [("Save the foreclosure notice (PDF)", "County Clerk copy", f"/notice/{r['id']}" if r["notice_url"] else ""), ("Flood map for this address", "FEMA", L["fema"]),
                 ("Street View", "Google", L["street"]), ("Directions", "Google Maps", L["directions"]),
                 ("Zillow", "Listing history, if any", L["zillow"]), ("Realtor.com", "Listing history, if any", L["realtor"])]
     near = "".join(
@@ -123,10 +130,10 @@ def body(r, sale, stats, nearby, prev, nxt):
 <div class="see"><span>See it on</span>{ext}</div>
 </div>
 <div class="acts">
-{f'<a class="btn btn-navy" href="{e(r["notice_url"])}" target="_blank" rel="noopener" title="The Harris County Clerk&#39;s official notice opens as a PDF in a new tab, ready to save or print">{DL}Save notice PDF</a>' if r['notice_url'] else ''}
+{f'<a class="btn btn-navy" href="/notice/{e(r["id"])}" download="{e(notice_filename(r))}" title="Downloads the Harris County Clerk&#39;s official notice as {e(notice_filename(r))}">{DL}Save notice PDF</a>' if r['notice_url'] else ''}
 <a class="btn btn-ghost" href="{e(L['directions'])}" target="_blank" rel="noopener">Directions</a>
 <a class="btn btn-ghost" href="/map#{e(r['id'])}">See it on the big map</a>
-{'<div class="acts-note">The notice is the county clerk&#39;s official PDF. It opens in a new tab to save or print.</div>' if r['notice_url'] else ''}
+{'<div class="acts-note">Saves the county clerk&#39;s official notice, named with this address.</div>' if r['notice_url'] else ''}
 </div>
 </div>
 
@@ -233,7 +240,7 @@ def body(r, sale, stats, nearby, prev, nxt):
 <aside class="p-side">
 <div class="card">
 <div class="h3">Research links</div>
-<div class="rlinks">{''.join(f'<a href="{e(u)}" target="_blank" rel="noopener"><span>{e(t)}</span><small>{e(s)}</small></a>' for t, s, u in research if u)}</div>
+<div class="rlinks">{''.join(f'<a href="{e(u)}"' + (' download' if u.startswith('/notice/') else ' target="_blank" rel="noopener"') + f'><span>{e(t)}</span><small>{e(s)}</small></a>' for t, s, u in research if u)}</div>
 </div>
 <div class="card">
 <div class="h3"><span class="ico-lock"></span>Member tools</div>
