@@ -18,9 +18,13 @@ from collections import Counter
 
 from PIL import Image
 
+from property_pages import write_pages
+
 SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
 PHOTO_W = 800
 NEW_SINCE_DAYS = 7
+FREE_FIELDS = {"id", "addr", "city", "zip", "lat", "lon", "photo", "type", "notice", "first", "window", "location",
+               "zone", "sfha", "notice_url", "repeat"}
 
 TYPES = {"single_family": "Single family", "condo_townhome": "Condo / townhome", "multifamily": "Multifamily",
          "commercial": "Commercial", "vacant_land": "Vacant land"}
@@ -66,6 +70,7 @@ def main(sale, data_csv, aerial_dir):
             "photo": photo, "type": r["property_type"], "notice": r["notice_type"], "first": r["first_seen"],
             "window": r["sale_time_window"], "location": r["sale_location"], "zone": r["fema_flood_zone"],
             "sfha": r["in_special_flood_hazard_area"] == "yes", "notice_url": r["notice_pdf_url"],
+            "repeat": r["repeat_posting"] == "yes",
         })
 
     mv = sorted(v for v in (num(r["market_value"]) for r in rows) if v)
@@ -89,8 +94,11 @@ def main(sale, data_csv, aerial_dir):
     json.dump({"sale": sale, "rows": public}, open(os.path.join(SITE, "data", f"sale-{sale}.json"), "w", encoding="utf-8"), separators=(",", ":"))
     json.dump(stats, open(os.path.join(SITE, "data", f"stats-{sale}.json"), "w", encoding="utf-8"), separators=(",", ":"))
     json.dump({"current_sale": sale}, open(os.path.join(SITE, "data", "current.json"), "w", encoding="utf-8"))
-    leaked = {"market_value", "est_equity", "mv", "eq", "loan", "beds", "sqft"} & set(public[0])
+    # every public field must be on the free list; anything else is member data
+    leaked = set(public[0]) - FREE_FIELDS
     assert not leaked, f"member fields in public data: {leaked}"
+    pages = write_pages(SITE, sale, public, stats)
+    print(f"{pages} property pages in site/property/")
     print(f"{len(public)} properties, {sum(1 for p in public if p['photo'])} photos, new this week {stats['new_this_week']} (since {new_cut})")
 
 

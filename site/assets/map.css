@@ -5,6 +5,11 @@
 .fm-panel input[type=search]{min-height:38px;border:1px solid #C5CEDB;border-radius:10px;padding:0 12px;font:inherit;font-size:14px}
 .fm-chips{display:flex;flex-wrap:wrap;gap:6px}
 .fm-count{display:flex;justify-content:space-between;align-items:baseline}
+.fm-inview{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#3A4A63;min-height:20px}
+.fm-inview .chip{min-height:26px;border-color:var(--navy)}
+.fm-inview .chip[hidden]{display:none}
+.fm-home-btn{display:inline-flex;align-items:center;gap:6px;margin:0 0 8px 10px;min-height:40px;padding:0 12px;border:0;border-radius:8px;background:#fff;color:var(--navy);font:inherit;font-size:13px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.3);cursor:pointer}
+.fm-home-btn:hover{background:#F4F7FD}
 .fm-legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11px;color:#3A4A63;border-top:1px solid #E2E7EF;padding-top:8px}
 .fm-legend span{display:inline-flex;align-items:center;gap:5px}
 .fm-card{position:absolute;right:14px;bottom:14px;width:340px;max-width:calc(100% - 28px);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 16px 36px rgba(14,26,43,.32);z-index:3;display:none}

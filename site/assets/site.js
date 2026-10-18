@@ -13,7 +13,7 @@
   const header = document.createElement('header');
   header.className = 'site-header';
   header.innerHTML = `<div class="wrap">
-    <a class="logo" href="/" aria-label="First Tuesday List home"><img src="/assets/logo.png" alt="First Tuesday List" width="185" height="30"></a>
+    <a class="logo" href="/" aria-label="First Tuesday List home"><img src="/assets/logo.png" alt="First Tuesday List" width="166" height="40"></a>
     <nav class="site-nav" id="siteNav" aria-label="Main">${nav.map(([k, h, l]) => `<a href="${h}"${k === page ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>
     <a class="btn btn-red cta" href="/#signup">Get the free list</a>
     <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -26,7 +26,7 @@
   const footer = document.createElement('footer');
   footer.className = 'site-footer';
   footer.innerHTML = `<div class="wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><img src="/assets/logo.png" alt="First Tuesday List" style="height:26px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><img src="/assets/logo.png" alt="First Tuesday List" width="132" height="32" style="height:32px;width:auto">
     <nav aria-label="Footer"><a href="/map">Map</a><a href="/pricing">Pricing</a><a href="/#how">How we research</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:leads@firsttuesdaylist.com">Contact</a></nav></div>
     <p>Compiled from public records. Not verified. Do your own title and lien research before bidding. First Tuesday List is not a law firm, title company, broker or auctioneer and does not give legal or investment advice. Aerial photos: Harris County Appraisal District imagery. Links to Zillow, Realtor.com, Redfin and Google open their sites; we're not affiliated with them.</p>
     <p>© ${new Date().getFullYear()} First Tuesday List</p></div>`;
