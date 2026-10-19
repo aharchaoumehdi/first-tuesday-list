@@ -28,8 +28,18 @@
 .fm-th img{width:100%;height:80px;object-fit:cover;display:block}
 .fm-th span{display:block;padding:4px 7px;font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fm-th small{display:block;padding:0 7px 5px;font-size:11px;color:var(--muted);font-weight:400}
-.fm-pin{width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(14,26,43,.5);cursor:pointer;transition:transform .15s}
-.fm-pin.sel{transform:scale(1.8);outline:3px solid rgba(210,20,28,.35)}
+/* property pin: a teardrop in the type color with a white rim, anchored at its tip */
+.fm-pin{position:relative;width:26px;height:33px;cursor:pointer;transform-origin:50% 100%;transition:transform .15s;filter:drop-shadow(0 2px 2px rgba(14,26,43,.45)) drop-shadow(0 0 1px rgba(14,26,43,.6))}
+.fm-pin i{position:absolute;left:1px;top:0;width:24px;height:24px;box-sizing:border-box;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--c,#1E5BD8);border:2.5px solid #fff}
+.fm-pin i::after{content:'';position:absolute;inset:5.5px;border-radius:50%;background:#fff}
+.fm-pin:hover{transform:scale(1.18)}
+.fm-pin.sel{transform:scale(1.4)}
+.fm-pin.sel i{border-color:#FFE7E7}
+/* zoomed in to street level, each pin shows its house number */
+.fm-pin b{display:none;position:absolute;left:50%;bottom:35px;transform:translateX(-50%);background:#fff;color:var(--ink);font:700 11px/1 'Public Sans',sans-serif;padding:3px 6px;border-radius:6px;white-space:nowrap;border:1.5px solid var(--c,#1E5BD8)}
+.fm-labels .fm-pin b{display:block}
+/* quieter base map so the pins stand out */
+.fm-quiet .fm-map img[src*="/maps/vt"]{filter:saturate(.25) brightness(1.05) contrast(.92)}
 .fm-nokey{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:1}
 /* full layout with a list */
 .fm-full{display:flex;height:calc(100vh - 96px);min-height:520px;border-radius:0;box-shadow:none;border:0}

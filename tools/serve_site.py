@@ -51,6 +51,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().do_GET()
 
 
+    def end_headers(self):
+        # like Cloudflare Pages: always revalidate, so edits show on reload
+        self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
+
     def send_notice(self, doc_id):
         """Local stand-in for functions/notice/[id].js: the county PDF, saved under the address."""
         notices = json.load(open(os.path.join(ROOT, "data", "notices.json"), encoding="utf-8"))

@@ -46,7 +46,7 @@ window.FTLMap = (function () {
     const full = o.layout === 'full';
 
     root.classList.add('fm');
-    root.classList.add(full ? 'fm-full' : 'fm-home');
+    root.classList.add(full ? 'fm-full' : 'fm-home', 'fm-quiet');
     const panel = `<div class="fm-panel">
       <div class="fm-count"><span class="disp" style="font-size:22px;font-weight:800">Nov 3 sale map</span><span class="mono" style="font-size:13px;font-weight:600"><span data-k="count">${rows.length}</span> / ${data.rows.length}</span></div>
       <div class="fm-inview"><span data-k="inview"></span><button class="chip" data-k="all" hidden>Show all</button></div>
@@ -162,7 +162,7 @@ window.FTLMap = (function () {
       renderList();
       renderCard();
       if (map) {
-        const ms = v.map(r => { const m = markers[r.id]; m.content.style.background = colorOf(r); m.content.classList.toggle('sel', r.id === S.sel); m.zIndex = r.id === S.sel ? 999 : null; return m; });
+        const ms = v.map(r => { const m = markers[r.id]; m.content.style.setProperty('--c', colorOf(r)); m.content.classList.toggle('sel', r.id === S.sel); m.zIndex = r.id === S.sel ? 999 : null; return m; });
         clusterer.clearMarkers(); clusterer.addMarkers(ms);
       }
     }
@@ -194,10 +194,12 @@ window.FTLMap = (function () {
       home.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Show all';
       home.onclick = () => fitTo(visible());
       map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(home);
-      map.addListener('idle', renderList);
+      map.addListener('idle', () => { root.classList.toggle('fm-labels', map.getZoom() >= 15); renderList(); });
       sv = new google.maps.StreetViewService();
       rows.forEach(r => {
         const el = document.createElement('div'); el.className = 'fm-pin';
+        const num = (r.addr.match(/^\d+[A-Z]?/) || [''])[0];
+        el.innerHTML = '<i></i>' + (num ? `<b>${esc(num)}</b>` : '');
         const m = new AdvancedMarkerElement({ position: { lat: r.lat, lng: r.lon }, content: el, title: r.addr + ', ' + r.city, gmpClickable: true });
         m.addEventListener('gmp-click', () => select(r.id, false));
         markers[r.id] = m;
