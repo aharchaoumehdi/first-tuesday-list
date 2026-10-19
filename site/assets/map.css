@@ -56,3 +56,5 @@
   .fm-panel{position:static;width:auto;max-width:none;border-radius:0;box-shadow:none;border-bottom:1px solid var(--line)}
   .fm-card{position:static;width:auto;max-width:none;border-radius:0;box-shadow:none;border-top:1px solid var(--line)}
 }
+/* base map a touch softer than Google's default, so the pins lead */
+.fm-map img[src*="/maps/vt"]{filter:saturate(.7) brightness(1.02)}
