@@ -46,7 +46,7 @@ window.FTLMap = (function () {
     const full = o.layout === 'full';
 
     root.classList.add('fm');
-    root.classList.add(full ? 'fm-full' : 'fm-home', 'fm-quiet');
+    root.classList.add(full ? 'fm-full' : 'fm-home');
     const panel = `<div class="fm-panel">
       <div class="fm-count"><span class="disp" style="font-size:22px;font-weight:800">Nov 3 sale map</span><span class="mono" style="font-size:13px;font-weight:600"><span data-k="count">${rows.length}</span> / ${data.rows.length}</span></div>
       <div class="fm-inview"><span data-k="inview"></span><button class="chip" data-k="all" hidden>Show all</button></div>

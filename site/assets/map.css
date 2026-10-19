@@ -38,8 +38,6 @@
 /* zoomed in to street level, each pin shows its house number */
 .fm-pin b{display:none;position:absolute;left:50%;bottom:35px;transform:translateX(-50%);background:#fff;color:var(--ink);font:700 11px/1 'Public Sans',sans-serif;padding:3px 6px;border-radius:6px;white-space:nowrap;border:1.5px solid var(--c,#1E5BD8)}
 .fm-labels .fm-pin b{display:block}
-/* quieter base map so the pins stand out */
-.fm-quiet .fm-map img[src*="/maps/vt"]{filter:saturate(.25) brightness(1.05) contrast(.92)}
 .fm-nokey{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:1}
 /* full layout with a list */
 .fm-full{display:flex;height:calc(100vh - 96px);min-height:520px;border-radius:0;box-shadow:none;border:0}
