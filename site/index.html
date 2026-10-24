@@ -55,7 +55,7 @@
 <section class="hero">
 <div class="wrap">
 <div class="main">
-<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag" style="background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px">Harris County foreclosure auction</span><span class="tag" style="background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px">Tuesday, November 3, 2026</span></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag" style="background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px">Harris County foreclosure auction</span><span class="tag" style="background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px" data-sale="date_full">Tuesday, November 3, 2026</span></div>
 <h1 class="disp">Every foreclosure going to auction. <span style="color:#FF5A5F">Researched before the gavel.</span></h1>
 <p class="lead">We read every notice filed with the Harris County Clerk and add photos, flood zones, appraisal values and an estimated loan balance. The full list is free.</p>
 <div class="signup-card" id="signup">
@@ -67,9 +67,9 @@
 <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:#B9C6D8"><a href="#map" style="color:#fff;font-weight:700">Or explore the map below</a><span>Sources: County Clerk · HCAD · FEMA · HCTax</span></div>
 </div>
 <aside class="cd" aria-label="Next sale">
-<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Next sale</span><span class="tag" style="background:#E8F4F1;color:var(--teal)">List complete</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Next sale</span><span class="tag" style="background:#E8F4F1;color:var(--teal)" data-sale="phase">List complete</span></div>
 <div class="boxes"><div><b data-cd="d">--</b><span>days</span></div><div><b data-cd="h">--</b><span>hours</span></div><div><b data-cd="m">--</b><span>min</span></div></div>
-<div style="font-size:15px"><strong>Tue, Nov 3 · most sales 10 AM – 1 PM</strong><br>Bayou City Event Center, Magnolia South Ballroom<br><span style="color:var(--muted)">9401 Knight Rd, Houston, TX 77045</span></div>
+<div style="font-size:15px"><strong data-sale="when">Tue, Nov 3 · most sales 10 AM – 1 PM</strong><br><span data-sale="place">Bayou City Event Center, Magnolia South Ballroom</span><br><span style="color:var(--muted)" data-sale="street">9401 Knight Rd, Houston, TX 77045</span></div>
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
 <div class="stat"><b data-s="total">795</b><span>notices for this sale</span></div><div class="stat"><b data-s="new_this_week">236</b><span>new this week</span></div>
 <div class="stat"><b data-s="sfha">72</b><span>in a FEMA flood zone</span></div><div class="stat"><b data-s="hoa">72</b><span>HOA lien sales</span></div></div>
@@ -80,7 +80,7 @@
 
 <section id="map" class="wrap sec">
 <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px">
-<div><div class="eyebrow">Live map · every notice for Nov 3</div><h2 class="disp" style="margin:6px 0 4px;font-size:40px">Every property, on one map</h2><div style="color:#3A4A63">Click any pin for its photo, sale details and full property page. The list under the map follows what the map shows.</div></div>
+<div><div class="eyebrow">Live map · every notice for <span data-sale="date_short">Nov 3</span></div><h2 class="disp" style="margin:6px 0 4px;font-size:40px">Every property, on one map</h2><div style="color:#3A4A63">Click any pin for its photo, sale details and full property page. The list under the map follows what the map shows.</div></div>
 <div class="card map-signup"><span style="font-size:13px;font-weight:700">Get it by email</span><div class="bh-form"><script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cc6e1d6a-72a6-4488-8f44-31002c963cac"></script></div></div>
 </div>
 <div id="homeMap"></div>
@@ -132,13 +132,13 @@
 
 <section class="wrap sec">
 <h2 class="disp" style="font-size:32px">Sale calendar · first Tuesday of every month</h2>
-<div class="grid5 cal">
+<div class="grid5 cal"><!--sale:calendar-->
 <div class="card"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)">Past</div><div class="disp" style="font-size:30px;font-weight:800">Oct 6</div><div style="font-size:14px">919 notices</div></div>
 <div class="card now"><div style="font-size:12px;font-weight:700;text-transform:uppercase;opacity:.8">Next sale</div><div class="disp" style="font-size:30px;font-weight:800">Nov 3</div><div style="font-size:14px">795 notices · list complete</div></div>
 <div class="card"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)">Filings open</div><div class="disp" style="font-size:30px;font-weight:800">Dec 1</div><div style="font-size:14px">notices due by Nov 10</div></div>
 <div class="card"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)">2027</div><div class="disp" style="font-size:30px;font-weight:800">Jan 5</div><div style="font-size:14px">notices due Dec 15</div></div>
 <div class="card"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)">2027</div><div class="disp" style="font-size:30px;font-weight:800">Feb 2</div><div style="font-size:14px">notices due Jan 12</div></div>
-</div>
+<!--/sale:calendar--></div>
 </section>
 
 <section class="brief">

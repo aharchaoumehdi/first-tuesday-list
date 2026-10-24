@@ -3,13 +3,20 @@
 Sources (all free, no account):
 - HCAD public parcel map (lot outline + centroid), queried by HCAD account.
   Only HCAD_NUM and the geometry are requested; owner names are never fetched.
-- US Census geocoder results (batch_out.csv) as a fallback location.
+- US Census geocoder as a fallback location (a batch_out.csv if given, else
+  its free one-line address lookup, sending only the property address).
 - HCAD's own aerial imagery (Aerials/Image2026, about 5 cm per pixel), the
   same photos the HCAD parcel viewer shows. Check HCAD's terms of use before
   launch; NAIP 2022 (public domain, 60 cm) is the fallback if needed.
 
-Usage: python fetch_aerials.py <data_tab.csv> <census_batch_out.csv> <out_dir>
-Writes <out_dir>/<doc_id>.jpg and <out_dir>/index.csv.
+Only properties without a photo yet are fetched: ones already in
+<out_dir>/index.csv with their file, or already on the site
+(site/data/sale-<date>.json with site/photos/<date>/<doc_id>.jpg), keep their
+location and photo. The daily job starts with an empty <out_dir>, so it only
+fetches the new notices.
+
+Usage: python fetch_aerials.py <data_tab.csv> <out_dir> [census_batch_out.csv]
+Writes <out_dir>/<doc_id>.jpg and <out_dir>/index.csv (every row of the sale).
 """
 import csv
 import json
@@ -23,6 +30,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 from PIL import Image, ImageDraw
 
+SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
+CENSUS = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress"
 HCAD = "https://arcweb.hcad.org/server/rest/services/public/public_query/MapServer/0/query"
 IMAGERY = "https://arcweb.hcad.org/server/rest/services/Aerials/Image2026/ImageServer/exportImage"
 W, H = 960, 620
@@ -56,6 +65,28 @@ def hcad_parcels(accounts):
             out.setdefault(f["attributes"]["HCAD_NUM"], []).extend(f["geometry"].get("rings", []))
         time.sleep(0.5)
     return out
+
+
+def census_lookup(address):
+    """(lon, lat) from the Census one-line geocoder, or None."""
+    d = get_json(CENSUS, {"address": address, "benchmark": "Public_AR_Current", "format": "json"})
+    m = ((d or {}).get("result") or {}).get("addressMatches") or []
+    return (m[0]["coordinates"]["x"], m[0]["coordinates"]["y"]) if m else None
+
+
+def have_photos(rows, out_dir):
+    """{doc_id: index row} for the properties that already have a photo, locally or on the site."""
+    have = {}
+    for sale in sorted({r["sale_date"] for r in rows if r.get("sale_date")}):
+        path = os.path.join(SITE, "data", f"sale-{sale}.json")
+        for p in (json.load(open(path, encoding="utf-8"))["rows"] if os.path.exists(path) else []):
+            if p["photo"] and p["lat"] is not None and os.path.exists(os.path.join(SITE, "photos", sale, p["id"] + ".jpg")):
+                have[p["id"]] = {"doc_id": p["id"], "lat": f"{p['lat']:.6f}", "lon": f"{p['lon']:.6f}", "location_source": "site", "photo": p["id"] + ".jpg"}
+    idx = os.path.join(out_dir, "index.csv")
+    for r in (csv.DictReader(open(idx, encoding="utf-8")) if os.path.exists(idx) else []):
+        if r["photo"] and os.path.exists(os.path.join(out_dir, r["photo"])):
+            have[r["doc_id"]] = r
+    return have
 
 
 def frame(rings, lon=None, lat=None):
@@ -103,15 +134,21 @@ def fetch(job):
     return doc_id, False
 
 
-def main(data_csv, census_csv, out_dir):
+def main(data_csv, out_dir, census_csv=None):
     os.makedirs(out_dir, exist_ok=True)
     rows = list(csv.DictReader(open(data_csv, encoding="utf-8")))
-    census = {x[0]: x[5] for x in csv.reader(open(census_csv, encoding="utf-8")) if len(x) > 5 and x[2] == "Match"}
-    parcels = hcad_parcels(sorted({r["hcad_account"].strip() for r in rows}))
+    census = {x[0]: x[5] for x in csv.reader(open(census_csv, encoding="utf-8")) if len(x) > 5 and x[2] == "Match"} if census_csv else {}
+    have = have_photos(rows, out_dir)
+    todo = [r for r in rows if r["doc_id"] not in have]
+    print("rows", len(rows), "with a photo already", len(rows) - len(todo), "to fetch", len(todo), flush=True)
+    parcels = hcad_parcels(sorted({r["hcad_account"].strip() for r in todo}))
     print("parcels found", len(parcels), flush=True)
     jobs, index = [], []
     for r in rows:
         acct, doc = r["hcad_account"].strip(), r["doc_id"]
+        if doc in have:
+            index.append(have[doc])
+            continue
         rings = parcels.get(acct)
         lon = lat = None
         source = ""
@@ -122,6 +159,9 @@ def main(data_csv, census_csv, out_dir):
         elif doc in census:
             lon, lat = map(float, census[doc].split(","))
             source = "census_geocoder"
+        elif not census_csv and (hit := census_lookup(r["property_address"])):
+            lon, lat = hit
+            source = "census_geocoder"
         if lon is None:
             index.append({"doc_id": doc, "lat": "", "lon": "", "location_source": "none", "photo": ""})
             continue
@@ -131,7 +171,7 @@ def main(data_csv, census_csv, out_dir):
     with ThreadPoolExecutor(max_workers=6) as ex:
         ok = dict(ex.map(fetch, jobs))
     for row in index:
-        if row["photo"] and not ok.get(row["doc_id"]):
+        if row["photo"] and ok.get(row["doc_id"]) is False:
             row["photo"] = ""
     with open(os.path.join(out_dir, "index.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["doc_id", "lat", "lon", "location_source", "photo"])
@@ -140,7 +180,7 @@ def main(data_csv, census_csv, out_dir):
     by = {}
     for row in index:
         by[row["location_source"]] = by.get(row["location_source"], 0) + 1
-    print("rows", len(rows), "parcels found", len(parcels), "locations", by, "photos", sum(1 for r in index if r["photo"]))
+    print("rows", len(rows), "fetched", sum(ok.values()), "of", len(jobs), "locations", by, "photos", sum(1 for r in index if r["photo"]))
 
 
 if __name__ == "__main__":

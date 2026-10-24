@@ -48,7 +48,7 @@ window.FTLMap = (function () {
     root.classList.add('fm');
     root.classList.add(full ? 'fm-full' : 'fm-home');
     const panel = `<div class="fm-panel">
-      <div class="fm-count"><span class="disp" style="font-size:22px;font-weight:800">Nov 3 sale map</span><span class="mono" style="font-size:13px;font-weight:600"><span data-k="count">${rows.length}</span> / ${data.rows.length}</span></div>
+      <div class="fm-count"><span class="disp" style="font-size:22px;font-weight:800">${esc(cur.label || '')} sale map</span><span class="mono" style="font-size:13px;font-weight:600"><span data-k="count">${rows.length}</span> / ${data.rows.length}</span></div>
       <div class="fm-inview"><span data-k="inview"></span><button class="chip" data-k="all" hidden>Show all</button></div>
       <label class="sr" for="fmq-${o.layout}">Find an address, ZIP or city</label>
       <input id="fmq-${o.layout}" type="search" placeholder="Find an address, ZIP or city" data-k="q">
@@ -112,7 +112,7 @@ window.FTLMap = (function () {
         <div class="fm-body">
         <div><div style="font-weight:800;font-size:17px">${esc(r.addr)}</div><div style="font-size:12px;color:var(--muted)">${esc(r.city)}, TX ${esc(r.zip)} · ${typeInfo(r.type)[0]} · ${esc(r.id)}</div></div>
         <div style="display:flex;gap:5px;flex-wrap:wrap">${isNew(r) ? '<span class="tag tag-new">New this week</span>' : ''}<span class="tag ${r.sfha ? 'tag-flood' : 'tag-plain'}">Flood zone ${esc(r.zone || '—')}${r.sfha ? ' (SFHA)' : ''}</span><span class="tag tag-plain">${r.notice === 'hoa' ? 'HOA lien' : 'Mortgage foreclosure'}</span></div>
-        <div style="font-size:13px"><strong>Tue Nov 3 · ${esc(r.window || '')}</strong><br><span style="color:var(--muted)">${esc((r.location || '').split(',').slice(0, 2).join(','))}</span></div>
+        <div style="font-size:13px"><strong>${esc(cur.label_day || '')} · ${esc(r.window || '')}</strong><br><span style="color:var(--muted)">${esc((r.location || '').split(',').slice(0, 2).join(','))}</span></div>
         <div class="lock"><span>Value, estimated equity, loan, beds and sq ft come with membership. <a href="/pricing" style="font-weight:700">Join the waitlist</a></span></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><a class="btn btn-red" href="/property/${esc(r.id)}" style="min-height:36px;font-size:13px">Full details</a><button class="btn btn-navy" data-a="sv" style="min-height:36px;font-size:13px">Street View here</button>
         ${r.notice_url ? `<a class="btn btn-ghost" style="min-height:36px;font-size:13px" href="/notice/${esc(r.id)}" download title="Downloads the county clerk's official notice, named with this address">Save notice PDF</a>` : ''}

@@ -1,0 +1,91 @@
+# Daily data refresh: newest issue sheet from Google Drive -> free-only site data -> commit site/ -> Cloudflare redeploys.
+# The sheet's member-only columns stay in the runner's temp folder; only site/ is ever committed (the repo is public).
+# Setup (service account, keyless sign-in, Drive sharing): README.md, "Daily data refresh".
+name: Daily data refresh
+
+on:
+  schedule:
+    - cron: "0 11 * * *"  # 6:00 AM Houston in daylight saving time, 5:00 AM in winter
+  workflow_dispatch:
+    inputs:
+      sale:
+        description: "Sale date, YYYY-MM-DD (blank: the next sale with an issue sheet)"
+        required: false
+        default: ""
+      dry_run:
+        description: "Build and check only, don't commit"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  id-token: write  # lets the run prove to Google that it is this repo (keyless sign-in)
+
+concurrency:
+  group: data-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/requirements.txt
+
+      - run: pip install -r tools/requirements.txt
+
+      # Keyless Google sign-in (Workload Identity Federation): only this repo can act as the
+      # read-only ftl-site-refresh account, with credentials that expire within the hour.
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/12588990729/locations/global/workloadIdentityPools/github/providers/first-tuesday-list
+          service_account: ftl-site-refresh@first-tuesday-list.iam.gserviceaccount.com
+
+      - name: Export the newest issue sheet (runner temp folder only)
+        id: sheet
+        env:
+          DRIVE_ISSUES_FOLDER_ID: ${{ vars.DRIVE_ISSUES_FOLDER_ID }}
+          SALE: ${{ inputs.sale }}
+        run: python tools/fetch_sheet.py "$RUNNER_TEMP/source" >> "$GITHUB_OUTPUT"
+
+      - name: Aerial photos for properties that don't have one yet
+        env:
+          CSV: ${{ steps.sheet.outputs.csv }}
+        run: python tools/fetch_aerials.py "$CSV" "$RUNNER_TEMP/aerial"
+
+      - name: Build the free-only site data and pages
+        env:
+          CSV: ${{ steps.sheet.outputs.csv }}
+          SALE: ${{ steps.sheet.outputs.sale }}
+        run: python tools/build_site.py "$SALE" "$CSV" "$RUNNER_TEMP/aerial"
+
+      - name: Check that no member value reached site/
+        env:
+          CSV: ${{ steps.sheet.outputs.csv }}
+          SALE: ${{ steps.sheet.outputs.sale }}
+        run: python tools/check_public.py "$CSV" "$SALE"
+
+      - name: Commit site/ if it changed
+        env:
+          SALE: ${{ steps.sheet.outputs.sale }}
+          NAME: ${{ steps.sheet.outputs.name }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          git add site
+          if git diff --cached --quiet; then echo "No changes for $SALE."; exit 0; fi
+          git diff --cached --stat | tail -n 1
+          if [ "$DRY_RUN" = "true" ]; then echo "Dry run: not committing."; exit 0; fi
+          git -c user.name="First Tuesday List bot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Data refresh: $SALE sale from $NAME"
+          git pull -q --rebase origin "$GITHUB_REF_NAME"
+          git push -q origin "HEAD:$GITHUB_REF_NAME"
+
+      - name: Delete the sheet export
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/source" "$RUNNER_TEMP/aerial"

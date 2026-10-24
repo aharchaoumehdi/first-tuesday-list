@@ -8,7 +8,7 @@
 
   const top = document.createElement('div');
   top.className = 'topbar';
-  top.innerHTML = `<div class="wrap"><span><strong style="color:#fff">Nov 3 list is complete.</strong> The filing deadline passed Oct 13. <span id="cdTop"></span></span><span class="hide-sm">Harris County, TX · first Tuesday of every month</span></div>`;
+  top.innerHTML = `<div class="wrap"><span><strong style="color:#fff" id="saleTop">Harris County foreclosure auction list.</strong> <span id="saleNote"></span> <span id="cdTop"></span></span><span class="hide-sm">Harris County, TX · first Tuesday of every month</span></div>`;
 
   const header = document.createElement('header');
   header.className = 'site-header';
@@ -32,15 +32,28 @@
     <p>© ${new Date().getFullYear()} First Tuesday List</p></div>`;
   document.body.append(footer);
 
-  // Countdown to the next sale (first Tuesday of the month, 10:00 AM Central).
-  const sale = new Date('2026-11-03T10:00:00-06:00');
-  function tick() {
-    const ms = sale - new Date();
-    const d = Math.max(0, Math.floor(ms / 864e5)), h = Math.max(0, Math.floor(ms / 36e5) % 24), m = Math.max(0, Math.floor(ms / 6e4) % 60);
-    const t = document.getElementById('cdTop'); if (t) t.textContent = ms > 0 ? `Sale in ${d} days.` : 'Sale day.';
-    document.querySelectorAll('[data-cd]').forEach(el => { el.textContent = String({ d, h, m }[el.dataset.cd]).padStart(2, '0'); });
-  }
-  tick(); setInterval(tick, 30000);
+  // The current sale (written by tools/build_site.py): topbar status and the countdown to its start, Central time.
+  fetch('/data/current.json').then(r => r.json()).then(cur => {
+    const sale = new Date(cur.starts);
+    const houstonDay = t => new Date(t).toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
+    function tick() {
+      const now = new Date(), ms = sale - now, today = houstonDay(now), day = cur.current_sale;
+      const phase = today <= cur.deadline ? 'open' : today < day ? 'complete' : today === day ? 'today' : 'over';
+      const [head, note, tag] = {
+        open: [`${cur.label} list is growing.`, `Notices can be filed until ${cur.deadline_label}.`, 'Filings open'],
+        complete: [`${cur.label} list is complete.`, `The filing deadline passed ${cur.deadline_label}.`, 'List complete'],
+        today: [`The ${cur.label} sale is today.`, '', 'Sale today'],
+        over: [`The ${cur.label} sale is over.`, `The ${cur.next_label} list is coming.`, 'Sale over']
+      }[phase];
+      const set = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      set('saleTop', head); set('saleNote', note);
+      set('cdTop', phase === 'open' || phase === 'complete' ? `Sale in ${Math.floor(ms / 864e5)} days.` : '');
+      document.querySelectorAll('[data-sale="phase"]').forEach(el => { el.textContent = tag; });
+      const d = Math.max(0, Math.floor(ms / 864e5)), h = Math.max(0, Math.floor(ms / 36e5) % 24), m = Math.max(0, Math.floor(ms / 6e4) % 60);
+      document.querySelectorAll('[data-cd]').forEach(el => { el.textContent = String({ d, h, m }[el.dataset.cd]).padStart(2, '0'); });
+    }
+    tick(); setInterval(tick, 30000);
+  }).catch(() => {});
 
   // beehiiv's embedded form can take a few seconds to appear (or be blocked), so
   // each slot shows our own form at once and hands over when beehiiv's has loaded.

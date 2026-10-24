@@ -81,7 +81,7 @@ PAGE = """<!doctype html>
 <link rel="stylesheet" href="/assets/site.css"><link rel="stylesheet" href="/assets/property.css">
 </head>
 <body data-page="property">
-<main id="prop" data-id="{id}" data-sale="{sale}" data-lat="{lat}" data-lon="{lon}" data-addr="{addr}">
+<main id="prop" data-id="{id}" data-sale="{sale}" data-starts="{starts}" data-lat="{lat}" data-lon="{lon}" data-addr="{addr}">
 {body}
 </main>
 <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
@@ -276,7 +276,7 @@ def write_pages(site, sale, public, stats):
         title = f"{r['addr']}, {r['city']} TX {r['zip']} · Foreclosure auction {nice(sale, year=True)} · First Tuesday List"
         desc = (f"{kind(r)} at {r['addr']}, {r['city']}, TX {r['zip']} goes to foreclosure auction on {nice(sale, weekday=True, year=True)}, "
                 f"{r['window'] or ''}. Flood zone {r['zone'] or 'unknown'}. Aerial photo, Street View, map and the county notice.")
-        page = PAGE.format(title=e(title), desc=e(desc), site=SITE_URL, id=e(r["id"]), photo=e(r["photo"] or "/assets/og.png"), sale=sale,
+        page = PAGE.format(title=e(title), desc=e(desc), site=SITE_URL, id=e(r["id"]), photo=e(r["photo"] or "/assets/og.png"), sale=sale, starts=e(stats.get("starts", "")),
                            lat=r["lat"] or "", lon=r["lon"] or "", addr=e(f"{r['addr']}, {r['city']}, TX {r['zip']}"),
                            body=body(r, sale, stats, nearby, prev, nxt))
         with open(os.path.join(out, r["id"] + ".html"), "w", encoding="utf-8") as f:
