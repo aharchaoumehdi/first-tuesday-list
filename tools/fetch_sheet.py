@@ -37,7 +37,13 @@ SHEETS = "https://sheets.googleapis.com/v4/spreadsheets"
 SHEET_MIME = "application/vnd.google-apps.spreadsheet"
 XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 FOLDER_MIME = "application/vnd.google-apps.folder"
-ISSUE_RE = re.compile(r"^sale-(\d{4}-\d{2}-\d{2})_issue-(\d{4}-\d{2}-\d{2})_v(\d+)_(\d+)(\.xlsx)?$")
+# FILING.md names issues ..._v<N>_<rows>; files made before it was written use ..._<rows>_v<N>. Accept both.
+ISSUE_RE = re.compile(r"^sale-(\d{4}-\d{2}-\d{2})_issue-(\d{4}-\d{2}-\d{2})_(?:v(\d+)_(\d+)|(\d+)_v(\d+))(\.xlsx)?$")
+
+
+def version_rows(m):
+    """(version, rows) from an ISSUE_RE match, whichever order the name uses."""
+    return int(m.group(3) or m.group(6)), int(m.group(4) or m.group(5))
 # the columns build_site.py and fetch_aerials.py read
 NEEDED = {"doc_id", "property_address", "zip", "property_type", "notice_type", "first_seen", "sale_date", "sale_time_window",
           "sale_location", "fema_flood_zone", "in_special_flood_hazard_area", "notice_pdf_url", "repeat_posting", "hcad_account",
@@ -90,7 +96,8 @@ def newest_issue(s, sale_folder, sale):
             m = ISSUE_RE.match(g["name"])
             if not m or m.group(1) != sale or g["mimeType"] not in (SHEET_MIME, XLSX_MIME):
                 continue
-            key = (m.group(2), int(m.group(3)), g["mimeType"] == SHEET_MIME, int(m.group(4)), g)
+            v, rows = version_rows(m)
+            key = (m.group(2), v, g["mimeType"] == SHEET_MIME, rows, g)
             if best is None or key[:3] > best[:3]:
                 best = key
     return best
