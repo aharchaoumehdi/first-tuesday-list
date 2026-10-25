@@ -1,5 +1,6 @@
 :root{--navy:#13294B;--ink:#0E1A2B;--red:#D2141C;--red-dark:#A80F16;--teal:#0B6E62;--muted:#4A5568;--line:#DDE2EA;--bg:#F4F6F9;--card:#fff;--radius:14px}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:'Public Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:var(--navy)}a:hover{color:var(--red)}
