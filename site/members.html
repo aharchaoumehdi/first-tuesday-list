@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Member home · First Tuesday List</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.mh-top{padding:34px 0 6px}.mh-top h1{font-size:52px;margin:6px 0 4px}
+.mh{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.stats div{background:var(--bg);border-radius:12px;padding:12px;text-align:center}
+.stats b{display:block;font:800 32px 'Barlow Condensed',sans-serif;color:var(--navy)}.stats .t b{color:var(--teal)}
+.stats span{font-size:12px;color:var(--muted);font-weight:600}
+.dl{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.dl a{display:flex;gap:12px;align-items:center;text-decoration:none;border:1px solid #E2E7EF;border-radius:12px;padding:12px;color:var(--ink);background:#fff}
+.dl a:hover{border-color:var(--navy)}
+.dl .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font:800 14px 'Barlow Condensed',sans-serif}
+.dl small{display:block;color:var(--muted)}
+.acct div{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #EEF1F6;font-size:14px}
+.acct .btn{width:100%;margin-top:10px}
+.top{display:flex;flex-direction:column}
+.top a{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #EEF1F6;text-decoration:none;color:var(--ink)}
+.top img{width:64px;height:46px;object-fit:cover;border-radius:8px;background:#C9D3E0}
+.top .e{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-weight:600;font-size:14px;text-align:right}
+.top small{display:block;color:var(--muted);font-size:12px}
+.method p{margin:0 0 10px;color:#24324A;font-size:15px}
+.note{font-size:13px;color:var(--muted)}
+.h3{font-weight:800;font-size:18px}
+@media (max-width:900px){.mh{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body data-page="members">
+<main class="wrap" id="app" hidden>
+<div class="mh-top"><div class="eyebrow" data-k="sale"></div><h1 class="disp">Welcome back</h1><div class="note" data-k="hello"></div></div>
+<div class="mh">
+<div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+<div class="card">
+<div class="h3">This sale at a glance</div>
+<div class="stats"><div><b data-k="total">—</b><span>properties</span></div><div class="t"><b data-k="pos">—</b><span>with positive est. equity</span></div>
+<div class="t"><b data-k="median">—</b><span>median est. equity (positive)</span></div><div class="t"><b data-k="e100">—</b><span>over $100k est. equity</span></div></div>
+<div class="dl">
+<a href="/api/member/file/latest-xlsx"><span class="ic">XLS</span><span><b>Member spreadsheet</b><small>Every property with value, loan, balance, equity and lender, sorted by equity. Excel.</small></span></a>
+<a href="/api/member/file/latest-csv"><span class="ic">CSV</span><span><b>Same list as CSV</b><small>For your own tools and spreadsheets.</small></span></a>
+<a href="/api/member/file/latest-brief"><span class="ic">PDF</span><span><b>Top 10 Research Brief</b><small>The ten best by our score, each checked by hand, with photos, maps and links. Monthly.</small></span></a>
+<a href="/map"><span class="ic">MAP</span><span><b>Open the map with member filters</b><small>Sort by equity, filter by value and occupancy.</small></span></a>
+</div>
+</div>
+<div class="card">
+<div class="h3">Highest estimated equity</div>
+<p class="note" style="margin:4px 0 6px">By the numbers alone, not checked by hand: the Research Brief does that. Single family, condo and townhome.</p>
+<div class="top" data-k="top"></div>
+</div>
+<div class="card method" id="method">
+<div class="h3" style="margin-bottom:8px">How we estimate</div>
+<p><strong>Value</strong> is the 2026 Harris County Appraisal District market value.</p>
+<p><strong>Original loan</strong> and the deed of trust date come from the foreclosure notice and county records.</p>
+<p><strong>Estimated balance</strong> assumes the loan was paid as scheduled since then, at the average 30-year mortgage rate of its year (Freddie Mac survey). <strong>Estimated equity</strong> is value minus that balance.</p>
+<p>Not included: second liens, unpaid property taxes, HOA dues, missed payments and fees. At a trustee sale the opening bid can be close to the full debt: call the trustee before the sale. Compiled from public records. Not verified. Do your own title and lien research before bidding.</p>
+</div>
+</div>
+<div class="card acct">
+<div class="h3" style="margin-bottom:6px">Your membership</div>
+<div><span>Plan</span><b data-k="plan"></b></div>
+<div><span data-k="nextLbl">Next payment</span><b data-k="next"></b></div>
+<div><span>Email</span><b data-k="email" style="word-break:break-all;text-align:right"></b></div>
+<div><span>Member since</span><b data-k="since"></b></div>
+<button class="btn btn-ghost" data-k="billing">Manage billing (Stripe)</button>
+<button class="btn btn-ghost" data-k="out">Sign out</button>
+<p class="note" style="margin-top:10px">Cancel anytime from Manage billing. You keep access until the end of the period you paid for. Questions: <a href="mailto:leads@firsttuesdaylist.com">leads@firsttuesdaylist.com</a></p>
+</div>
+</div>
+</main>
+<main class="wrap" id="lapsed" hidden style="max-width:620px;padding-top:48px">
+<div class="eyebrow">Membership</div><h1 class="disp" style="font-size:48px;margin:6px 0 10px">Your membership isn't active</h1>
+<div class="card" style="display:flex;flex-direction:column;gap:12px"><p style="margin:0">Your subscription ended or the last payment didn't go through. Update your card or restart it in billing.</p>
+<button class="btn btn-red" data-k="billing2">Manage billing (Stripe)</button><a class="btn btn-ghost" href="/pricing">See membership</a></div>
+</main>
+<script src="/config.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(async function () {
+  const $ = k => document.querySelector(`[data-k="${k}"]`);
+  const usd = v => v == null ? '—' : (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US');
+  const short = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : '$' + Math.round(v / 1000) + 'k';
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const day = t => new Date(t * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  async function billing() {
+    const r = await fetch('/api/portal', { method: 'POST' }); const d = await r.json();
+    if (d.url) location.href = d.url; else alert(d.error || 'Billing is unavailable right now.');
+  }
+  const s = await FTL.status;
+  if (!s.member) {
+    if (s.signed_in) { document.getElementById('lapsed').hidden = false; $('billing2').onclick = billing; }
+    else location.replace('/signin');
+    return;
+  }
+  document.getElementById('app').hidden = false;
+  const m = s.member;
+  const PLAN = { monthly: 'Member · $49/month', yearly: 'Member · $490/year', founding_monthly: 'Founding member · $39/month', founding_yearly: 'Founding member · $390/year' };
+  $('plan').textContent = PLAN[m.plan] || 'Member';
+  $('nextLbl').textContent = m.cancel_at_period_end ? 'Access until' : 'Next payment';
+  $('next').textContent = m.period_end ? day(m.period_end) : '—';
+  $('email').textContent = m.email;
+  $('since').textContent = m.since ? new Date(m.since + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '—';
+  $('hello').textContent = m.cancel_at_period_end ? `Your membership is set to end on ${day(m.period_end)}. You can restart it from Manage billing.` : '';
+  $('billing').onclick = billing;
+  $('out').onclick = async () => { await fetch('/api/logout', { method: 'POST' }); location.href = '/'; };
+
+  const cur = await fetch('/data/current.json').then(r => r.json());
+  const days = Math.floor((new Date(cur.starts) - new Date()) / 864e5);  // as the top bar counts
+  $('sale').textContent = `${cur.label_year || cur.label} sale · ${days > 1 ? days + ' days away' : days === 1 ? 'tomorrow' : days === 0 ? 'today' : 'sale day passed'}`;
+  const [pub, mem] = await Promise.all([
+    fetch('/data/sale-' + cur.current_sale + '.json').then(r => r.json()),
+    fetch('/api/member/sale').then(r => r.ok ? r.json() : null)
+  ]);
+  $('total').textContent = pub.rows.length;
+  if (!mem) { $('top').innerHTML = '<p class="note">The member numbers for this sale are being prepared. Check back after the morning update.</p>'; return; }
+  const eq = Object.values(mem.rows).map(r => r.equity).filter(v => v != null);
+  const pos = eq.filter(v => v > 0).sort((a, b) => a - b);
+  $('pos').textContent = pos.length;
+  $('median').textContent = pos.length ? short(pos[Math.floor(pos.length / 2)]) : '—';
+  $('e100').textContent = eq.filter(v => v >= 100000).length;
+  const homes = new Set(['single_family', 'condo_townhome']);
+  const top = pub.rows.filter(p => homes.has(p.type) && mem.rows[p.id] && mem.rows[p.id].equity != null)
+    .sort((a, b) => mem.rows[b.id].equity - mem.rows[a.id].equity).slice(0, 8);
+  $('top').innerHTML = top.map(p => { const r = mem.rows[p.id];
+    return `<a href="/property/${esc(p.id)}"><img loading="lazy" src="${esc(p.photo || '')}" alt=""><span><b>${esc(p.addr)}</b><small>${esc(p.city)} ${esc(p.zip)} · value ${usd(r.value)}</small></span>
+      <span class="e">${usd(r.equity)}<small>${r.share != null ? Math.round(r.share * 100) + '% of value' : ''}</small></span></a>`; }).join('');
+})();
+</script>
+</body>
+</html>

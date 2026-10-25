@@ -57,8 +57,9 @@ def links(r):
     }
 
 
-def locked(label):
-    return f'<div><div class="k">{e(label)}</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>'
+def locked(label, key):
+    """A member field: a grey bar for everyone; property.js fills data-m=<key> for signed-in members."""
+    return f'<div><div class="k">{e(label)}</div><div class="v" data-m="{key}"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>'
 
 
 def kv(label, value, mono=False):
@@ -181,12 +182,12 @@ def body(r, sale, stats, nearby, prev, nxt):
 <div class="card members">
 <div class="h3"><span class="ico-lock"></span>The numbers <span class="tag tag-plain">Members</span></div>
 <div class="nums">
-<div><span>HCAD market value</span><span class="redact"><i></i></span></div>
-<div><span>Estimated loan balance</span><span class="redact"><i></i></span></div>
-<div class="tot"><span>Estimated equity</span><span class="redact"><i></i></span></div>
-<div><span>Value / original loan</span><span class="redact"><i></i></span></div>
+<div><span>HCAD market value</span><span data-m="value"><span class="redact"><i></i></span></span></div>
+<div><span>Estimated loan balance</span><span data-m="balance"><span class="redact"><i></i></span></span></div>
+<div class="tot"><span>Estimated equity</span><span data-m="equity"><span class="redact"><i></i></span></span></div>
+<div><span>Value / original loan</span><span data-m="vtl"><span class="redact"><i></i></span></span></div>
 </div>
-<div class="cta"><span>Members see the value, the loan, the estimated balance and equity, with the method behind every number.</span><a class="btn btn-red" href="/pricing">Join the waitlist</a></div>
+<div class="cta"><span>Members see the value, the loan, the estimated balance and equity, with the method behind every number.</span><a class="btn btn-red" href="/pricing" data-join>Join the waitlist</a></div>
 </div>
 
 <div class="card">
@@ -205,13 +206,13 @@ def body(r, sale, stats, nearby, prev, nxt):
 {kv('Address', f"{e(r['addr'])}<br>{e(r['city'])}, TX {e(r['zip'])}")}
 {kv('Property type', kind(r))}
 {kv('FEMA flood zone', e(r['zone'] or '—') + (' · high-risk area (SFHA)' if r['sfha'] else ' · outside the high-risk area'))}
-{locked('Beds / baths')}
-{locked('Living area')}
-{locked('Year built')}
-{locked('Lot size')}
-{locked('Appraised value')}
-{locked('School district')}
-{locked('Owner-occupied (estimate)')}
+{locked('Beds / baths', 'beds')}
+{locked('Living area', 'sqft')}
+{locked('Year built', 'year')}
+{locked('Lot size', 'lot')}
+{locked('Appraised value', 'appraised')}
+{locked('School district', 'school')}
+{locked('Owner-occupied (estimate)', 'occ')}
 </div>
 </div>
 
@@ -222,11 +223,11 @@ def body(r, sale, stats, nearby, prev, nxt):
 {kv('Notice ID', e(r['id']), mono=True)}
 {kv('Posted more than once', 'Yes' if r.get('repeat') else 'No')}
 {kv('Sale window', e(r['window'] or '—'))}
-{locked('Lender or HOA' if hoa else 'Current lender')}
-{locked('Servicer')}
-{locked('Substitute trustee')}
-{locked('Original loan')}
-{locked('Deed of trust date')}
+{locked('Lender or HOA' if hoa else 'Current lender', 'lender')}
+{locked('Servicer', 'servicer')}
+{locked('Substitute trustee', 'trustee')}
+{locked('Original loan', 'loan')}
+{locked('Deed of trust date', 'dot')}
 </div>
 </div>
 
@@ -244,9 +245,9 @@ def body(r, sale, stats, nearby, prev, nxt):
 <aside class="p-side">
 <div class="card">
 <div class="h3">Research links</div>
-<div class="rlinks">{''.join(f'<a href="{e(u)}"' + (' download' if u.startswith('/notice/') else ' target="_blank" rel="noopener"') + f'><span>{e(t)}</span><small>{e(s)}</small></a>' for t, s, u in research if u)}</div>
+<div class="rlinks" data-k="rlinks">{''.join(f'<a href="{e(u)}"' + (' download' if u.startswith('/notice/') else ' target="_blank" rel="noopener"') + f'><span>{e(t)}</span><small>{e(s)}</small></a>' for t, s, u in research if u)}</div>
 </div>
-<div class="card">
+<div class="card" data-k="tools">
 <div class="h3"><span class="ico-lock"></span>Member tools</div>
 <ul class="tools"><li>Max-bid calculator for this property</li><li>Watchlist with postponement and cancellation alerts</li><li>Your private notes</li><li>CSV and Excel export of the sale</li></ul>
 <a class="btn btn-ghost" href="/pricing" style="width:100%">See membership</a>

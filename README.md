@@ -26,6 +26,45 @@ python tools/serve_site.py
 
 Public data files contain only the free columns. Member fields (values, loans, equity) are never committed.
 
+## Membership
+
+Paid membership ($49/month or $490/year; founding $39/$390 for the first 100, kept for as long as they stay):
+
+- `functions/api/`: Cloudflare Pages Functions. `checkout` (Stripe Checkout), `claim` (the welcome page signs the buyer in),
+  `stripe-webhook` (subscription changes), `login` (one-time sign-in link by email), `logout`, `portal` (Stripe billing page),
+  `status`, `member/*` (member data and downloads, members only), `upload/*` (member data in, keyless from GitHub Actions).
+- `lib/members.js`: the shared code, and the list of KV keys and settings.
+- Pages: `site/pricing.html`, `site/welcome.html`, `site/signin.html`, `site/members.html`; `site/assets/property.js` and
+  `mapapp.js` unlock the numbers for members. The static pages never contain member values: members' browsers fetch them.
+- `tools/member_data.py`: the daily refresh builds the member fields and the member spreadsheet in the runner's temp folder
+  and uploads them (GitHub's OIDC token for this repo's main branch is the proof, no key). The monthly Research Brief job in
+  ftl-ops uploads the member edition the same way.
+
+Until the settings below exist, membership stays closed: the pricing page shows "Opening soon" and every member endpoint answers 503.
+
+### One-time setup
+
+1. **Cloudflare** (dash.cloudflare.com → Workers & Pages):
+   - Storage & Databases → KV → Create namespace `ftl-members`.
+   - The Pages project → Settings → Bindings → Add → KV namespace: variable name `MEMBERS`, namespace `ftl-members` (Production).
+2. **Stripe** (start in test mode, then repeat with live keys):
+   - Developers → API keys → Secret key → Cloudflare Pages → Settings → Variables and secrets → add secret `STRIPE_SECRET_KEY`.
+   - Developers → Webhooks → Add endpoint `https://firsttuesdaylist.com/api/stripe-webhook`, events `checkout.session.completed`,
+     `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted` → its Signing secret →
+     Cloudflare secret `STRIPE_WEBHOOK_SECRET`.
+   - Settings → Billing → Customer portal: allow updating the payment method, viewing invoices and canceling (at period end). Save.
+   - Settings → Branding: logo and colors (#13294B, #D2141C).
+   - The product and its four prices are created automatically on the first checkout (lookup keys `ftl_member_monthly`,
+     `ftl_member_yearly`, `ftl_founding_monthly`, `ftl_founding_yearly`).
+   - Optional: Stripe Tax registered for Texas → Cloudflare variable `STRIPE_TAX` = `on`.
+3. **Resend** (sign-in emails): add and verify the domain `firsttuesdaylist.com` (it writes the DNS records in Cloudflare),
+   API key with sending access → Cloudflare secret `RESEND_API_KEY`. Optional `EMAIL_FROM`
+   (default `First Tuesday List <members@firsttuesdaylist.com>`).
+4. Cloudflare Pages → Deployments → Retry the latest deployment, so the new settings apply.
+
+Local test: `npx wrangler pages dev site --kv MEMBERS --binding STRIPE_SECRET_KEY=... --binding STRIPE_WEBHOOK_SECRET=... --binding DEV=1`
+(with `DEV=1` and no Resend key, sign-in emails are printed to the console).
+
 ## Daily data refresh
 
 `.github/workflows/data-refresh.yml` runs every morning at 6 AM Houston time, summer and winter and on demand (Actions → Daily data refresh → Run workflow, with an optional sale date and a dry-run box):

@@ -19,6 +19,22 @@
     <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>`;
   document.body.prepend(header);
+
+  // Membership state, once per page: is it open, who is signed in. Pages wait on FTL.status (never rejects).
+  window.FTL = window.FTL || {};
+  FTL.status = fetch('/api/status', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null).catch(() => null)
+    .then(s => s || { open: false, member: null, signed_in: false, founding: true, founding_left: 100 });
+  FTL.status.then(s => {
+    const cta = header.querySelector('.cta');
+    if (s.member) { cta.textContent = 'Member home'; cta.href = '/members'; cta.className = 'btn btn-navy cta'; }
+    else if (s.open) {
+      const a = document.createElement('a'); a.href = s.signed_in ? '/members' : '/signin'; a.textContent = s.signed_in ? 'Your account' : 'Sign in';
+      a.className = 'signin-link'; cta.before(a);
+    }
+    // "Join the waitlist" becomes "Become a member" once membership is open
+    if (s.open && !s.member) document.querySelectorAll('[data-join]').forEach(el => { el.textContent = 'Become a member'; });
+    document.body.classList.toggle('is-member', Boolean(s.member));
+  });
   document.body.prepend(top);
   const btn = header.querySelector('.menu-btn'), navEl = header.querySelector('.site-nav');
   btn.addEventListener('click', () => { const o = navEl.classList.toggle('open'); btn.setAttribute('aria-expanded', o); });

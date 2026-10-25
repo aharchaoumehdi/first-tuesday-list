@@ -7,7 +7,7 @@ data/source/
 # Local Google Maps prototype: its data file includes member-only fields
 prototype/
 
-# Internal planning docs (pricing split, bot data contract); the repo is public
+# Internal planning docs (pricing split, bot data contract, legal drafts): kept out of git
 docs/
 
 # Full-size aerial originals (the site uses the resized copies in site/photos)
@@ -18,3 +18,7 @@ site/config.js
 
 __pycache__/
 *.pyc
+
+# Local Cloudflare dev state and settings (wrangler pages dev)
+.wrangler/
+.dev.vars

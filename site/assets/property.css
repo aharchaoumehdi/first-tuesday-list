@@ -97,3 +97,9 @@
   .gutter:hover{background:rgba(14,26,43,.12)}
   .gutter:hover span{opacity:1}
 }
+/* member view: the same cards, unlocked */
+.members.unlocked{border:2px solid var(--teal);background:#fff}
+.members.unlocked .nums>div>span:last-child{font-family:'IBM Plex Mono',monospace;font-weight:600}
+.members.unlocked .eq{color:var(--teal);font-size:20px}
+.tag-member{background:#E3F2EF;color:var(--teal)}
+body.is-member .signup-box{display:none}

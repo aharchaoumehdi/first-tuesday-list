@@ -83,6 +83,42 @@
     } catch (e) { fallback(el, 'The map could not load here.'); }
   }
 
+  // Members: the locked rows get their values (from /api/member/property/<id>, never from the static page).
+  const usd = v => v == null ? '—' : (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const longDate = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+  function fill(m) {
+    const show = {
+      value: usd(m.value), balance: usd(m.balance), vtl: m.vtl == null ? '—' : m.vtl.toFixed(2) + '×',
+      equity: m.equity == null ? '—' : `<span class="eq">${usd(m.equity)}</span>${m.share != null ? ` <span class="tag tag-plain">${Math.round(m.share * 100)}%</span>` : ''}`,
+      beds: m.beds == null ? '—' : `${m.beds} bd · ${m.baths ?? '—'} ba${m.half ? ' · ' + m.half + ' half' : ''}`,
+      sqft: m.sqft == null ? '—' : m.sqft.toLocaleString('en-US') + ' sq ft', year: m.year ?? '—',
+      lot: m.lot == null ? '—' : m.lot.toLocaleString('en-US') + ' sq ft', appraised: usd(m.appraised), school: esc(m.school || '—'),
+      occ: m.occ == null ? 'Unknown' : m.occ ? 'Likely' : 'Likely not', lender: esc(m.lender || '—'),
+      servicer: esc(m.servicer || '—'), trustee: esc(m.trustee || '—'),
+      loan: m.loan == null ? (m.loan_status === 'not_stated' ? 'Not stated on the notice' : '—') : usd(m.loan), dot: longDate(m.dot)
+    };
+    root.querySelectorAll('[data-m]').forEach(el => { el.innerHTML = show[el.dataset.m] ?? '—'; });
+    const card = root.querySelector('.card.members');
+    card.classList.add('unlocked');
+    card.querySelector('.h3').innerHTML = 'The numbers <span class="tag tag-member">Member</span>';
+    card.querySelector('.cta').innerHTML = '<span>Estimates from public records, not a lender payoff. The opening bid can be close to the full debt: call the trustee. <a href="/members#method">How we estimate</a></span>';
+    const links = root.querySelector('[data-k="rlinks"]');
+    if (m.hcad_url) links.insertAdjacentHTML('afterbegin', `<a href="${esc(m.hcad_url)}" target="_blank" rel="noopener"><span>Appraisal record</span><small>HCAD${m.hcad ? ' · ' + esc(m.hcad) : ''}</small></a>`);
+    if (m.tax_url) links.insertAdjacentHTML('afterbegin', `<a href="${esc(m.tax_url)}" target="_blank" rel="noopener"><span>Tax statement</span><small>Harris County Tax Office</small></a>`);
+    const tools = root.querySelector('[data-k="tools"]');
+    tools.innerHTML = `<div class="h3">Member downloads</div><div class="rlinks">
+      <a href="/api/member/file/latest-xlsx"><span>Member spreadsheet</span><small>Excel · every property</small></a>
+      <a href="/api/member/file/latest-brief"><span>Top 10 Research Brief</span><small>PDF · this sale</small></a>
+      <a href="/members"><span>Member home</span><small>Account and billing</small></a></div>
+      <p class="note" style="margin:10px 0 0">Coming next: watchlist and alerts, max-bid calculator, sale-day mode.</p>`;
+  }
+  if (window.FTL && FTL.status) FTL.status.then(s => {
+    if (!s.member) return;
+    fetch('/api/member/property/' + encodeURIComponent(root.dataset.id), { credentials: 'same-origin' })
+      .then(r => r.ok ? r.json() : null).then(d => { if (d && d.row) fill(d.row); }).catch(() => {});
+  });
+
   root.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => {
     const t = b.dataset.tab;
     root.querySelectorAll('[data-tab]').forEach(x => x.setAttribute('aria-selected', x === b));

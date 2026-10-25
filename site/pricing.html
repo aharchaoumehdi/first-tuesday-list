@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pricing · First Tuesday List</title>
-<meta name="description" content="The Harris County foreclosure auction list is free. Membership with values, estimated equity, loan details, filters and exports opens soon for $49/month.">
+<meta name="description" content="The Harris County foreclosure auction list is free. Membership adds values, loans, estimated equity, filters, the member spreadsheet and the Top 10 Research Brief for $49/month.">
 <link rel="canonical" href="https://firsttuesdaylist.com/pricing">
 <link rel="icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +24,15 @@ table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;ove
 th,td{padding:13px 16px;border-bottom:1px solid #EEF1F6;text-align:left;font-size:15px}
 th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 td.c{text-align:center;font-weight:700;color:var(--teal)}td.n{text-align:center;color:#9AA6B8}
+.toggle{display:inline-flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:3px;font-size:13px;font-weight:700;align-self:flex-start}
+.toggle button{border:0;background:none;color:#D5DEEA;font:inherit;padding:6px 13px;border-radius:999px;cursor:pointer}
+.toggle button[aria-pressed=true]{background:#fff;color:var(--navy)}
+.found{background:rgba(255,193,77,.14);border:1px solid rgba(255,193,77,.45);color:#FFE3A8;border-radius:12px;padding:12px;font-size:14px}
+.found b{color:#fff}
+.plan .was{font-size:24px;color:#8EA0B8;text-decoration:line-through;font-family:'Barlow Condensed',sans-serif;margin-left:10px}
+.plan .note{font-size:13px;color:#B9C6D8}.plan .note a{color:#fff}
+.plan .err{display:none;background:#FDECEC;color:#8A1016;border-radius:10px;padding:10px;font-size:14px}
+.plan li.soon::before{content:'+';color:#FFC14D}
 @media (max-width:760px){.plans{grid-template-columns:minmax(0,1fr)}.ph h1{font-size:44px}}
 </style>
 </head>
@@ -39,11 +48,15 @@ td.c{text-align:center;font-weight:700;color:var(--teal)}td.n{text-align:center;
 <div class="bh-form"><script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cc6e1d6a-72a6-4488-8f44-31002c963cac"></script></div>
 <ul><li>Every Harris County property going to auction</li><li>The full spreadsheet of each sale, by email</li><li>Live map with aerial photos and Street View</li><li>Sale date, time window and location</li><li>FEMA flood zone and high-risk flag</li><li>Notice PDF, Zillow, Realtor.com and Redfin links</li><li>The First Tuesday Brief every Wednesday</li></ul>
 </div>
-<div class="plan dark">
-<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;color:#B9C6D8;text-transform:uppercase;letter-spacing:.06em;font-size:14px">Member</div><span class="tag" style="background:var(--red);color:#fff">Opening soon</span></div>
-<div><div class="price">$49<span style="font-size:22px;color:#B9C6D8;font-family:'Public Sans',sans-serif;font-weight:500"> / month</span></div><div style="color:#D5DEEA">Decide which properties are worth a bid, before sale day.</div></div>
-<div style="background:rgba(255,255,255,.08);border-radius:12px;padding:12px;font-size:14px">Join the free list to get the launch invitation and founding-member pricing.</div>
-<ul><li>Appraised value and building facts</li><li>Original loan, estimated balance and estimated equity, with the method shown</li><li>Lender, servicer and trustee</li><li>Filter and sort by equity, value and occupancy</li><li>Watchlist, saved searches and alerts</li><li>Status history: postponed, cancelled, re-posted</li><li>CSV and Excel export of every sale</li><li>Max-bid calculator and sale-day mode</li></ul>
+<div class="plan dark" id="member">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;color:#B9C6D8;text-transform:uppercase;letter-spacing:.06em;font-size:14px">Member</div><span class="tag" style="background:var(--red);color:#fff" data-k="tag">Opening soon</span></div>
+<div class="toggle" role="group" aria-label="Billing"><button type="button" data-cycle="monthly" aria-pressed="true">Monthly</button><button type="button" data-cycle="yearly" aria-pressed="false">Yearly · 2 months free</button></div>
+<div><div class="price"><span data-k="price">$49</span><span style="font-size:22px;color:#B9C6D8;font-family:'Public Sans',sans-serif;font-weight:500" data-k="per"> / month</span><span class="was" data-k="was" hidden></span></div><div style="color:#D5DEEA">Decide which properties are worth a bid, before sale day.</div></div>
+<div class="found" data-k="found"><b>Founding price: $39/month, kept for as long as you stay</b>, for the first 100 members. Join the free list to get the launch invitation.</div>
+<div class="err" data-k="err" role="alert"></div>
+<button class="btn btn-red" type="button" data-k="buy" hidden>Become a member</button>
+<div class="note" data-k="note">Secure payment by Stripe. No contract, no setup fee. Cancel anytime. Already a member? <a href="/signin">Sign in</a></div>
+<ul><li>Value, original loan, estimated balance and equity, with the method shown</li><li>Lender, servicer and trustee</li><li>Beds, baths, sq ft, year built, lot, school district</li><li>Sort and filter the map by equity, value and occupancy</li><li>The full member spreadsheet each sale (CSV and Excel)</li><li>The Top 10 Research Brief each month</li><li class="soon">Coming next: watchlist and alerts, max-bid calculator, sale-day mode</li></ul>
 </div>
 </div>
 
@@ -57,8 +70,10 @@ td.c{text-align:center;font-weight:700;color:var(--teal)}td.n{text-align:center;
 <tr><td>Weekly Brief email</td><td class="c">✓</td><td class="c">✓</td></tr>
 <tr><td>Value, beds, baths, sq ft, year built</td><td class="n">—</td><td class="c">✓</td></tr>
 <tr><td>Loan, estimated balance, estimated equity</td><td class="n">—</td><td class="c">✓</td></tr>
-<tr><td>Filters, sorting, saved searches and alerts</td><td class="n">—</td><td class="c">✓</td></tr>
-<tr><td>CSV / Excel export</td><td class="n">—</td><td class="c">✓</td></tr>
+<tr><td>Lender, servicer and trustee</td><td class="n">—</td><td class="c">✓</td></tr>
+<tr><td>Sort and filter by equity, value and occupancy</td><td class="n">—</td><td class="c">✓</td></tr>
+<tr><td>Member spreadsheet, CSV and Excel</td><td class="n">—</td><td class="c">✓</td></tr>
+<tr><td>Top 10 Research Brief each month</td><td class="n">—</td><td class="c">✓</td></tr>
 </tbody></table></div></section>
 
 <section class="sec"><h2 class="disp">Questions</h2>
@@ -66,11 +81,50 @@ td.c{text-align:center;font-weight:700;color:var(--teal)}td.n{text-align:center;
 <div class="card"><strong>Where does the data come from?</strong><p style="margin:6px 0 0;color:#3A4A63">Foreclosure notices from the Harris County Clerk, values and aerial imagery from HCAD, tax statements from HCTax and flood zones from FEMA maps.</p></div>
 <div class="card"><strong>How fresh is it?</strong><p style="margin:6px 0 0;color:#3A4A63">We check the county daily. The list for a sale is complete once the filing deadline passes, 21 days before the sale.</p></div>
 <div class="card"><strong>Which counties?</strong><p style="margin:6px 0 0;color:#3A4A63">Harris County today. Tell us which county you want next: <a href="mailto:leads@firsttuesdaylist.com">leads@firsttuesdaylist.com</a>.</p></div>
+<div class="card"><strong>How do I cancel?</strong><p style="margin:6px 0 0;color:#3A4A63">From your member home: Manage billing, then Cancel. No email or phone call needed. You keep access until the end of the period you paid for.</p></div>
+<div class="card"><strong>Can I share my membership?</strong><p style="margin:6px 0 0;color:#3A4A63">Membership is for one person. The spreadsheet and the brief are for your own use: please don&#39;t forward or resell them.</p></div>
 <div class="card"><strong>Is this legal or investment advice?</strong><p style="margin:6px 0 0;color:#3A4A63">No. It's research compiled from public records and not verified. Do your own title and lien research before bidding.</p></div>
 </div></section>
 </div>
 <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
 <script src="/config.js"></script>
 <script src="/assets/site.js"></script>
+<script>
+// The member card: monthly or yearly, founding price while seats last, checkout on Stripe once membership is open.
+(function () {
+  const card = document.getElementById('member'), $ = k => card.querySelector(`[data-k="${k}"]`);
+  let cycle = 'monthly', st = { open: false, founding: true, founding_left: 100, prices: { monthly: 49, yearly: 490, founding_monthly: 39, founding_yearly: 390 } };
+  const money = n => '$' + n.toLocaleString('en-US');
+  function render() {
+    const P = st.prices, yearly = cycle === 'yearly', f = st.founding;
+    const now = P[(f ? 'founding_' : '') + cycle], full = P[cycle];
+    card.querySelectorAll('[data-cycle]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cycle === cycle));
+    $('price').textContent = money(now); $('per').textContent = yearly ? ' / year' : ' / month';
+    $('was').hidden = !f; $('was').textContent = money(full);
+    const perMonth = yearly ? ` (${money(Math.round(now / 12))} a month)` : '';
+    $('found').hidden = !f;
+    $('found').innerHTML = st.open
+      ? `<b>Founding price: ${money(now)}${yearly ? '/year' : '/month'}${perMonth}, kept for as long as you stay.</b> For the first 100 members: ${st.founding_left} left.`
+      : '<b>Founding price: $39/month, kept for as long as you stay</b>, for the first 100 members. Join the free list to get the launch invitation.';
+    $('tag').textContent = st.member ? 'Your plan' : st.open ? (f ? 'Founding members' : 'Open') : 'Opening soon';
+    $('buy').hidden = !st.open || Boolean(st.member);
+    $('buy').textContent = `Become a member · ${money(now)}${yearly ? '/year' : '/month'}`;
+    if (st.member) $('note').innerHTML = 'You are a member. <a href="/members">Go to your member home</a>';
+  }
+  card.querySelectorAll('[data-cycle]').forEach(b => b.onclick = () => { cycle = b.dataset.cycle; render(); });
+  $('buy').onclick = async () => {
+    $('buy').disabled = true; $('buy').textContent = 'Opening secure checkout…'; $('err').style.display = 'none';
+    try {
+      const r = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: cycle }) });
+      const d = await r.json();
+      if (d.url) { location.href = d.url; return; }
+      throw new Error(d.error || 'Checkout is unavailable right now.');
+    } catch (e) { $('err').textContent = e.message; $('err').style.display = 'block'; $('buy').disabled = false; render(); }
+  };
+  if (new URLSearchParams(location.search).get('canceled')) { $('err').textContent = 'Checkout canceled: nothing was charged.'; $('err').style.display = 'block'; }
+  render();
+  FTL.status.then(s => { st = Object.assign(st, s); render(); });
+})();
+</script>
 </body>
 </html>

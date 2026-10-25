@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in · First Tuesday List</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.auth{max-width:520px;margin:48px auto 0}
+.auth h1{font-size:48px;margin:6px 0 10px}
+.auth .card{padding:26px;display:flex;flex-direction:column;gap:14px}
+.msg{display:none;border-radius:12px;padding:12px 14px;font-size:15px}
+.msg.ok{display:block;background:#E3F2EF;color:#0A5A50}.msg.bad{display:block;background:#FDECEC;color:#8A1016}
+</style>
+</head>
+<body data-page="signin">
+<main class="wrap auth">
+<div class="eyebrow">Members</div>
+<h1 class="disp">Sign in</h1>
+<div class="card">
+<p style="margin:0;color:#3A4A63">No password: we email you a link that signs you in. It works once and expires in 20 minutes.</p>
+<div class="msg" id="msg" role="status"></div>
+<form class="signup" id="f"><label class="sr" for="em">Email address</label><input id="em" type="email" required placeholder="The email you joined with" autocomplete="email"><button class="btn btn-red" type="submit">Email me a sign-in link</button></form>
+<p style="margin:0;font-size:14px;color:var(--muted)">Not a member yet? <a href="/pricing">See membership</a>. Trouble signing in? <a href="mailto:leads@firsttuesdaylist.com">leads@firsttuesdaylist.com</a></p>
+</div>
+</main>
+<script src="/config.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function () {
+  const msg = document.getElementById('msg'), f = document.getElementById('f');
+  const say = (t, ok) => { msg.textContent = t; msg.className = 'msg ' + (ok ? 'ok' : 'bad'); };
+  if (new URLSearchParams(location.search).get('expired')) say('That sign-in link has expired or was already used. Ask for a new one below.', false);
+  FTL.status.then(s => { if (s.member) location.replace('/members'); });
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const b = f.querySelector('button'); b.disabled = true;
+    try {
+      const r = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: f.querySelector('input').value }) });
+      const d = await r.json();
+      say(d.message || d.error, r.ok);
+    } catch (err) { say('Something went wrong. Please try again.', false); }
+    b.disabled = false;
+  });
+})();
+</script>
+</body>
+</html>

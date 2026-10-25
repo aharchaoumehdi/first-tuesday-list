@@ -40,7 +40,14 @@ window.FTLMap = (function () {
     const data = await fetch('/data/sale-' + cur.current_sale + '.json').then(r => r.json());
     const stats = await fetch('/data/stats-' + cur.current_sale + '.json').then(r => r.json());
     const rows = data.rows.filter(r => r.lat != null);
-    const S = { type: 'all', newOnly: false, dry: false, q: (new URLSearchParams(location.search).get('q') || '').trim().toLowerCase(), mode: 'type', sel: null };
+    // members get each property's numbers (from /api/member/sale, never from the public data files)
+    const ST = window.FTL && FTL.status ? await FTL.status : { open: false, member: null };
+    const M = ST.member ? await fetch('/api/member/sale', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null).then(d => d && d.rows).catch(() => null) : null;
+    const mem = id => (M && M[id]) || {};
+    const usd = v => v == null ? '—' : (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US');
+    const joinText = ST.open ? 'Become a member' : 'Join the waitlist';
+    const S = { type: 'all', newOnly: false, dry: false, q: (new URLSearchParams(location.search).get('q') || '').trim().toLowerCase(), mode: 'type', sel: null,
+      byEquity: Boolean(M), eq100: false, midValue: false, notOcc: false };
     const isNew = r => r.first >= stats.new_since;
     const colorOf = r => S.mode === 'new' ? (isNew(r) ? '#D2141C' : '#7C8797') : typeInfo(r.type)[1];
     const full = o.layout === 'full';
@@ -55,6 +62,9 @@ window.FTLMap = (function () {
       <div class="fm-chips" data-k="types"></div>
       <div class="fm-chips"><button class="chip" data-k="new" aria-pressed="false">New this week</button><button class="chip" data-k="dry" aria-pressed="false">Outside flood zone</button>
       <span style="flex:1"></span><button class="chip" data-k="mode" aria-pressed="false" title="Color pins by new vs earlier">Color: type</button></div>
+      ${M ? `<div class="fm-chips fm-member"><span class="tag tag-member">Member</span><button class="chip" data-k="byEquity">Sort: equity ↓</button><button class="chip" data-k="eq100">Equity over $100k</button>
+      <button class="chip" data-k="midValue">Value $150k–$500k</button><button class="chip" data-k="notOcc">Not owner-occupied</button></div>`
+      : `<a class="fm-member-lock" href="/pricing"><span class="ico-lock"></span>Sort by equity, filter by value and occupancy: <strong>${joinText}</strong></a>`}
       <div class="fm-legend" data-k="legend"></div></div>`;
     const stage = `<div class="fm-stage" style="${full ? '' : 'height:' + o.height + 'px'}"><div class="fm-map" data-k="map"></div>
       <div class="fm-nokey" data-k="nokey"><div class="card" style="max-width:440px">The live map needs the Google Maps key. The property list still works.</div></div></div>`;
@@ -66,9 +76,14 @@ window.FTLMap = (function () {
     const $ = k => root.querySelector(`[data-k="${k}"]`);
 
     let map, clusterer, markers = {}, sv;
-    const visible = () => rows.filter(r => (S.type === 'all' || r.type === S.type) && (!S.newOnly || isNew(r)) && (!S.dry || !r.sfha)
+    const memberOk = r => { if (!M) return true; const m = mem(r.id);
+      return (!S.eq100 || m.equity >= 100000) && (!S.midValue || (m.value >= 150000 && m.value <= 500000)) && (!S.notOcc || m.occ === false); };
+    const visible = () => rows.filter(r => (S.type === 'all' || r.type === S.type) && (!S.newOnly || isNew(r)) && (!S.dry || !r.sfha) && memberOk(r)
       && (!S.q || (r.addr + ' ' + r.city + ' ' + r.zip + ' ' + r.id).toLowerCase().includes(S.q)));
-    const ordered = v => v.slice().sort((a, b) => (isNew(b) - isNew(a)) || a.zip.localeCompare(b.zip) || a.addr.localeCompare(b.addr));
+    const eqOf = r => { const e = mem(r.id).equity; return e == null ? -Infinity : e; };
+    const ordered = v => v.slice().sort((a, b) => (S.byEquity && M ? eqOf(b) - eqOf(a) : 0) || (isNew(b) - isNew(a)) || a.zip.localeCompare(b.zip) || a.addr.localeCompare(b.addr));
+    const numLine = r => { const m = mem(r.id);
+      return M ? `<span class="fm-num"><span>${usd(m.value)}</span><span class="e">${m.equity == null ? 'Equity —' : 'Eq. ' + usd(m.equity) + (m.share != null ? ' · ' + Math.round(m.share * 100) + '%' : '')}</span></span>` : ''; };
     // The list and photo strip show only what the map currently shows.
     const inView = v => { const b = map && map.getBounds(); return b ? v.filter(r => b.contains({ lat: r.lat, lng: r.lon })) : v; };
     // on wide screens the home map's filter panel covers its left side
@@ -113,7 +128,10 @@ window.FTLMap = (function () {
         <div><div style="font-weight:800;font-size:17px">${esc(r.addr)}</div><div style="font-size:12px;color:var(--muted)">${esc(r.city)}, TX ${esc(r.zip)} · ${typeInfo(r.type)[0]} · ${esc(r.id)}</div></div>
         <div style="display:flex;gap:5px;flex-wrap:wrap">${isNew(r) ? '<span class="tag tag-new">New this week</span>' : ''}<span class="tag ${r.sfha ? 'tag-flood' : 'tag-plain'}">Flood zone ${esc(r.zone || '—')}${r.sfha ? ' (SFHA)' : ''}</span><span class="tag tag-plain">${r.notice === 'hoa' ? 'HOA lien' : 'Mortgage foreclosure'}</span></div>
         <div style="font-size:13px"><strong>${esc(cur.label_day || '')} · ${esc(r.window || '')}</strong><br><span style="color:var(--muted)">${esc((r.location || '').split(',').slice(0, 2).join(','))}</span></div>
-        <div class="lock"><span>Value, estimated equity, loan, beds and sq ft come with membership. <a href="/pricing" style="font-weight:700">Join the waitlist</a></span></div>
+        ${M ? (m => `<div class="fm-nums"><div><span>Value</span><b>${usd(m.value)}</b></div><div><span>Est. balance</span><b>${usd(m.balance)}</b></div>
+          <div class="t"><span>Est. equity</span><b>${usd(m.equity)}${m.share != null ? ' · ' + Math.round(m.share * 100) + '%' : ''}</b></div>
+          <div><span>Beds · sq ft · built</span><b>${m.beds ?? '—'} · ${m.sqft ? m.sqft.toLocaleString('en-US') : '—'} · ${m.year ?? '—'}</b></div></div>`)(mem(r.id))
+        : `<div class="lock"><span>Value, estimated equity, loan, beds and sq ft come with membership. <a href="/pricing" style="font-weight:700">${joinText}</a></span></div>`}
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><a class="btn btn-red" href="/property/${esc(r.id)}" style="min-height:36px;font-size:13px">Full details</a><button class="btn btn-navy" data-a="sv" style="min-height:36px;font-size:13px">Street View here</button>
         ${r.notice_url ? `<a class="btn btn-ghost" style="min-height:36px;font-size:13px" href="/notice/${esc(r.id)}" download title="Downloads the county clerk's official notice, named with this address">Save notice PDF</a>` : ''}
         <a class="btn btn-ghost" style="min-height:36px;font-size:13px" href="${L.directions}" target="_blank" rel="noopener">Directions</a></div>
@@ -136,7 +154,7 @@ window.FTLMap = (function () {
         $('list').innerHTML = iv.slice(0, 250).map(r => `<button class="fm-item ${S.sel === r.id ? 'sel' : ''}" data-id="${r.id}">
           <img loading="lazy" src="${esc(r.photo)}" alt=""><span style="min-width:0;display:flex;flex-direction:column;gap:3px"><strong style="font-size:14px">${esc(r.addr)}</strong>
           <span style="font-size:12px;color:var(--muted)">${esc(r.city)} ${esc(r.zip)} · ${typeInfo(r.type)[0]}</span>
-          <span>${isNew(r) ? '<span class="tag tag-new">New</span> ' : ''}${r.sfha ? '<span class="tag tag-flood">Flood ' + esc(r.zone) + '</span>' : ''}</span></span></button>`).join('')
+          ${numLine(r)}<span>${isNew(r) ? '<span class="tag tag-new">New</span> ' : ''}${r.sfha ? '<span class="tag tag-flood">Flood ' + esc(r.zone) + '</span>' : ''}</span></span></button>`).join('')
           + (iv.length > 250 ? `<div style="padding:10px 14px;font-size:12px;color:var(--muted)">Showing 250 of ${iv.length}. Zoom in, search or filter to narrow.</div>` : '')
           + (!iv.length ? `<div style="padding:16px 14px;font-size:14px;color:var(--muted)">No properties in this part of the map. Zoom out or press Show all.</div>` : '');
         $('list').querySelectorAll('.fm-item').forEach(b => b.onclick = () => select(b.dataset.id, true));
@@ -153,6 +171,7 @@ window.FTLMap = (function () {
       const v = visible();
       $('count').textContent = v.length;
       $('new').setAttribute('aria-pressed', S.newOnly); $('dry').setAttribute('aria-pressed', S.dry);
+      if (M) ['byEquity', 'eq100', 'midValue', 'notOcc'].forEach(k => $(k).setAttribute('aria-pressed', S[k]));
       $('mode').textContent = S.mode === 'new' ? 'Color: new' : 'Color: type';
       const opts = [['all', 'All', '#0E1A2B'], ...Object.entries(TYPE).map(([k, t]) => [k, t[0].replace(' / townhome', ''), t[1]])];
       $('types').innerHTML = opts.map(([k, l, c]) => `<button class="chip" data-t="${k}" aria-pressed="${S.type === k}"><span class="dot" style="background:${c}"></span>${l}</button>`).join('');
@@ -176,6 +195,7 @@ window.FTLMap = (function () {
     $('all').onclick = () => fitTo(visible());
     $('new').onclick = () => { S.newOnly = !S.newOnly; render(); };
     $('dry').onclick = () => { S.dry = !S.dry; render(); };
+    if (M) ['byEquity', 'eq100', 'midValue', 'notOcc'].forEach(k => { $(k).onclick = () => { S[k] = !S[k]; render(); }; });
     $('mode').onclick = () => { S.mode = S.mode === 'new' ? 'type' : 'new'; render(); };
     render();
 

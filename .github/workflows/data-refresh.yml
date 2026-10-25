@@ -1,5 +1,5 @@
 # Daily data refresh: newest issue sheet from Google Drive -> free-only site data -> commit site/ -> Cloudflare redeploys.
-# The sheet's member-only columns stay in the runner's temp folder; only site/ is ever committed (the repo is public).
+# The sheet's member-only columns stay in the runner's temp folder; only site/ is ever committed, and Cloudflare publishes all of site/ (private repo or not).
 # Setup (service account, keyless sign-in, Drive sharing): README.md, "Daily data refresh".
 name: Daily data refresh
 
@@ -89,6 +89,14 @@ jobs:
           SALE: ${{ steps.sheet.outputs.sale }}
         run: python tools/check_public.py "$CSV" "$SALE"
 
+      # members' numbers and spreadsheet go to the site's private storage (Cloudflare KV, members only), never to site/
+      - name: Member data to private storage
+        if: inputs.dry_run != true
+        env:
+          CSV: ${{ steps.sheet.outputs.csv }}
+          SALE: ${{ steps.sheet.outputs.sale }}
+        run: python tools/member_data.py "$SALE" "$CSV" "$RUNNER_TEMP/members" --upload
+
       - name: Commit site/ if it changed
         env:
           SALE: ${{ steps.sheet.outputs.sale }}
@@ -106,4 +114,4 @@ jobs:
 
       - name: Delete the sheet export
         if: always()
-        run: rm -rf "$RUNNER_TEMP/source" "$RUNNER_TEMP/aerial"
+        run: rm -rf "$RUNNER_TEMP/source" "$RUNNER_TEMP/aerial" "$RUNNER_TEMP/members"

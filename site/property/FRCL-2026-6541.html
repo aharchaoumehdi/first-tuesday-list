@@ -76,12 +76,12 @@
 <div class="card members">
 <div class="h3"><span class="ico-lock"></span>The numbers <span class="tag tag-plain">Members</span></div>
 <div class="nums">
-<div><span>HCAD market value</span><span class="redact"><i></i></span></div>
-<div><span>Estimated loan balance</span><span class="redact"><i></i></span></div>
-<div class="tot"><span>Estimated equity</span><span class="redact"><i></i></span></div>
-<div><span>Value / original loan</span><span class="redact"><i></i></span></div>
+<div><span>HCAD market value</span><span data-m="value"><span class="redact"><i></i></span></span></div>
+<div><span>Estimated loan balance</span><span data-m="balance"><span class="redact"><i></i></span></span></div>
+<div class="tot"><span>Estimated equity</span><span data-m="equity"><span class="redact"><i></i></span></span></div>
+<div><span>Value / original loan</span><span data-m="vtl"><span class="redact"><i></i></span></span></div>
 </div>
-<div class="cta"><span>Members see the value, the loan, the estimated balance and equity, with the method behind every number.</span><a class="btn btn-red" href="/pricing">Join the waitlist</a></div>
+<div class="cta"><span>Members see the value, the loan, the estimated balance and equity, with the method behind every number.</span><a class="btn btn-red" href="/pricing" data-join>Join the waitlist</a></div>
 </div>
 
 <div class="card">
@@ -100,13 +100,13 @@
 <div><div class="k">Address</div><div class="v">12829 Clarewood Dr<br>Houston, TX 77072</div></div>
 <div><div class="k">Property type</div><div class="v">Single family</div></div>
 <div><div class="k">FEMA flood zone</div><div class="v">X · outside the high-risk area</div></div>
-<div><div class="k">Beds / baths</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Living area</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Year built</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Lot size</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Appraised value</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">School district</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Owner-occupied (estimate)</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Beds / baths</div><div class="v" data-m="beds"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Living area</div><div class="v" data-m="sqft"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Year built</div><div class="v" data-m="year"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Lot size</div><div class="v" data-m="lot"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Appraised value</div><div class="v" data-m="appraised"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">School district</div><div class="v" data-m="school"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Owner-occupied (estimate)</div><div class="v" data-m="occ"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
 </div>
 </div>
 
@@ -117,11 +117,11 @@
 <div><div class="k">Notice ID</div><div class="v mono">FRCL-2026-6541</div></div>
 <div><div class="k">Posted more than once</div><div class="v">No</div></div>
 <div><div class="k">Sale window</div><div class="v">10:00 AM - 1:00 PM</div></div>
-<div><div class="k">Current lender</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Servicer</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Substitute trustee</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Original loan</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
-<div><div class="k">Deed of trust date</div><div class="v"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Current lender</div><div class="v" data-m="lender"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Servicer</div><div class="v" data-m="servicer"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Substitute trustee</div><div class="v" data-m="trustee"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Original loan</div><div class="v" data-m="loan"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
+<div><div class="k">Deed of trust date</div><div class="v" data-m="dot"><span class="redact"><span class="ico-lock"></span><i></i></span></div></div>
 </div>
 </div>
 
@@ -139,9 +139,9 @@
 <aside class="p-side">
 <div class="card">
 <div class="h3">Research links</div>
-<div class="rlinks"><a href="/notice/FRCL-2026-6541" download><span>Save the foreclosure notice (PDF)</span><small>County Clerk copy</small></a><a href="https://msc.fema.gov/portal/search?AddressQuery=12829+Clarewood+Dr%2C+Houston%2C+TX+77072" target="_blank" rel="noopener"><span>Flood map for this address</span><small>FEMA</small></a><a href="https://www.google.com/maps/@?api=1&amp;map_action=pano&amp;viewpoint=29.706551,-95.610454" target="_blank" rel="noopener"><span>Street View</span><small>Google</small></a><a href="https://www.google.com/maps/dir/?api=1&amp;destination=12829+Clarewood+Dr%2C+Houston%2C+TX+77072" target="_blank" rel="noopener"><span>Directions</span><small>Google Maps</small></a><a href="https://www.zillow.com/homes/12829-Clarewood-Dr,-Houston,-TX,-77072_rb/" target="_blank" rel="noopener"><span>Zillow</span><small>Listing history, if any</small></a><a href="https://www.realtor.com/realestateandhomes-search/12829-Clarewood-Dr_Houston_TX_77072" target="_blank" rel="noopener"><span>Realtor.com</span><small>Listing history, if any</small></a></div>
+<div class="rlinks" data-k="rlinks"><a href="/notice/FRCL-2026-6541" download><span>Save the foreclosure notice (PDF)</span><small>County Clerk copy</small></a><a href="https://msc.fema.gov/portal/search?AddressQuery=12829+Clarewood+Dr%2C+Houston%2C+TX+77072" target="_blank" rel="noopener"><span>Flood map for this address</span><small>FEMA</small></a><a href="https://www.google.com/maps/@?api=1&amp;map_action=pano&amp;viewpoint=29.706551,-95.610454" target="_blank" rel="noopener"><span>Street View</span><small>Google</small></a><a href="https://www.google.com/maps/dir/?api=1&amp;destination=12829+Clarewood+Dr%2C+Houston%2C+TX+77072" target="_blank" rel="noopener"><span>Directions</span><small>Google Maps</small></a><a href="https://www.zillow.com/homes/12829-Clarewood-Dr,-Houston,-TX,-77072_rb/" target="_blank" rel="noopener"><span>Zillow</span><small>Listing history, if any</small></a><a href="https://www.realtor.com/realestateandhomes-search/12829-Clarewood-Dr_Houston_TX_77072" target="_blank" rel="noopener"><span>Realtor.com</span><small>Listing history, if any</small></a></div>
 </div>
-<div class="card">
+<div class="card" data-k="tools">
 <div class="h3"><span class="ico-lock"></span>Member tools</div>
 <ul class="tools"><li>Max-bid calculator for this property</li><li>Watchlist with postponement and cancellation alerts</li><li>Your private notes</li><li>CSV and Excel export of the sale</li></ul>
 <a class="btn btn-ghost" href="/pricing" style="width:100%">See membership</a>

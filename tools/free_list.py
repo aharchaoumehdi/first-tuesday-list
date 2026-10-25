@@ -19,7 +19,9 @@ TYPES = {"single_family": "Single family", "condo_townhome": "Condo / townhome",
 HEADER = ["Notice ID", "Address", "City", "ZIP", "Property type", "Sale date", "Sale time window", "Sale location",
           "Notice type", "FEMA flood zone", "High-risk flood area (SFHA)", "Posted more than once", "First seen",
           "Property page", "Notice PDF", "Google Maps"]
-LINK_COLS = {"Property page", "Notice PDF", "Google Maps"}
+LINK_LABELS = {"Property page": "Photos and map", "Notice PDF": "Save PDF", "Google Maps": "Open map",
+               "Appraisal (HCAD)": "HCAD record", "Tax statement": "Tax statement"}  # link columns show these words
+LINK_COLS = set(LINK_LABELS)
 
 
 def rows_for(sale, public):
@@ -34,9 +36,11 @@ def rows_for(sale, public):
     return out
 
 
-def write_xlsx(path, rows, label_year):
+def write_xlsx(path, rows, label_year, header=None, widths=None, title=None, subtitle=None, readme=None, money=()):
     """The Excel file in the site's look: logo banner, navy header, banded rows, colored flags, a Read me tab.
-    Excel can't load web fonts, so Arial Narrow stands in for Barlow Condensed and Arial for Public Sans."""
+    Excel can't load web fonts, so Arial Narrow stands in for Barlow Condensed and Arial for Public Sans.
+    The member spreadsheet (tools/member_data.py) passes its own header, widths, titles, Read me lines and money columns."""
+    header = header or HEADER
     from openpyxl import Workbook
     from openpyxl.drawing.image import Image
     from openpyxl.formatting.rule import FormulaRule
@@ -69,10 +73,10 @@ def write_xlsx(path, rows, label_year):
     ws = wb.active
     ws.title = f"{label_year} sale"[:31]
     ws.sheet_properties.tabColor = navy
-    banner(ws, f"HARRIS COUNTY FORECLOSURE AUCTION · {label_year.upper()}",
-           f"{len(rows)} properties · free list from First Tuesday List · built {date.today().isoformat()} · {SITE_URL}/map", len(HEADER))
+    banner(ws, title or f"HARRIS COUNTY FORECLOSURE AUCTION · {label_year.upper()}",
+           subtitle or f"{len(rows)} properties · free list from First Tuesday List · built {date.today().isoformat()} · {SITE_URL}/map", len(header))
     top = 4  # the header row; rows 1-3 are the banner
-    ws.append(HEADER)
+    ws.append(header)
     for row in rows:
         ws.append(row)
     last = top + len(rows)
@@ -90,19 +94,23 @@ def write_xlsx(path, rows, label_year):
         r[0].font = idf
     widths = {"Notice ID": 16, "Address": 30, "City": 14, "ZIP": 8, "Property type": 17, "Sale date": 11, "Sale time window": 18,
               "Sale location": 50, "Notice type": 21, "FEMA flood zone": 10, "High-risk flood area (SFHA)": 12,
-              "Posted more than once": 11, "First seen": 11, "Property page": 15, "Notice PDF": 12, "Google Maps": 12}
-    for i, h in enumerate(HEADER, 1):
-        ws.column_dimensions[get_column_letter(i)].width = widths[h]
+              "Posted more than once": 11, "First seen": 11, "Property page": 15, "Notice PDF": 12, "Google Maps": 12} | (widths or {})
+    for i, h in enumerate(header, 1):
+        ws.column_dimensions[get_column_letter(i)].width = widths.get(h, 14)
+        if h in money:
+            for cell in ws.iter_cols(min_col=i, max_col=i, min_row=top + 1):
+                for c in cell:
+                    c.number_format = '"$"#,##0'
+                    c.font = Font(name="Consolas", size=10, color=ink)
         if h in LINK_COLS:
             for cell in ws.iter_cols(min_col=i, max_col=i, min_row=top + 1):
                 for c in cell:
                     if c.value:
-                        c.hyperlink, c.value, c.font = c.value, {"Property page": "Photos and map", "Notice PDF": "Save PDF",
-                                                                 "Google Maps": "Open map"}[h], linkf
+                        c.hyperlink, c.value, c.font = c.value, LINK_LABELS[h], linkf
     # banding and flags as rules, so they stay right when someone sorts or filters
-    span = f"A{top + 1}:{get_column_letter(len(HEADER))}{last}"
+    span = f"A{top + 1}:{get_column_letter(len(header))}{last}"
     ws.conditional_formatting.add(span, FormulaRule(formula=["MOD(ROW(),2)=0"], fill=cf_fill(band)))
-    col = lambda name: get_column_letter(HEADER.index(name) + 1)
+    col = lambda name: get_column_letter(header.index(name) + 1)
     flags = [("High-risk flood area (SFHA)", '"Yes"', "FDECEC", "B0101A"), ("Notice type", '"HOA lien"', "FFF4DE", "8A5A00"),
              ("Posted more than once", '"Yes"', "E8EDF5", navy)]
     for name, value, bg, fg in flags:
@@ -110,7 +118,7 @@ def write_xlsx(path, rows, label_year):
         ws.conditional_formatting.add(f"{c}{top + 1}:{c}{last}", FormulaRule(formula=[f"{c}{top + 1}={value}"], fill=cf_fill(bg),
                                                                             font=Font(name="Arial", size=10, bold=True, color=fg)))
     ws.freeze_panes = f"C{top + 1}"
-    ws.auto_filter.ref = f"A{top}:{get_column_letter(len(HEADER))}{last}"
+    ws.auto_filter.ref = f"A{top}:{get_column_letter(len(header))}{last}"
     ws.page_setup.orientation, ws.page_setup.fitToWidth, ws.page_setup.fitToHeight = "landscape", 1, 0
     ws.sheet_properties.pageSetUpPr.fitToPage = True
     ws.print_title_rows = f"{top}:{top}"
@@ -124,7 +132,7 @@ def write_xlsx(path, rows, label_year):
     about.sheet_properties.pageSetUpPr.fitToPage = True
     heading = Font(name="Arial Narrow", size=13, bold=True, color=navy)
     text, small = Font(name="Arial", size=10, color=ink), Font(name="Arial", size=9, color=muted)
-    lines = [
+    lines = readme or [
         ("WHAT'S IN IT", heading, None),
         (f"{len(rows)} properties scheduled for the {label_year} sale, built {date.today().isoformat()} from notices filed with the "
          "Harris County Clerk. One row per property; filter by ZIP, type or flood zone with the arrows in the header.", text, None),
@@ -140,6 +148,9 @@ def write_xlsx(path, rows, label_year):
         ("Compiled from public records. Not verified. Do your own title and lien research before bidding.", Font(name="Arial", size=10, bold=True, color=red), None),
         ("First Tuesday List is not a law firm, title company, broker or auctioneer and does not give legal or investment advice.", small, None),
     ]
+    # callers name the styles: heading, text, link, warn, small
+    styles = {"heading": heading, "text": text, "link": linkf, "small": small, "warn": Font(name="Arial", size=10, bold=True, color=red)}
+    lines = [(v, styles[f] if isinstance(f, str) else f, link) for v, f, link in lines]
     for n, (value, font, link) in enumerate(lines, 5):
         c = about.cell(row=n, column=2, value=value)
         c.font, c.alignment = font, Alignment(wrap_text=True, vertical="top")
