@@ -27,6 +27,7 @@ from datetime import date, datetime, timedelta, timezone
 from PIL import Image
 
 from free_list import write_free_list
+from newsletter import write_brief
 from property_pages import nice, notice_filename, write_pages
 
 SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
@@ -244,6 +245,8 @@ def main(sale, data_csv, aerial_dir):
     pages = write_pages(SITE, sale, public, stats)
     print(f"{pages} property pages in site/property/")
     print(f"{write_free_list(SITE, sale, public, info['label_year'])} rows in the free spreadsheet (site/free-list/)")
+    issue, picks = write_brief(SITE, sale, public, stats, info, central_today())
+    print(f"weekly brief for Wednesday {issue.isoformat()} with {picks} example properties (site/free-list/brief.html)")
     print(f"{len(public)} properties, {sum(1 for p in public if p['photo'])} photos, new this week {stats['new_this_week']} (since {new_cut})")
 
 

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{{SUBJECT}}</title>
+<!--
+  THE FIRST TUESDAY BRIEF — weekly email template (Publisher)
+
+  The website fills this in every morning from the newest issue sheet and publishes it at
+  https://firsttuesdaylist.com/free-list/brief.html. All numbers, the four properties, photos,
+  ZIP codes and the sale-day checklist come from the same data as the site and the free spreadsheet.
+
+  Each Wednesday:
+  1. Open https://firsttuesdaylist.com/free-list/brief.html (rebuilt at 6 AM CT).
+  2. Edit ONLY the blocks marked "EDIT" (what changed this week). Everything else stays as generated.
+  3. Put it in a beehiiv DRAFT: subject and preview text are below; the email body is everything
+     inside <body>. Name the draft "Brief <Mon D> — <Sale Mon D> sale". Never schedule or send.
+  4. Check every link and photo, then log the draft in ops_log for the CEO.
+
+  Subject:      {{SUBJECT}}
+  Preview text: {{PREVIEW}}
+
+  Never add: value, loan, balance, equity, lender, servicer, trustee, owner or borrower names,
+  lien guesses, risk notes, Drive links, or advice words ("deal", "steal", "best buy").
+  Generated {{GENERATED}}.
+-->
+</head>
+<body style="margin:0;background:#E9EDF2;font-family:Inter,Arial,sans-serif;color:#1F2A3C">
+<div style="display:none;max-height:0;overflow:hidden">{{PREVIEW}}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#E9EDF2;padding:24px 0">
+<tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#FFFFFF;border-radius:14px;overflow:hidden">
+
+  <tr><td style="padding:28px 36px 8px 36px">
+    <img src="https://firsttuesdaylist.com/assets/logo.png" width="210" alt="First Tuesday List" style="display:block;border:0;width:210px;height:auto">
+  </td></tr>
+  <tr><td style="padding:14px 36px 0 36px">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#D2141C;text-transform:uppercase">The First Tuesday Brief · {{ISSUE_DAY}}</div>
+    <h1 style="margin:6px 0 10px 0;font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:34px;line-height:1.1;color:#13294B;text-transform:uppercase">{{HEADLINE}}</h1>
+    <p style="margin:0;font-size:16px;line-height:1.6">{{LEDE}}</p>
+  </td></tr>
+
+  <tr><td style="padding:22px 36px 6px 36px">
+    <a href="https://firsttuesdaylist.com/free-list/latest.xlsx" style="display:inline-block;background:#D2141C;color:#FFFFFF;text-decoration:none;font-weight:700;font-size:16px;padding:13px 22px;border-radius:10px">Download this week's spreadsheet</a>
+    &nbsp;
+    <a href="https://firsttuesdaylist.com/map" style="display:inline-block;background:#FFFFFF;color:#13294B;text-decoration:none;font-weight:700;font-size:16px;padding:11px 20px;border-radius:10px;border:2px solid #13294B">Open the map</a>
+  </td></tr>
+
+  <tr><td style="padding:18px 36px 0 36px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>{{STATS}}</tr></table>
+  </td></tr>
+
+  <tr><td style="padding:26px 36px 0 36px">
+    <h2 style="margin:0 0 10px 0;font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:22px;color:#13294B;text-transform:uppercase">What changed since last week</h2>
+    <!-- EDIT: replace the postponed / cancelled lines with this week's counts and up to 5 property links each
+         (https://firsttuesdaylist.com/property/<doc_id>). If you have no status data, keep the generated line. Never guess. -->
+    <ul style="margin:0;padding-left:20px;font-size:15px;line-height:1.7">{{CHANGES}}</ul>
+    <p style="margin:8px 0 0 0;font-size:13px;color:#4A5568">We check the county every day until sale morning. The spreadsheet and map always show the latest.</p>
+  </td></tr>
+
+  <tr><td style="padding:26px 36px 0 36px">
+    <h2 style="margin:0 0 4px 0;font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:22px;color:#13294B;text-transform:uppercase">Four to start with</h2>
+    <p style="margin:0 0 12px 0;font-size:13px;color:#4A5568">One of each type, among the newest notices outside the flood zone. Picked for variety, not a recommendation.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">{{PICKS}}</table>
+    <p style="margin:0;font-size:13px;color:#4A5568;background:#F1F3F7;border:1px dashed #B8C2D3;border-radius:8px;padding:8px 10px">Value, loan and estimated equity for each property come with membership.</p>
+  </td></tr>
+
+  <tr><td style="padding:26px 36px 0 36px">
+    <h2 style="margin:0 0 10px 0;font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:22px;color:#13294B;text-transform:uppercase">Busiest ZIP codes</h2>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:15px">{{ZIPS}}</table>
+    <p style="margin:6px 0 0 0;font-size:13px;color:#4A5568">Click a ZIP to see its properties on the map.</p>
+  </td></tr>
+{{CHECKLIST}}
+  <tr><td style="padding:26px 36px 0 36px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#13294B;border-radius:12px"><tr><td style="padding:20px 22px;color:#FFFFFF">
+      <div style="font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:22px;text-transform:uppercase">The numbers are coming</div>
+      <p style="margin:6px 0 14px 0;font-size:15px;line-height:1.6;color:#DCE3EE">Members will see each property's value, loan, estimated balance and equity, with the method behind every number. $49/month, opening soon. Subscribers get first access.</p>
+      <a href="https://firsttuesdaylist.com/pricing" style="display:inline-block;background:#FFFFFF;color:#13294B;text-decoration:none;font-weight:700;font-size:15px;padding:10px 18px;border-radius:9px">See what members get</a>
+    </td></tr></table>
+  </td></tr>
+
+  <tr><td style="padding:22px 36px 0 36px">
+    <p style="margin:0;font-size:15px;line-height:1.6">Know an investor who'd want this? <strong>Forward this email.</strong> They can get the list free at <a href="https://firsttuesdaylist.com" style="color:#13294B">firsttuesdaylist.com</a>. Questions? Just reply.</p>
+  </td></tr>
+
+  <tr><td style="padding:22px 36px 30px 36px">
+    <p style="margin:0;font-size:12px;line-height:1.6;color:#6B7280">Compiled from public records. Not verified. Do your own title and lien research before bidding. First Tuesday List is not a law firm, title company, broker or auctioneer and does not give legal or investment advice.</p>
+  </td></tr>
+
+</table>
+</td></tr></table>
+</body>
+</html>
