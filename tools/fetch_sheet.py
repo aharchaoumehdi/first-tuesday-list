@@ -76,7 +76,7 @@ def children(s, folder):
     out, token = [], None
     while True:
         r = s.get(DRIVE, params={"q": f"'{folder}' in parents and trashed = false", "pageSize": 1000, "pageToken": token,
-                                 "fields": "nextPageToken, files(id, name, mimeType, modifiedTime)",
+                                 "fields": "nextPageToken, files(id, name, mimeType, modifiedTime)", "corpora": "allDrives",
                                  "supportsAllDrives": "true", "includeItemsFromAllDrives": "true"})
         r.raise_for_status()
         d = r.json()
@@ -112,6 +112,24 @@ def issue_files(s, root, depth=4):
     return found, seen
 
 
+def diagnose(s, folder):
+    """Who Drive thinks we are, and whether the folder itself is visible (no file contents)."""
+    out = []
+    r = s.get("https://www.googleapis.com/drive/v3/about", params={"fields": "user(emailAddress)"})
+    out.append(f"Signed in as {r.json().get('user', {}).get('emailAddress') if r.ok else 'unknown (' + str(r.status_code) + ')'}.")
+    r = s.get(f"{DRIVE}/{folder}", params={"fields": "name, mimeType, driveId, capabilities(canListChildren)", "supportsAllDrives": "true"})
+    if r.ok:
+        d = r.json()
+        out.append(f"Folder visible: {d.get('name')!r}, shared drive: {'yes' if d.get('driveId') else 'no'}, "
+                   f"can list: {d.get('capabilities', {}).get('canListChildren')}.")
+    else:
+        out.append(f"Folder not visible ({r.status_code}).")
+    r = s.get(DRIVE, params={"q": "name contains 'sale-' and trashed = false", "pageSize": 5, "fields": "files(name)",
+                             "corpora": "allDrives", "supportsAllDrives": "true", "includeItemsFromAllDrives": "true"})
+    out.append(f"Files named sale-* visible anywhere: {len(r.json().get('files', [])) if r.ok else 'error ' + str(r.status_code)}.")
+    return " ".join(out)
+
+
 def pick(s, wanted=None):
     found, seen = issue_files(s, os.environ.get("DRIVE_ISSUES_FOLDER_ID") or ISSUES_FOLDER)
     best = {}
@@ -128,7 +146,8 @@ def pick(s, wanted=None):
         return sales[0], best[sales[0]]
     if not seen["items"]:
         sys.exit("no issue sheet found: the issues folder looks empty to the service account. "
-                 "Check that Ops/issues is shared with ftl-site-refresh@first-tuesday-list.iam.gserviceaccount.com (Viewer).")
+                 "Check that Ops/issues is shared with ftl-site-refresh@first-tuesday-list.iam.gserviceaccount.com (Viewer). "
+                 + diagnose(s, os.environ.get("DRIVE_ISSUES_FOLDER_ID") or ISSUES_FOLDER))
     sys.exit(f"no issue sheet found{' for sale ' + wanted if wanted else ''}: saw {seen['items']} items, "
              f"folders: {', '.join(sorted(seen['folders'])[:25]) or 'none'}. Issue sheets must be named "
              f"sale-YYYY-MM-DD_issue-YYYY-MM-DD_v<N>_<rows>.")
