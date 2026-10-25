@@ -41,6 +41,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        redirects = os.path.join(ROOT, "_redirects")  # like Cloudflare Pages: "from to status" lines
+        if os.path.exists(redirects):
+            for line in open(redirects, encoding="utf-8"):
+                parts = line.split()
+                if len(parts) == 3 and parts[0] == path:
+                    self.send_response(int(parts[2]))
+                    self.send_header("Location", parts[1])
+                    self.end_headers()
+                    return
         if path.startswith("/notice/"):
             self.send_notice(path.rsplit("/", 1)[-1])
             return

@@ -35,14 +35,34 @@ NUM = re.compile(r"^\$?-?[\d,]+(\.\d+)?%?$")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$|^\d{1,2}/\d{1,2}/\d{2,4}$")
 
 
+FREE_LIST_HEADER = ["Notice ID", "Address", "City", "ZIP", "Property type", "Sale date", "Sale time window", "Sale location",
+                    "Notice type", "FEMA flood zone", "High-risk flood area (SFHA)", "Posted more than once", "First seen",
+                    "Property page", "Notice PDF", "Google Maps"]
+
+
+def xlsx_text(path):
+    from openpyxl import load_workbook
+    wb = load_workbook(path)
+    lines = []
+    for ws in wb.worksheets:
+        for row in ws.iter_rows():
+            lines.append(",".join("" if c.value is None else str(c.value) for c in row)
+                         + "".join("," + c.hyperlink.target for c in row if c.hyperlink and c.hyperlink.target))
+    return "\n".join(lines)
+
+
 def site_files():
     out = {}
     for dirpath, _, names in os.walk(SITE):
         for n in names:
             p = os.path.join(dirpath, n)
             rel = os.path.relpath(p, SITE).replace(os.sep, "/")
-            if n.lower().endswith((".csv", ".tsv", ".xlsx", ".xls")):
-                out[rel] = None  # a spreadsheet has no business in site/
+            if rel.startswith("free-list/") and n.lower().endswith(".csv"):
+                out[rel] = open(p, encoding="utf-8-sig", errors="replace").read()
+            elif rel.startswith("free-list/") and n.lower().endswith(".xlsx"):
+                out[rel] = xlsx_text(p)  # every cell and hyperlink, scanned like any page
+            elif n.lower().endswith((".csv", ".tsv", ".xlsx", ".xls")):
+                out[rel] = None  # outside free-list/, a spreadsheet has no business in site/
             elif n.endswith(TEXT_EXT) and rel != "config.js":
                 out[rel] = open(p, encoding="utf-8", errors="replace").read()
     return out
@@ -78,6 +98,17 @@ def main(data_csv, sale):
             if re.search(rf"\b{re.escape(col)}\b", t):
                 problems.append(f"{p}: mentions member column name {col!r}")
 
+    # the free spreadsheet: exactly the free columns, one row per property, and each row is checked like a property page
+    free_rows = {}
+    for p in [p for p in files if p.startswith("free-list/") and p.endswith(".csv")]:
+        table = list(csv.reader(files[p].splitlines()))
+        if table[0] != FREE_LIST_HEADER:
+            problems.append(f"{p}: columns {table[0]} are not the free-list columns")
+        free_rows.update({row[0]: ",".join(row) for row in table[1:] if row})
+    for p in [p for p in files if p.startswith("free-list/") and p.endswith(".xlsx")]:
+        for line in files[p].splitlines():
+            key = line.split(",", 1)[0]
+            free_rows[key] = free_rows.get(key, "") + "\n" + line
     by_id = {r["id"]: r for r in data["rows"]}
     row_text = {i: json.dumps(r) for i, r in by_id.items()}
     free_text = json.dumps(data["rows"]).lower()
@@ -106,11 +137,12 @@ def main(data_csv, sale):
                 checked[c] += 1
                 for f in forms:
                     pat = re.compile(rf"(?<![\d.,]){re.escape(f)}(?![\d])")
-                    for where, text in ((f"property/{r['doc_id']}.html", page), (f"data/sale-{sale}.json row {r['doc_id']}", row_text.get(r["doc_id"], ""))):
+                    for where, text in ((f"property/{r['doc_id']}.html", page), (f"data/sale-{sale}.json row {r['doc_id']}", row_text.get(r["doc_id"], "")),
+                                        (f"free-list row {r['doc_id']}", free_rows.get(r["doc_id"], ""))):
                         if pat.search(text):
                             problems.append(f"{where}: {c} value {f!r}")
             elif len(v) >= 6 and distinct[c] <= 40:  # a category (school district, loan status): only on its own property it says something
-                if v.lower() in row_text.get(r["doc_id"], "").lower() + page.lower() and v.lower() not in json.dumps(by_id.get(r["doc_id"], {})).lower():
+                if v.lower() in row_text.get(r["doc_id"], "").lower() + page.lower() + free_rows.get(r["doc_id"], "").lower() and v.lower() not in json.dumps(by_id.get(r["doc_id"], {})).lower():
                     problems.append(f"property/{r['doc_id']}.html: {c} value {v!r}")
                 checked[c] += 1
             elif len(v) >= 6:
