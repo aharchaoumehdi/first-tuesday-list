@@ -1,0 +1,47 @@
+FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-10-28 (Nov 3, 2026 sale)
+Built 2026-10-24 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
+Use template. Replace each [PLACEHOLDER] with the value below (keep the formatting), then save as a DRAFT. Never send.
+
+[SUBJECT]                  Nov 3 auction: 6 days out
+[PREVIEW TEXT]             795 properties go to auction Tuesday. What changed, four to start with, and your sale-day checklist.
+[ISSUE DATE]               OCT 28
+[HEADLINE]                 NOV 3 AUCTION: 6 DAYS OUT
+[LEDE]                     795 Harris County properties are scheduled for Tuesday's sale. The list is final: filing closed Oct 13. Here's what changed this week, four properties to start with, and your sale-day checklist.
+[ON THE LIST]              795
+[POSTPONED OR NEW]         — postponed or cancelled (fill in when known)
+[FLOOD]                    72
+[HOA]                      72
+[NEW FILINGS]               none. The Nov 3 list closed Oct 13.
+[POSTPONED AND CANCELLED]   EDIT: this week's counts and up to 5 property links each. No data? Write: we'll report them here as they're posted. Never guess.
+
+[PICK 1 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-11-03/FRCL-2026-7660.jpg
+[PICK 1 ADDRESS]            5210 Parkcrest Dr
+[PICK 1 CITY ZIP · TYPE · FLOOD ZONE]  La Porte 77571 · Single family · Flood zone X
+[PICK 1 ID] (in the link)   FRCL-2026-7660   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-7660
+
+[PICK 2 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-11-03/FRCL-2026-7657.jpg
+[PICK 2 ADDRESS]            10501 South Dr 301
+[PICK 2 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77099 · Condo / townhome · Flood zone X
+[PICK 2 ID] (in the link)   FRCL-2026-7657   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-7657
+
+[PICK 3 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-11-03/FRCL-2026-7636.jpg
+[PICK 3 ADDRESS]            12300 Hodges St 42
+[PICK 3 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77085 · Multifamily · Flood zone X
+[PICK 3 ID] (in the link)   FRCL-2026-7636   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-7636
+
+[PICK 4 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-11-03/FRCL-2026-7718.jpg
+[PICK 4 ADDRESS]            23103 Clay Rd
+[PICK 4 CITY ZIP · TYPE · FLOOD ZONE]  Katy 77493 · Commercial · Flood zone X
+[PICK 4 ID] (in the link)   FRCL-2026-7718   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-7718
+
+[ZIP 1] [CITY 1] [COUNT 1]   77449 · Katy · 38   (ZIP link: https://firsttuesdaylist.com/map?q=77449)
+[ZIP 2] [CITY 2] [COUNT 2]   77433 · Cypress · 30   (ZIP link: https://firsttuesdaylist.com/map?q=77433)
+[ZIP 3] [CITY 3] [COUNT 3]   77373 · Spring · 29   (ZIP link: https://firsttuesdaylist.com/map?q=77373)
+[ZIP 4] [CITY 4] [COUNT 4]   77346 · Humble · 22   (ZIP link: https://firsttuesdaylist.com/map?q=77346)
+[ZIP 5] [CITY 5] [COUNT 5]   77044 · Houston · 21   (ZIP link: https://firsttuesdaylist.com/map?q=77044)
+
+[SALE DAY AND WINDOW]       Tuesday, Nov 3, most sales 10 AM – 1 PM
+[SALE LOCATION]             Bayou City Event Center, Magnolia South Ballroom, 9401 Knight Rd, Houston, TX 77045
+
+Before handing it to the CEO: every link opens, all 4 photos show, the numbers match this sheet, subject and
+preview text are set. Log the draft name in ops_log.

@@ -117,6 +117,43 @@ def write_brief(site, sale, public, stats, info, today):
                      + row("Check", "Status that morning. Many sales are postponed or cancelled at the last minute.")
                      + "</table>\n  </td></tr>\n")
 
+    # the fill-in sheet for the beehiiv template "First Tuesday Brief (weekly)": one line per [PLACEHOLDER]
+    stat2 = f"{len(new_week)} new this week" if open_ else "— postponed or cancelled (fill in when known)"
+    fill = [f"FIRST TUESDAY BRIEF — fill-in sheet for Wednesday {issue.isoformat()} ({info['label_year']} sale)",
+            f"Built {today.isoformat()} from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >",
+            "Use template. Replace each [PLACEHOLDER] with the value below (keep the formatting), then save as a DRAFT. Never send.", "",
+            f"[SUBJECT]                  {subject}",
+            f"[PREVIEW TEXT]             {preview}",
+            f"[ISSUE DATE]               {md(issue).upper()}",
+            f"[HEADLINE]                 {headline.upper()}",
+            f"[LEDE]                     {lede}",
+            f"[ON THE LIST]              {total}",
+            f"[POSTPONED OR NEW]         {stat2}",
+            f"[FLOOD]                    {stats['sfha']}",
+            f"[HOA]                      {stats['hoa']}",
+            "[NEW FILINGS]               " + (f"{len(new_week)} this week: " + "; ".join(f"{r['addr']} ({SITE_URL}/property/{r['id']})" for r in sorted(new_week, key=lambda r: r['first'], reverse=True)[:5])
+                                             if open_ else f"none. The {info['label']} list closed {info['deadline_label']}."),
+            "[POSTPONED AND CANCELLED]   EDIT: this week's counts and up to 5 property links each. No data? Write: we'll report them here as they're posted. Never guess.", ""]
+    for n, r in enumerate(picks, 1):
+        fill += [f"[PICK {n} PHOTO]              replace the image (click it > Replace > Upload from URL): {SITE_URL}{r['photo']}",
+                 f"[PICK {n} ADDRESS]            {r['addr']}",
+                 f"[PICK {n} CITY ZIP · TYPE · FLOOD ZONE]  {r['city']} {r['zip']} · {TYPES.get(r['type'], 'Other')} · Flood zone {r['zone'] or '—'}",
+                 f"[PICK {n} ID] (in the link)   {r['id']}   → link becomes {SITE_URL}/property/{r['id']}", ""]
+    for n, ((z, c), cnt) in enumerate(zips, 1):
+        fill.append(f"[ZIP {n}] [CITY {n}] [COUNT {n}]   {z} · {c} · {cnt}   (ZIP link: {SITE_URL}/map?q={z})")
+    fill.append("")
+    if checklist:
+        fill += [f"[SALE DAY AND WINDOW]       {sale_d.strftime('%A')}, {md(sale_d)}, most sales {info['window']}",
+                 f"[SALE LOCATION]             {', '.join(p for p in (info['place'], info['street']) if p)}"]
+    else:
+        fill.append("SALE-DAY CHECKLIST          more than 2 weeks before the sale: delete the checklist heading and its 4 lines this week.")
+    fill += ["", "Before handing it to the CEO: every link opens, all 4 photos show, the numbers match this sheet, subject and",
+             "preview text are set. Log the draft name in ops_log."]
+    out = os.path.join(site, "free-list")
+    os.makedirs(out, exist_ok=True)
+    with open(os.path.join(out, "brief-fill.txt"), "w", encoding="utf-8") as f:
+        f.write("\n".join(fill) + "\n")
+
     page = open(TEMPLATE, encoding="utf-8").read()
     for k, v in {"SUBJECT": e(subject), "PREVIEW": e(preview), "ISSUE_DAY": f"Wednesday, {md(issue)}", "HEADLINE": e(headline),
                  "LEDE": e(lede), "STATS": stats_html, "CHANGES": changes, "PICKS": rows, "ZIPS": zip_rows,
