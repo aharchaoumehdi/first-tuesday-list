@@ -4,8 +4,9 @@
 name: Daily data refresh
 
 on:
-  schedule:
-    - cron: "0 11 * * *"  # 6:00 AM Houston in daylight saving time, 5:00 AM in winter
+  schedule:  # 6:00 AM Houston all year: cron runs on UTC, so both slots fire and the "when" job keeps the right one
+    - cron: "0 11 * * *"  # 6:00 AM in daylight saving time
+    - cron: "0 12 * * *"  # 6:00 AM in winter
   workflow_dispatch:
     inputs:
       sale:
@@ -26,7 +27,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  when:
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.hour.outputs.go }}
+    steps:
+      - id: hour
+        run: |
+          # pick the slot by daylight saving, not by the clock: GitHub sometimes starts scheduled runs hours late
+          offset=$(TZ=America/Chicago date +%z)
+          if [ "${{ github.event_name }}" != "schedule" ]              || { [ "${{ github.event.schedule }}" = "0 11 * * *" ] && [ "$offset" = "-0500" ]; }              || { [ "${{ github.event.schedule }}" = "0 12 * * *" ] && [ "$offset" = "-0600" ]; }; then
+            echo "go=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "The other slot is today's 6 AM run."; echo "go=0" >> "$GITHUB_OUTPUT"
+          fi
+
   refresh:
+    needs: when
+    if: needs.when.outputs.go == '1'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:

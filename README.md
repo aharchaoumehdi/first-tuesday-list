@@ -28,7 +28,7 @@ Public data files contain only the free columns. Member fields (values, loans, e
 
 ## Daily data refresh
 
-`.github/workflows/data-refresh.yml` runs every morning (11:00 UTC: 6 AM Houston in summer, 5 AM in winter) and on demand (Actions → Daily data refresh → Run workflow, with an optional sale date and a dry-run box):
+`.github/workflows/data-refresh.yml` runs every morning at 6 AM Houston time, summer and winter and on demand (Actions → Daily data refresh → Run workflow, with an optional sale date and a dry-run box):
 
 1. `tools/fetch_sheet.py` finds the current sale's newest issue sheet in Drive (`Ops/issues/sale-YYYY-MM-DD/issue-YYYY-MM-DD/`, highest `v`, never `_superseded/`) and exports its **Data** tab to a CSV in the runner's temp folder. The current sale is the next one that has an issue sheet; on the day after a sale it moves on as soon as the bots file the next sale's sheet. It stops if the sheet lost more than 30% of the rows the site already lists.
 2. `tools/fetch_aerials.py` fetches HCAD aerials only for properties without a photo on the site yet (HCAD parcel by `HCAD_NUM`, never the owner field; Census geocoder as fallback).
