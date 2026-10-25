@@ -10,8 +10,8 @@ which the Ops issues/ folder is shared with. No key exists: the GitHub job
 signs in through Workload Identity Federation (see README), so there is no
 secret to store or leak.
 
-Which file: issues/sale-YYYY-MM-DD/issue-YYYY-MM-DD/sale-..._issue-..._v<N>_<rows>
-(see Ops/scripts/FILING.md). The sale is the earliest one that hasn't
+Which file: any sheet named sale-..._issue-..._v<N>_<rows> anywhere under Ops/issues/
+(FILING.md files them in issues/sale-YYYY-MM-DD/issue-YYYY-MM-DD/). The sale is the earliest one that hasn't
 happened yet (Central time) and has an issue sheet; if none has, the latest
 sale with one. Within it, the newest issue folder, then the highest v.
 Files in _superseded/ are never read. SALE=YYYY-MM-DD picks the sale by hand.
@@ -86,36 +86,52 @@ def children(s, folder):
             return out
 
 
-def newest_issue(s, sale_folder, sale):
-    """(issue date, v, rows, file) of the newest issue sheet for one sale, or None."""
-    best = None
-    for f in children(s, sale_folder):
-        if f["mimeType"] != FOLDER_MIME or not re.fullmatch(r"issue-\d{4}-\d{2}-\d{2}", f["name"]):
-            continue
-        for g in children(s, f["id"]):
-            m = ISSUE_RE.match(g["name"])
-            if not m or m.group(1) != sale or g["mimeType"] not in (SHEET_MIME, XLSX_MIME):
-                continue
-            v, rows = version_rows(m)
-            key = (m.group(2), v, g["mimeType"] == SHEET_MIME, rows, g)
-            if best is None or key[:3] > best[:3]:
-                best = key
-    return best
+SKIP_FOLDERS = re.compile(r"^(_superseded|_archive|internal|to_delete)$", re.I)
+
+
+def issue_files(s, root, depth=4):
+    """Every issue sheet under root, wherever the Publisher filed it (FILING.md plans
+    issues/sale-YYYY-MM-DD/issue-YYYY-MM-DD/, but older issues sit elsewhere). Skips
+    _superseded/, _archive/ and internal/. Also returns what it saw, for the error message."""
+    found, seen, stack = [], {"folders": [], "items": 0}, [(root, 0, "issues")]
+    while stack:
+        fid, d, path = stack.pop()
+        for f in children(s, fid):
+            seen["items"] += 1
+            if f["mimeType"] == FOLDER_MIME:
+                if SKIP_FOLDERS.match(f["name"]) or d >= depth:
+                    continue
+                seen["folders"].append(f"{path}/{f['name']}")
+                stack.append((f["id"], d + 1, f"{path}/{f['name']}"))
+            elif f["mimeType"] in (SHEET_MIME, XLSX_MIME):
+                m = ISSUE_RE.match(f["name"])
+                if m:
+                    v, rows = version_rows(m)
+                    # newest issue date, then highest v, then a native Sheet over an .xlsx copy
+                    found.append((m.group(1), (m.group(2), v, f["mimeType"] == SHEET_MIME, rows, f)))
+    return found, seen
 
 
 def pick(s, wanted=None):
-    sales = sorted((f["name"][5:], f["id"]) for f in children(s, os.environ.get("DRIVE_ISSUES_FOLDER_ID") or ISSUES_FOLDER)
-                   if f["mimeType"] == FOLDER_MIME and re.fullmatch(r"sale-\d{4}-\d{2}-\d{2}", f["name"]))
+    found, seen = issue_files(s, os.environ.get("DRIVE_ISSUES_FOLDER_ID") or ISSUES_FOLDER)
+    best = {}
+    for sale, key in found:
+        if sale not in best or key[:3] > best[sale][:3]:
+            best[sale] = key
+    sales = sorted(best)
     if wanted:
-        sales = [x for x in sales if x[0] == wanted]
+        sales = [x for x in sales if x == wanted]
     else:
         today = central_today().isoformat()
-        sales = [x for x in sales if x[0] >= today] + [x for x in reversed(sales) if x[0] < today]
-    for sale, fid in sales:
-        hit = newest_issue(s, fid, sale)
-        if hit:
-            return sale, hit
-    sys.exit(f"no issue sheet found{' for sale ' + wanted if wanted else ''}")
+        sales = [x for x in sales if x >= today] + [x for x in reversed(sales) if x < today]
+    if sales:
+        return sales[0], best[sales[0]]
+    if not seen["items"]:
+        sys.exit("no issue sheet found: the issues folder looks empty to the service account. "
+                 "Check that Ops/issues is shared with ftl-site-refresh@first-tuesday-list.iam.gserviceaccount.com (Viewer).")
+    sys.exit(f"no issue sheet found{' for sale ' + wanted if wanted else ''}: saw {seen['items']} items, "
+             f"folders: {', '.join(sorted(seen['folders'])[:25]) or 'none'}. Issue sheets must be named "
+             f"sale-YYYY-MM-DD_issue-YYYY-MM-DD_v<N>_<rows>.")
 
 
 def data_tab(names):
