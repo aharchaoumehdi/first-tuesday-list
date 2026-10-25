@@ -1,9 +1,9 @@
 // POST /api/checkout {plan: "monthly" | "yearly", email?} → {url} of a Stripe Checkout page.
 // The founding price applies automatically while founding seats are left.
-import { json, isOpen, sameOrigin, priceFor, stripe, foundingTaken, FOUNDING_SEATS, normEmail, validEmail } from '../../lib/members.js';
+import { json, salesOpen, sameOrigin, priceFor, stripe, foundingTaken, FOUNDING_SEATS, normEmail, validEmail } from '../../lib/members.js';
 
 export async function onRequestPost({ request, env }) {
-  if (!isOpen(env)) return json({ error: 'Membership opens soon.' }, 503);
+  if (!salesOpen(env)) return json({ error: 'Membership opens soon.' }, 503);
   if (!sameOrigin(request)) return json({ error: 'Bad origin' }, 403);
   const body = await request.json().catch(() => ({}));
   const cycle = body.plan === 'yearly' ? 'yearly' : 'monthly';

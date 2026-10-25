@@ -57,6 +57,7 @@ Until the settings below exist, membership stays closed: the pricing page shows 
    - The product and its four prices are created automatically on the first checkout (lookup keys `ftl_member_monthly`,
      `ftl_member_yearly`, `ftl_founding_monthly`, `ftl_founding_yearly`).
    - Optional: Stripe Tax registered for Texas → Cloudflare variable `STRIPE_TAX` = `on`.
+   - Cloudflare variable `SALES` = `closed` pauses new sign-ups (pricing shows "Opening soon"); members keep access. Delete it to open.
 3. **Resend** (sign-in emails): add and verify the domain `firsttuesdaylist.com` (it writes the DNS records in Cloudflare),
    API key with sending access → Cloudflare secret `RESEND_API_KEY`. Optional `EMAIL_FROM`
    (default `First Tuesday List <members@firsttuesdaylist.com>`).
