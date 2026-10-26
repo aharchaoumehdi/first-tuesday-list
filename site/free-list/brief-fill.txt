@@ -1,5 +1,5 @@
 FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-10-28 (Nov 3, 2026 sale)
-Built 2026-10-25 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
+Built 2026-10-26 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
 Use template. Replace each [PLACEHOLDER] with the value below (keep the formatting), then save as a DRAFT. Never send.
 
 [SUBJECT]                  Nov 3 auction: 6 days out
