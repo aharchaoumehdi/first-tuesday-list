@@ -32,6 +32,9 @@ CURRENT_KEYS = {"current_sale", "label", "label_day", "label_year", "starts", "d
 ALWAYS_MEMBER = {"lien_position_guess", "risk_notes", "borrower", "borrower_name", "borrower_names", "owner", "owner_name"}
 TEXT_EXT = (".html", ".js", ".json", ".svg", ".css", ".txt", ".xml")
 NUM = re.compile(r"^\$?-?[\d,]+(\.\d+)?%?$")
+# placeholder words a bot writes when it doesn't know (sale_status "unknown"): they say nothing about a property,
+# and the pages use the same words for free fields ("Flood zone unknown")
+GENERIC = {"unknown", "not_stated", "not stated", "none", "n/a", "pending", "unverified", "not_found", "not found", "missing"}
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$|^\d{1,2}/\d{1,2}/\d{2,4}$")
 
 
@@ -121,7 +124,7 @@ def main(data_csv, sale):
         page = files.get(f"property/{r['doc_id']}.html", "")
         for c in member:
             v = (r.get(c) or "").strip()
-            if not v:
+            if not v or v.lower() in GENERIC:
                 continue
             if NUM.match(v) or DATE.match(v):
                 if NUM.match(v):
