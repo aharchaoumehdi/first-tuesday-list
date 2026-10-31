@@ -1,8 +1,6 @@
 // Shared header, footer and email sign-up for every page.
 (function () {
   const CFG = window.FTL_CONFIG || {};
-  // Where sign-ups go. Swap for the beehiiv embed or API once it's set up.
-  const SUBSCRIBE_URL = CFG.subscribeUrl || 'https://firsttuesdaylist.beehiiv.com/subscribe';
   const page = document.body.dataset.page || '';
   const nav = [['index', '/', 'Home'], ['map', '/map', 'Map'], ['pricing', '/pricing', 'Pricing']];
 
@@ -71,29 +69,32 @@
     tick(); setInterval(tick, 30000);
   }).catch(() => {});
 
-  // beehiiv's embedded form can take a few seconds to appear (or be blocked), so
-  // each slot shows our own form at once and hands over when beehiiv's has loaded.
+  // Every sign-up slot gets our own form; it posts to /api/subscribe (the welcome email carries the spreadsheet).
+  // The hidden "website" field is a trap for bots; "source" says where people signed up (page, flyer).
+  const source = (() => { try { return (new URLSearchParams(location.search).get('utm_source') || '') + ':' + (location.pathname || '/'); } catch (e) { return location.pathname; } })();
   document.querySelectorAll('.bh-form').forEach(slot => {
-    const fb = document.createElement('form');
-    fb.className = 'signup signup-form';
-    fb.innerHTML = '<label class="sr">Email address</label><input type="email" required placeholder="you@company.com" autocomplete="email"><button class="btn btn-red" type="submit">Send me the list</button>';
-    slot.prepend(fb);
-    const done = document.createElement('div'); done.className = 'signup-done'; slot.after(done);
-    const swap = setInterval(() => {
-      // beehiiv inserts its own wrapper next to the script; it only gets a real height once the form is ready
-      const shown = [...slot.children].some(c => c !== fb && c.tagName !== 'SCRIPT' && c.getBoundingClientRect().height > 40);
-      if (shown) { fb.remove(); clearInterval(swap); }
-    }, 400);
-    setTimeout(() => clearInterval(swap), 20000);
+    const f = document.createElement('form');
+    f.className = 'signup signup-form';
+    f.innerHTML = '<label class="sr">Email address</label><input type="email" required placeholder="you@company.com" autocomplete="email">'
+      + '<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">'
+      + '<button class="btn btn-red" type="submit">Send me the list</button>';
+    slot.prepend(f);
+    const done = document.createElement('div'); done.className = 'signup-done'; done.setAttribute('role', 'status'); slot.after(done);
+    f.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = f.querySelector('input[type=email]').value.trim(), btn = f.querySelector('button');
+      if (!email) return;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      let msg = 'Something went wrong. Try again, or write to leads@firsttuesdaylist.com.';
+      try {
+        const r = await fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source, website: f.querySelector('[name=website]').value }) });
+        const d = await r.json();
+        msg = d.message || d.error || msg;
+        if (r.ok) f.reset();
+      } catch (err) { /* keep the default message */ }
+      btn.disabled = false; btn.textContent = 'Send me the list';
+      done.style.display = 'block'; done.textContent = msg;
+    });
   });
-
-  // Every sign-up form on the page.
-  document.querySelectorAll('form.signup-form').forEach(f => f.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = f.querySelector('input[type=email]').value.trim();
-    if (!email) return;
-    window.open(SUBSCRIBE_URL + '?email=' + encodeURIComponent(email), '_blank', 'noopener');
-    const done = f.parentElement.querySelector('.signup-done');
-    if (done) { done.style.display = 'block'; done.textContent = 'Almost done: confirm on the beehiiv page that just opened.'; }
-  }));
 })();

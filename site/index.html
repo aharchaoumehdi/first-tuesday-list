@@ -41,7 +41,6 @@
 .fix p{margin:0;font-size:15px;color:#24324A}
 .step b{font-family:'IBM Plex Mono',monospace;color:var(--red);font-size:13px}
 .cal div.now{background:var(--navy);color:#fff}
-/* beehiiv's form needs ~420px or its input and button get squeezed */
 .map-signup{flex:1 1 460px;max-width:600px;padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .map-signup .bh-form{flex:1 1 420px;min-width:0}
 .brief{background:var(--ink);color:#fff;margin-top:48px}
@@ -60,7 +59,7 @@
 <p class="lead">We read every notice filed with the Harris County Clerk and add photos, flood zones, appraisal values and an estimated loan balance. The full list is free.</p>
 <div class="signup-card" id="signup">
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><label for="email1" class="disp" style="font-size:26px;font-weight:800">Get the free list every Wednesday</label><span style="font-size:13px;color:var(--teal);font-weight:700">Free · no card</span></div>
-<div class="bh-form"><script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cc6e1d6a-72a6-4488-8f44-31002c963cac"></script></div>
+<div class="bh-form"></div>
 <div class="signup-note"><strong>The spreadsheet of every property for this sale lands in your inbox right away.</strong> Then every Wednesday: what's new, postponed and cancelled. Unsubscribe in one click.</div>
 <div class="signup-done"></div>
 </div>
@@ -81,7 +80,7 @@
 <section id="map" class="wrap sec">
 <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px">
 <div><div class="eyebrow">Live map · every notice for <span data-sale="date_short">Nov 3</span></div><h2 class="disp" style="margin:6px 0 4px;font-size:40px">Every property, on one map</h2><div style="color:#3A4A63">Click any pin for its photo, sale details and full property page. The list under the map follows what the map shows.</div></div>
-<div class="card map-signup"><span style="font-size:13px;font-weight:700">Get the spreadsheet by email</span><div class="bh-form"><script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cc6e1d6a-72a6-4488-8f44-31002c963cac"></script></div></div>
+<div class="card map-signup"><span style="font-size:13px;font-weight:700">Get the spreadsheet by email</span><div class="bh-form"></div></div>
 </div>
 <div id="homeMap"></div>
 </section>
@@ -146,13 +145,12 @@
 <div style="flex:1 1 520px;min-width:0"><h2 class="disp" style="margin:0 0 8px;font-size:44px">The First Tuesday Brief</h2>
 <p style="margin:0;font-size:17px;color:#C9D3E0">Free every Wednesday: what was filed this week, what got postponed, the ZIP codes to watch, and the full list. No spam, and we never sell your email.</p></div>
 <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:8px">
-<div class="bh-form"><script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cc6e1d6a-72a6-4488-8f44-31002c963cac"></script></div>
+<div class="bh-form"></div>
 <div class="signup-done" style="color:#5FD3C1"></div>
 </div>
 </div>
 </section>
 
-<script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
 <script src="/config.js"></script>
 <script src="/assets/site.js"></script>
 <script src="/assets/mapapp.js"></script>
