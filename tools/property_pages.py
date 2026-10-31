@@ -283,3 +283,15 @@ def write_pages(site, sale, public, stats):
         with open(os.path.join(out, r["id"] + ".html"), "w", encoding="utf-8") as f:
             f.write(page)
     return len(order)
+
+
+def write_sitemap(site, public, updated):
+    """sitemap.xml for search engines: the main pages and this sale's property pages."""
+    urls = [("/", "daily", "1.0"), ("/map", "daily", "0.9"), ("/pricing", "weekly", "0.8"),
+            ("/privacy", "yearly", "0.2"), ("/terms", "yearly", "0.2")]
+    urls += [(f"/property/{r['id']}", "daily", "0.6") for r in sorted(public, key=lambda r: r["id"])]
+    body = "".join(f"<url><loc>{SITE_URL}{u}</loc><lastmod>{updated}</lastmod><changefreq>{c}</changefreq><priority>{pr}</priority></url>\n"
+                   for u, c, pr in urls)
+    with open(os.path.join(site, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + "</urlset>\n")
+    return len(urls)

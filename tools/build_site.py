@@ -28,7 +28,7 @@ from PIL import Image
 
 from free_list import write_free_list
 from newsletter import write_brief
-from property_pages import nice, notice_filename, write_pages
+from property_pages import nice, notice_filename, write_pages, write_sitemap
 
 SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
 PHOTO_W = 800
@@ -244,6 +244,7 @@ def main(sale, data_csv, aerial_dir):
     stamp_pages(info, stats)
     pages = write_pages(SITE, sale, public, stats)
     print(f"{pages} property pages in site/property/")
+    print(f"{write_sitemap(SITE, public, central_today().isoformat())} pages in site/sitemap.xml")
     print(f"{write_free_list(SITE, sale, public, info['label_year'])} rows in the free spreadsheet (site/free-list/)")
     issue, picks = write_brief(SITE, sale, public, stats, info, central_today())
     print(f"weekly brief for Wednesday {issue.isoformat()} with {picks} example properties (site/free-list/brief.html)")

@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /free-list/
+Disallow: /api/
+Disallow: /members
+Allow: /
+
+Sitemap: https://firsttuesdaylist.com/sitemap.xml
