@@ -176,7 +176,9 @@ def write_free_list(site, sale, public, label_year):
 
     # stable links for the emails, and keep the folder out of search engines
     with open(os.path.join(site, "_redirects"), "w", encoding="utf-8") as f:
-        f.write(f"/free-list/latest.xlsx /free-list/{base}.xlsx 302\n/free-list/latest.csv /free-list/{base}.csv 302\n")
+        f.write(f"/free-list/latest.xlsx /free-list/{base}.xlsx 302\n/free-list/latest.csv /free-list/{base}.csv 302\n"
+                # short links printed on paper (the auction flyer's QR code): they must survive every rebuild
+                "/auction /?utm_source=flyer&utm_medium=print&utm_campaign=auction 302\n")
     with open(os.path.join(site, "_headers"), "w", encoding="utf-8") as f:
         f.write("/free-list/*\n  X-Robots-Tag: noindex, nofollow\n  Cache-Control: no-cache\n")
     return len(rows)
