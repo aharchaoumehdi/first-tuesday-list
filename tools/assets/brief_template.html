@@ -12,12 +12,11 @@
   https://firsttuesdaylist.com/free-list/brief.html. All numbers, the four properties, photos,
   ZIP codes and the sale-day checklist come from the same data as the site and the free spreadsheet.
 
-  Each Wednesday:
-  1. Open https://firsttuesdaylist.com/free-list/brief.html (rebuilt at 6 AM CT).
-  2. Edit ONLY the blocks marked "EDIT" (what changed this week). Everything else stays as generated.
-  3. Put it in a beehiiv DRAFT: subject and preview text are below; the email body is everything
-     inside <body>. Name the draft "Brief <Mon D> — <Sale Mon D> sale". Never schedule or send.
-  4. Check every link and photo, then log the draft in ops_log for the CEO.
+  Each Wednesday (since 2026-11-01 nobody pastes it anywhere): Claude's manager run reviews this page and
+  approves it (ftl-ops tools/brief_send.py); the run then emails that exact version to every subscriber
+  through the site (/api/brief/send, Resend), with an unsubscribe link and the mailing address added.
+  These comments are stripped before sending. The "what changed" line is generated; the Publisher posts
+  postponed/cancelled counts in the review tab when the sheet has them.
 
   Subject:      {{SUBJECT}}
   Preview text: {{PREVIEW}}

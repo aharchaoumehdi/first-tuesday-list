@@ -26,6 +26,18 @@ python tools/serve_site.py
 
 Public data files contain only the free columns. Member fields (values, loans, equity) are never committed.
 
+## Free list and the weekly Brief (our own, since Nov 1, 2026; beehiiv is no longer used)
+
+- Sign-up forms on every page post to `functions/api/subscribe.js`: the subscriber goes into KV (`sub:<email>`) and gets
+  the welcome email with the spreadsheet link. Every email has a one-click unsubscribe (`functions/api/unsubscribe.js`)
+  and the mailing address. Code in `lib/newsletter.js`; emails go out through Resend (same key as sign-in emails).
+- The Brief: `tools/newsletter.py` builds `site/free-list/brief.html` every morning. On Wednesday the ftl-ops manager run
+  reviews it and approves that exact version (ftl-ops `tools/brief_send.py`); the run then posts it to
+  `functions/api/brief/send.js` (keyless, GitHub OIDC), which emails every active subscriber once per issue.
+- Resend's free plan sends 100 emails a day: past ~90 subscribers the Brief needs a paid Resend plan (the CEO's call).
+- Estimated rent for members: `tools/member_data.py` reads HUD's Small Area Fair Market Rents
+  (`tools/assets/hud_safmr_fy2027_houston.csv`, by ZIP and bedrooms). Replace it each October with the new fiscal year.
+
 ## Membership
 
 Paid membership ($49/month or $490/year; founding $39/$390 for the first 100, kept for as long as they stay):
