@@ -1,12 +1,12 @@
-FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-10-28 (Nov 3, 2026 sale)
-Built 2026-10-27 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
+FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-11-04 (Nov 3, 2026 sale)
+Built 2026-10-31 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
 Use template. Replace each [PLACEHOLDER] with the value below (keep the formatting), then save as a DRAFT. Never send.
 
-[SUBJECT]                  Nov 3 auction: 6 days out
-[PREVIEW TEXT]             795 properties go to auction Tuesday. What changed, four to start with, and your sale-day checklist.
-[ISSUE DATE]               OCT 28
-[HEADLINE]                 NOV 3 AUCTION: 6 DAYS OUT
-[LEDE]                     795 Harris County properties are scheduled for Tuesday's sale. The list is final: filing closed Oct 13. Here's what changed this week, four properties to start with, and your sale-day checklist.
+[SUBJECT]                  Dec 1 list is building
+[PREVIEW TEXT]             795 properties go to auction Nov 3. What changed, four to start with.
+[ISSUE DATE]               NOV 4
+[HEADLINE]                 DEC 1 LIST IS BUILDING
+[LEDE]                     The Nov 3 sale is over. Notices for the Dec 1 sale are being filed now; the spreadsheet and map switch to them as soon as the first list is ready.
 [ON THE LIST]              795
 [POSTPONED OR NEW]         — postponed or cancelled (fill in when known)
 [FLOOD]                    72
@@ -40,8 +40,7 @@ Use template. Replace each [PLACEHOLDER] with the value below (keep the formatti
 [ZIP 4] [CITY 4] [COUNT 4]   77346 · Humble · 22   (ZIP link: https://firsttuesdaylist.com/map?q=77346)
 [ZIP 5] [CITY 5] [COUNT 5]   77044 · Houston · 21   (ZIP link: https://firsttuesdaylist.com/map?q=77044)
 
-[SALE DAY AND WINDOW]       Tuesday, Nov 3, most sales 10 AM – 1 PM
-[SALE LOCATION]             Bayou City Event Center, Magnolia South Ballroom, 9401 Knight Rd, Houston, TX 77045
+SALE-DAY CHECKLIST          more than 2 weeks before the sale: delete the checklist heading and its 4 lines this week.
 
 Before handing it to the CEO: every link opens, all 4 photos show, the numbers match this sheet, subject and
 preview text are set. Log the draft name in ops_log.
