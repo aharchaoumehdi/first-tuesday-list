@@ -96,6 +96,8 @@
       lot: m.lot == null ? '—' : m.lot.toLocaleString('en-US') + ' sq ft', appraised: usd(m.appraised), school: esc(m.school || '—'),
       occ: m.occ == null ? 'Unknown' : m.occ ? 'Likely' : 'Likely not', lender: esc(m.lender || '—'),
       servicer: esc(m.servicer || '—'), trustee: esc(m.trustee || '—'),
+      rent: m.rent == null ? '—' : `${usd(m.rent)}/mo <span class="tag tag-plain">HUD · ${m.rent_beds} bd</span>`,
+      rent_yield: m.rent_yield == null ? '—' : (m.rent_yield * 100).toFixed(1) + '%',
       loan: m.loan == null ? (m.loan_status === 'not_stated' ? 'Not stated on the notice' : '—') : usd(m.loan), dot: longDate(m.dot)
     };
     root.querySelectorAll('[data-m]').forEach(el => { el.innerHTML = show[el.dataset.m] ?? '—'; });

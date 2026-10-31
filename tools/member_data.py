@@ -28,6 +28,12 @@ from free_list import SITE_URL, TYPES, write_xlsx  # noqa: E402
 SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
 AUDIENCE = "firsttuesdaylist.com/upload"
 
+# Estimated monthly rent: HUD's FY2027 Small Area Fair Market Rents (by ZIP and bedroom count) for the Houston metro.
+# Refresh each October from https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html (FY27_safmrs.xlsx).
+RENT_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "hud_safmr_fy2027_houston.csv")
+RENT_SOURCE = "HUD Small Area Fair Market Rent, FY2027"
+RENT_TYPES = {"single_family", "condo_townhome"}  # a whole home with one rent; multifamily, land and commercial get none
+
 # the same guard as the Research Brief (ftl-ops tools/research_brief.py): businesses keep their name, people don't
 BUSINESS = re.compile(r"\b(inc|llc|l\.l\.c|lp|l\.p|llp|ltd|corp|corporation|company|co|n\.a|na|bank|bancorp|trust|trustee|"
                       r"mortgage|financial|finance|credit|union|association|assoc|fund|capital|services|servicing|lending|loans?|"
@@ -65,9 +71,28 @@ def yes(v):
     return True if v in ("yes", "true", "1") else False if v in ("no", "false", "0") else None
 
 
+_rents = None
+
+
+def hud_rent(zip_code, beds, ptype):
+    """HUD fair market rent for a home with this many bedrooms in this ZIP, or None. Above 4 bedrooms HUD adds 15% of the
+    4-bedroom rent per extra bedroom. Missing or zero bedrooms (HCAD often leaves them blank) get no estimate."""
+    global _rents
+    if _rents is None:
+        _rents = {r["zip"]: [int(r[f"br{i}"]) for i in range(5)] for r in csv.DictReader(open(RENT_TABLE, encoding="utf-8"))}
+    row = _rents.get((zip_code or "").strip()[:5])
+    if ptype not in RENT_TYPES or not row or not beds or beds < 1:
+        return None
+    return row[beds] if beds <= 4 else int(round(row[4] * (1 + 0.15 * (beds - 4)), -1))
+
+
 def member_row(r):
     value, equity = whole(r["market_value"]), whole(r["est_equity"])
+    beds = whole(r["bedrooms"])
+    rent = hud_rent(r["zip"], beds, r["property_type"])
     return {
+        "rent": rent, "rent_beds": beds if rent else None,
+        "rent_yield": round(rent * 12 / value, 3) if rent and value else None,
         "value": value, "appraised": whole(r["appraised_value"]), "loan": whole(r["original_loan_amount"]),
         "loan_status": r["loan_amount_status"] or None, "dot": r["deed_of_trust_date"] or None,
         "vtl": num(r["value_to_loan"]), "balance": whole(r["est_current_balance"]), "equity": equity,
@@ -86,11 +111,12 @@ def member_row(r):
 HEADER = ["Notice ID", "Address", "City", "ZIP", "Property type", "Sale date", "Sale time window", "Notice type",
           "FEMA flood zone", "High-risk flood area (SFHA)", "Posted more than once",
           "Market value", "Original loan", "Deed of trust date", "Value / loan", "Est. balance", "Est. equity", "Equity share",
+          "Est. monthly rent (HUD)", "Gross rent yield",
           "Beds", "Full baths", "Half baths", "Living area (sq ft)", "Year built", "Lot (sq ft)", "Owner-occupied (estimate)",
           "School district", "Lender", "Servicer", "Substitute trustee", "HCAD account", "First seen",
           "Property page", "Notice PDF", "Appraisal (HCAD)", "Tax statement", "Confidence", "Notes", "Legal description"]
-MONEY = {"Market value", "Original loan", "Est. balance", "Est. equity"}
-WIDTHS = {"Market value": 13, "Original loan": 13, "Est. balance": 13, "Est. equity": 13, "Equity share": 9, "Value / loan": 9,
+MONEY = {"Market value", "Original loan", "Est. balance", "Est. equity", "Est. monthly rent (HUD)"}
+WIDTHS = {"Market value": 13, "Original loan": 13, "Est. balance": 13, "Est. equity": 13, "Equity share": 9, "Value / loan": 9, "Est. monthly rent (HUD)": 11, "Gross rent yield": 9,
           "Deed of trust date": 12, "Beds": 6, "Full baths": 6, "Half baths": 6, "Living area (sq ft)": 10, "Year built": 7,
           "Lot (sq ft)": 9, "Owner-occupied (estimate)": 11, "School district": 18, "Lender": 36, "Servicer": 30,
           "Substitute trustee": 30, "HCAD account": 16, "Appraisal (HCAD)": 13, "Tax statement": 13, "Confidence": 9,
@@ -106,6 +132,10 @@ README = [
      "notice and county records. Estimated balance assumes the loan was paid as scheduled at the average 30-year rate of its "
      "year (Freddie Mac survey); estimated equity is value minus that balance. Second liens, unpaid taxes, HOA dues and "
      "missed payments aren't in it: the opening bid can be close to the full debt. Ask the trustee.", "text", None),
+    ("Estimated monthly rent is HUD's Small Area Fair Market Rent (FY2027) for the property's ZIP code and bedroom count: "
+     "a typical rent for a modest home there, utilities included, not a quote. Single-family homes, condos and townhomes "
+     "only, when the bedroom count is known. Gross rent yield is a year of that rent divided by the market value, before "
+     "taxes, insurance, repairs and vacancy.", "text", None),
     ("", "text", None),
     ("FOR MEMBERS ONLY", "heading", None),
     ("This file is licensed to you as a member. Please don't share or resell it (Terms of Use).", "text", None),
@@ -128,6 +158,7 @@ def sheet_rows(sale, public, members):
                     "Yes" if p["sfha"] else "No", "Yes" if p.get("repeat") else "No",
                     m["value"], m["loan"], m["dot"] or "", m["vtl"], m["balance"], m["equity"],
                     f"{m['share']:.0%}" if m["share"] is not None else "",
+                    m["rent"], f"{m['rent_yield']:.1%}" if m["rent_yield"] is not None else "",
                     m["beds"], m["baths"], m["half"], m["sqft"], m["year"], m["lot"],
                     {True: "Yes", False: "No"}.get(m["occ"], ""), m["school"] or "", m["lender"] or "", m["servicer"] or "",
                     m["trustee"] or "", m["hcad"] or "", p["first"],
@@ -158,7 +189,8 @@ def build(sale, data_csv, out):
                title=f"MEMBER LIST · HARRIS COUNTY FORECLOSURE AUCTION · {label_year.upper()}",
                subtitle=f"{len(rows)} properties · for First Tuesday List members only, please don't share · built {date.today().isoformat()}")
     files[base + ".csv"], files[base + ".xlsx"] = "csv", "xlsx"
-    print(f"member data for {len(members)} properties ({sum(1 for m in members.values() if m['equity'] is not None)} with equity) in {out}")
+    print(f"member data for {len(members)} properties ({sum(1 for m in members.values() if m['equity'] is not None)} with equity, "
+          f"{sum(1 for m in members.values() if m['rent'] is not None)} with rent) in {out}")
     return files
 
 
