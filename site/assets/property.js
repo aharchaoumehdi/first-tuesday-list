@@ -5,15 +5,51 @@
   const lat = parseFloat(root.dataset.lat), lon = parseFloat(root.dataset.lon);
   const $ = k => root.querySelector(`[data-k="${k}"]`);
 
+  // "Get alerts for 77084": the free sign-up is a ZIP alert for this property's ZIP, in the card under the photo
+  // (tools/property_pages.py writes the card and loads assets/zipalerts.js)
+  (function zipAlerts() {
+    const slot = root.querySelector('[data-zip-alerts]'), zip = slot && slot.dataset.zip;
+    if (!slot || !zip || !window.FTLAlerts) return;
+    FTLAlerts.mount(slot, { variant: 'prop', areas: [zip], picksLabel: 'Nearby ZIPs',
+      around: { lat: parseFloat(root.dataset.lat), lon: parseFloat(root.dataset.lon) },
+      lead: ix => `Buying around here? We'll email you the day a new foreclosure is filed in ${ix.byZip[zip] ? ix.byZip[zip].c + ' ' : ''}${zip}.`,
+      title: a => a.length ? `Get alerts for ${a.length <= 2 ? a.join(', ') : a.slice(0, 2).join(', ') + ' + ' + (a.length - 2)}` : 'Get ZIP alerts' });
+  })();
+
   // Back to the map: return to the exact map view (zoom, filters) when we came from it,
   // otherwise open the map on this property. Esc does the same.
   const fromMap = (() => { try { const u = new URL(document.referrer); return u.origin === location.origin && (u.pathname === '/map' || u.pathname === '/'); } catch (e) { return false; } })();
   const goBack = ev => { if (fromMap && history.length > 1) { if (ev) ev.preventDefault(); history.back(); } };
   document.querySelectorAll('[data-back]').forEach(a => a.addEventListener('click', goBack));
   document.addEventListener('keydown', ev => {
-    if (ev.key !== 'Escape' || /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) return;
+    if (ev.key !== 'Escape' || document.body.classList.contains('sl-open') || /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) return;
     if (fromMap && history.length > 1) history.back(); else location.href = '/map#' + encodeURIComponent(root.dataset.id);
   });
+
+  // Shortlist (site.js): a save button first in the actions, with this page's public facts as the saved copy.
+  const SL = window.FTL && FTL.shortlist;
+  if (SL) {
+    const id = root.dataset.id, parts = (root.dataset.addr || '').split(', ');
+    const text = sel => ((root.querySelector(sel) || {}).textContent || '').trim();
+    const TYPES = { 'Single family': 'single_family', 'Condo / townhome': 'condo_townhome', Multifamily: 'multifamily', Commercial: 'commercial', 'Vacant land': 'vacant_land' };
+    const flood = [...root.querySelectorAll('.p-title .chips .tag')].find(t => /^Flood zone /.test(t.textContent));
+    const kv = k => { const el = [...root.querySelectorAll('.kv .k')].find(x => x.textContent.trim() === k); return el ? el.nextElementSibling.textContent.trim() : ''; };
+    const typeLabel = (text('.p-title .sub').split('·')[1] || '').trim();
+    const photo = root.querySelector('.g-photo');
+    SL.know([{ id, addr: text('.p-title h1') || parts[0], city: parts[1] || '', zip: ((parts[2] || '').match(/\d{5}/) || [''])[0],
+      type: TYPES[typeLabel] || 'other', zone: flood ? flood.textContent.replace('Flood zone ', '').split(' ')[0] : '', sfha: flood ? flood.classList.contains('tag-flood') : null,
+      photo: photo ? photo.getAttribute('src') : '', window: kv('Sale window'), location: text('.auction .where'), notice: /HOA/.test(kv('Notice type')) ? 'hoa' : 'mortgage' }], root.dataset.sale);
+    const acts = root.querySelector('.acts');
+    if (acts) {
+      const on = SL.has(id), b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn btn-navy sl-save'; b.dataset.sl = id; b.dataset.slAddr = parts[0] || '';
+      b.dataset.on = 'On my shortlist'; b.dataset.off = 'Save to my shortlist'; b.setAttribute('aria-pressed', on);
+      b.innerHTML = '<svg class="sl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.6 5.5 6 .8-4.4 4.1 1.1 6L12 16.9l-5.3 2.9 1.1-6-4.4-4.1 6-.8z"/></svg><span class="sl-t">' + (on ? b.dataset.on : b.dataset.off) + '</span>';
+      acts.prepend(b);
+    }
+    // the free shortlist now does the postponed / cancelled emails, so the member list names what members add to it
+    root.querySelectorAll('.tools li').forEach(li => { if (/^Watchlist/.test(li.textContent)) li.textContent = 'Value and equity for every home on your shortlist'; });
+  }
 
   // stagger the sheen on the locked bars so it travels down each card, top to bottom
   root.querySelectorAll('.card').forEach(card => card.querySelectorAll('.redact i').forEach((bar, i) => bar.style.setProperty('--d', (i * 0.22).toFixed(2) + 's')));
@@ -133,4 +169,11 @@
     if (t === 'pano') showPano();
     if (t === 'gmap') showMap();
   }));
+})();
+
+// Compare: a "Compare" box beside "Save notice PDF" and the floating compare tray (assets/compare.js).
+// Loaded from here so the 795 generated pages need no change.
+(function () {
+  if (!document.getElementById('prop') || window.FTLCompare) return;
+  const s = document.createElement('script'); s.src = '/assets/compare.js'; s.async = true; document.head.appendChild(s);
 })();

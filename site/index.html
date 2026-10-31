@@ -14,123 +14,351 @@
 <link rel="icon" href="/favicon.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css"><link rel="stylesheet" href="/assets/map.css">
+<link rel="stylesheet" href="/assets/site.css?v=3"><link rel="stylesheet" href="/assets/map.css?v=3"><link rel="stylesheet" href="/assets/zipalerts.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is the First Tuesday List free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The map, every property page, the full spreadsheet of each sale and the weekly First Tuesday Brief are free, with no card. An optional membership adds the numbers: value, loan, estimated balance and equity, rent estimates and the lender."}},
+{"@type":"Question","name":"Where does the data come from?","acceptedAnswer":{"@type":"Answer","text":"Public records: foreclosure notices from the Harris County Clerk, property records and aerial photos from the Harris County Appraisal District, flood zones from FEMA and tax statements from Harris County Tax. AI-driven research reads every notice."}},
+{"@type":"Question","name":"How often is the list updated?","acceptedAnswer":{"@type":"Answer","text":"We check the county every day. Notices can be filed until 21 days before each first-Tuesday sale; after that the list for the sale is complete. The Brief goes out every Wednesday."}},
+{"@type":"Question","name":"What's the catch?","acceptedAnswer":{"@type":"Answer","text":"None. We earn from the optional membership. We never sell your email or pass your inquiries to agents or lead buyers, and you can unsubscribe in one click."}}
+]}
+</script>
 <style>
-.hero{background:var(--navy);color:#fff}
-.hero .wrap{display:flex;gap:36px;padding-top:34px;padding-bottom:40px;flex-wrap:wrap;align-items:flex-start}
-.hero h1{margin:0;font-size:58px;font-weight:800}
-.hero p.lead{margin:0;font-size:18px;color:#D5DEEA;max-width:600px}
-.hero .main{flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px}
-.signup-card{background:#fff;color:var(--ink);border-radius:16px;padding:18px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:10px;max-width:640px}
-.cd{flex:0 1 380px;min-width:0;background:#fff;color:var(--ink);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 40px rgba(0,0,0,.25)}
-.cd .boxes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
-.cd .boxes div{background:var(--bg);border-radius:12px;padding:10px 4px}
-.cd .boxes b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:44px;line-height:1}
-.cd .boxes span{font-size:12px;color:var(--muted);font-weight:600}
-.stat{border:1px solid #E2E7EF;border-radius:12px;padding:10px 12px}.stat b{font-family:'IBM Plex Mono',monospace;font-size:22px;display:block}.stat span{font-size:12px;color:var(--muted)}
-.bars div{display:grid;grid-template-columns:140px minmax(0,1fr) 40px;gap:10px;align-items:center;font-size:14px;margin-bottom:8px}
-.bars i{display:block;height:12px;background:var(--navy);border-radius:6px}
-.bars em{display:block;height:12px;background:#EEF1F6;border-radius:6px;overflow:hidden;font-style:normal}
-.zips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}
-.zips div{display:flex;justify-content:space-between;padding:7px 10px;border-radius:8px;background:var(--bg);font-size:14px}
-.eqbars{display:flex;align-items:flex-end;gap:8px;height:120px}
-.eqbars div{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
-.eqbars i{display:block;width:100%;border-radius:6px 6px 0 0;background:var(--teal)}
-.fix .bad{font-size:13px;color:var(--muted)}.fix .bad b{color:#8A1015}
-.fix h3{margin:6px 0;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:24px;line-height:1.05}
-.fix p{margin:0;font-size:15px;color:#24324A}
-.step b{font-family:'IBM Plex Mono',monospace;color:var(--red);font-size:13px}
-.cal div.now{background:var(--navy);color:#fff}
+/* ---------- hero: what it is, who it's for, what to do ---------- */
+.hero{background:var(--navy);color:#fff;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;padding-top:36px;padding-bottom:44px;align-items:center}
+.hero .main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.htags{display:flex;gap:8px;flex-wrap:wrap}
+.htag{background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px}
+.hero h1{margin:0;font-size:60px;font-weight:800}
+.hero h1 .hl{color:#FF5A5F}
+.hero p.lead{margin:0;font-size:18px;color:#D5DEEA;max-width:580px}
+.hero p.lead strong{color:#fff}
+.signup-card{background:#fff;color:var(--ink);border-radius:16px;padding:18px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:10px;max-width:600px}
+.sc-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sc-head .disp{font-size:28px;font-weight:800}
+.sc-head span{font-size:13px;color:var(--teal);font-weight:700}
+.proof{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 0;font-size:14px;color:#C9D3E0;max-width:600px}
+.proof li{display:inline-flex;align-items:center;gap:6px}
+.proof li+li::before{content:'·';margin:0 10px;color:#7F91AB}
+.proof b{color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600}
+.proof b.d{font-family:inherit;font-weight:700}
+.live{width:8px;height:8px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:ftl-live 2.4s ease-out infinite}
+@keyframes ftl-live{0%{box-shadow:0 0 0 0 rgba(61,220,151,.55)}70%,100%{box-shadow:0 0 0 8px rgba(61,220,151,0)}}
+
+/* the product, for real: the sale's pins and one property card from the data */
+.peek{position:relative;min-width:0}
+.mini{display:block;position:relative;border-radius:18px;overflow:hidden;background:#E9EDF0;box-shadow:0 20px 44px rgba(0,0,0,.32);text-decoration:none;color:var(--ink);aspect-ratio:16/10}
+.mini svg{display:block;width:100%;height:100%}
+.mini .cap{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.95);border-radius:12px;padding:8px 11px;box-shadow:0 6px 16px rgba(14,26,43,.18);display:flex;flex-direction:column;gap:2px;max-width:60%}
+.mini .cap b{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;line-height:1}
+.mini .cap>span{font-size:12px;color:var(--muted);font-weight:600}
+.mini .go{position:absolute;right:12px;top:12px;background:var(--navy);color:#fff;border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700}
+.mini:hover .go,.mini:focus-visible .go{background:var(--red)}
+.mini .pulse{transform-box:fill-box;transform-origin:center;animation:ftl-pulse 2.6s ease-out infinite}
+@keyframes ftl-pulse{0%{transform:scale(.4);opacity:.75}80%,100%{transform:scale(2.4);opacity:0}}
+.hero-card{position:relative;margin:-64px 0 0 40px;display:grid;grid-template-columns:150px minmax(0,1fr);box-shadow:0 22px 48px rgba(0,0,0,.38);border:0}
+.hero-card .ph{height:auto;min-height:100%}
+.hero-card .ph img{position:absolute;inset:0}
+.hero-card .body{gap:6px;padding:12px 14px 13px;min-width:0}
+.hero-card .addr{font-weight:700;font-size:16px;text-decoration:none;color:var(--ink);line-height:1.25}
+.hero-card .sub{font-size:13px;color:var(--muted)}
+.hero-card .tags{display:flex;gap:5px;flex-wrap:wrap}
+.locked{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 10px;margin-top:2px;padding:8px 10px 10px;border-radius:10px;background:#F7F9FC;border:1px dashed #B8C2D3}
+.locked .lk{grid-column:1/-1;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)}
+.locked>div:not(.lk){display:flex;flex-direction:column;gap:4px;font-size:12px;color:#3A4A63;font-weight:600}
+.locked .redact i{width:100%;max-width:84px}
+.hero-card .more{font-size:13px;font-weight:700;text-decoration:none}
+
+/* ---------- how it works ---------- */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;counter-reset:s}
+.steps li{position:relative;display:flex;flex-direction:column;gap:8px}
+.steps .ic{display:flex;align-items:center;gap:12px}
+.steps .n{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;line-height:1;color:var(--red)}
+.steps .ic svg{width:34px;height:34px;color:var(--navy)}
+.steps h3{margin:0;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:26px;line-height:1.05}
+.steps p{margin:0;font-size:15px;color:#24324A}
+.steps p b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px}
+.steps li:not(:last-child)::after{content:'';position:absolute;right:-16px;top:34px;width:14px;height:14px;border-top:3px solid #C5CEDB;border-right:3px solid #C5CEDB;transform:rotate(45deg);z-index:1}
+
+/* ---------- the map ---------- */
+.map-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .map-signup{flex:1 1 460px;max-width:600px;padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .map-signup .bh-form{flex:1 1 420px;min-width:0}
+#homeMap:empty{min-height:724px;border-radius:18px;background:#E9EDF0 linear-gradient(110deg,#E9EDF0 30%,#F3F5F8 50%,#E9EDF0 70%) 0 0/300% 100%;border:1px solid var(--line)}
+
+/* ---------- free vs member ---------- */
+.fvm-sec{background:#fff;border-top:1px solid #E2E7EF;border-bottom:1px solid #E2E7EF;margin-top:48px;padding-bottom:44px}
+.fvm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;align-items:stretch}
+.plan{border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.plan .who{font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px}
+.plan .price{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:800;line-height:1}
+.plan .price small{font-family:'Public Sans',sans-serif;font-size:20px;font-weight:500}
+.plan .price s{font-size:26px;color:#8EA0B8;margin-left:8px}
+.plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:15px}
+.plan-free{background:var(--bg);border:1px solid #E2E7EF}
+.plan-free li::before{content:'✓';color:var(--teal);font-weight:700;margin-right:9px}
+.plan-free .join{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #E2E7EF}
+.plan-free .join b{font-size:15px}
+.plan-mem{background:var(--ink);color:#fff}
+.plan-mem .who{color:#B9C6D8}
+.plan-mem .price small{color:#B9C6D8}
+.found{background:rgba(255,193,77,.14);border:1px solid rgba(255,193,77,.45);color:#FFE3A8;border-radius:12px;padding:11px 12px;font-size:14px}
+.found b{color:#fff}
+.plan-mem .locks li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.06)}
+.plan-mem .redact{color:#B9C6D8}
+.plan-mem .redact i{width:96px;background:linear-gradient(90deg,#3A4A63,#4D5E79)}
+.plan-mem .redact i::after{background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.35),rgba(255,255,255,0))}
+.plan-mem .ico-lock{filter:invert(1) brightness(1.6)}
+.teaser{font-size:14px;color:#D5DEEA;border-left:3px solid var(--red);padding-left:12px}
+.teaser b{color:#fff;font-family:'IBM Plex Mono',monospace}
+.plan-mem .acts{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:auto}
+.plan-mem .acts span{font-size:13px;color:#B9C6D8}
+
+/* ---------- who it's for ---------- */
+.who-card{display:flex;flex-direction:column;gap:6px}
+.who-card svg{width:36px;height:36px;color:var(--red)}
+.who-card h3{margin:4px 0 0;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:26px;line-height:1.05}
+.who-card p{margin:0;font-size:15px;color:#24324A}
+
+/* ---------- sale calendar ---------- */
+.cal div.now{background:var(--navy);color:#fff}
+.when-line{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center;margin:-6px 0 16px;font-size:15px;color:#3A4A63}
+.when-line b{color:var(--ink)}
+.when-line .cdn{font-weight:700;color:var(--red)}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;align-items:start}
+.faq details{background:#fff;border:1px solid #E2E7EF;border-radius:var(--radius)}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;font-weight:700;font-size:16px;min-height:44px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-family:'Barlow Condensed',sans-serif;font-size:28px;line-height:1;color:var(--red);flex:0 0 auto}
+.faq details[open] summary::after{content:'–'}
+.faq summary:focus-visible{outline:3px solid var(--navy);outline-offset:-3px;border-radius:var(--radius)}
+.faq details p{margin:0;padding:0 18px 16px;color:#3A4A63;font-size:15px}
+
+/* ---------- closing sign-up ---------- */
 .brief{background:var(--ink);color:#fff;margin-top:48px}
 .brief .wrap{display:flex;gap:30px;padding-top:44px;padding-bottom:44px;flex-wrap:wrap;align-items:center}
-.brief + .site-footer{margin-top:0}
+body[data-page=index] .site-footer{margin-top:0}
+
+/* ---------- phones: the sticky "Get the free list" bar and its sign-up sheet ---------- */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(14,26,43,.16);transform:translateY(110%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+.sticky-cta.show{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+.sticky-cta .t{flex:1 1 auto;min-width:0;line-height:1.2}
+.sticky-cta .t b{display:block;font-size:22px;font-weight:800}
+.sticky-cta .t span{font-size:12px;color:var(--muted);font-weight:600}
+.sheet{border:0;padding:0;width:100%;max-width:560px;border-radius:20px;color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.sheet::backdrop{background:rgba(14,26,43,.55)}
+.sheet .in{padding:22px 20px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px}
+.sheet h2{margin:0;font-size:32px;padding-right:44px}
+.sheet p{margin:0;color:#3A4A63;font-size:15px}
+.sheet .x{position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:22px;cursor:pointer;color:var(--navy)}
+
+@media (max-width:1060px){.hero h1{font-size:50px}.hero .wrap{gap:30px}.hero-card{margin-left:20px}}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr)}
+  .peek{max-width:560px}
+  .steps{grid-template-columns:minmax(0,1fr)}.steps li:not(:last-child)::after{display:none}
+  .fvm,.faq{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .hero .wrap{padding-top:20px;padding-bottom:32px;gap:24px}
+  .hero h1{font-size:38px}
+  .hero p.lead{font-size:15px}
+  .signup-card{padding:14px}
+  .sc-head .disp{font-size:24px}
+  .proof{font-size:13px;gap:4px 14px}.proof li+li::before{display:none}
+  .signup .btn{flex:1 1 100%}
+  .hero-card{display:flex;margin:-48px 12px 0}
+  .hero-card .ph{height:150px;min-height:0}
+  #homeMap:empty{min-height:584px}
+  .plan{padding:20px}
+  .plan .price{font-size:48px}
+  .plan-mem .redact i{width:52px}
+  .sticky-cta{display:flex}
+  body.has-sticky{padding-bottom:76px}
+  .sheet{margin:auto 0 0;max-width:none;border-radius:20px 20px 0 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .live,.mini .pulse{animation:none}
+  .mini .pulse{display:none}
+  .sticky-cta,.sticky-cta.show{transition:none}
+  #homeMap:empty{background:#E9EDF0}
+}
+/* busiest areas under the map: plain links to the area pages */
+.areas-card{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.areas-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}.areas-top a{font-size:14px;font-weight:700}
+.zips{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
+.zips a{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:8px;background:var(--bg);font-size:14px;text-decoration:none;color:var(--ink)}
+.zips a:hover{background:#E7ECF4;color:var(--ink)}.zips a:hover strong{color:var(--red)}
+.zips a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+/* Rent by ZIP (HUD, area-level) */
+.rz{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:18px;align-items:start}
+.rz-main{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.rz-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rz-hint{font-size:12px;color:var(--muted)}
+.rz-scroll{overflow-x:auto}
+.rz-table{width:100%;border-collapse:collapse;font-size:14px}
+.rz-table th{text-align:left;font-size:12px;color:var(--muted);font-weight:700;border-bottom:1px solid #E2E7EF;padding:0 8px 6px}
+.rz-table th.n,.rz-table td.n{text-align:right}
+.rz-table th button{white-space:nowrap;background:none;border:0;padding:4px 0;font:inherit;color:inherit;cursor:pointer;text-transform:uppercase;letter-spacing:.05em}
+.rz-table th button::after{content:'↕';margin-left:4px;opacity:.45}
+.rz-table th[aria-sort=descending] button,.rz-table th[aria-sort=ascending] button{color:var(--navy)}
+.rz-table th[aria-sort=descending] button::after{content:'↓';opacity:1}
+.rz-table th[aria-sort=ascending] button::after{content:'↑';opacity:1}
+.rz-table th button:focus-visible,.rz-table a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.rz-table td{padding:7px 8px;border-bottom:1px solid #EEF1F6;vertical-align:middle}
+.rz-table tbody tr:hover{background:#F7F9FC}
+.rz-table .z{font-weight:700;white-space:nowrap}.rz-table .z small{font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}
+.rz-table .r{font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap}
+.rz-table .r .dot{margin-right:6px}
+.rz-barcol{width:34%}
+.rz-bar{display:block;height:10px;border-radius:5px;background:#EEF1F6;overflow:hidden}.rz-bar i{display:block;height:100%;border-radius:5px}
+.rz-table td.go{text-align:right;white-space:nowrap}.rz-table td.go a{font-size:13px;font-weight:700;text-decoration:none}
+.rz-foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.rz-src{flex:1 1 300px;font-size:12px;color:var(--muted)}
+.rz-side{display:flex;flex-direction:column;gap:12px}
+.rz-side p{margin:0;font-size:15px;color:#24324A}
+.rz-ramp{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.rz-ramp i{height:12px;border-radius:3px}
+.rz-ramp-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:-6px}
+.rz-lock{flex-wrap:wrap;gap:6px 8px;text-decoration:none}.rz-lock .t{flex:1 1 calc(100% - 30px)}.rz-lock .b{display:flex;align-items:center;gap:8px;margin-left:auto}
+.rz-lock .redact i{width:64px}.rz-lock strong{color:var(--navy)}.rz-lock:hover strong{color:var(--red)}
+@media (max-width:900px){.rz{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.rz-table .z small{display:block;margin-left:0;font-size:12px}.rz-table th{font-size:11px}.rz-table th button{letter-spacing:.02em}.rz-barcol,.rz-table td.bar{display:none}.rz-table td,.rz-table th{padding-left:5px;padding-right:5px}.rz-main{padding:14px 12px}}
 @media (max-width:760px){.hero h1{font-size:34px}.hero p.lead{font-size:15px}.hero .wrap{padding-top:20px;gap:22px}.cd{flex:1 1 100%}.bars div{grid-template-columns:110px minmax(0,1fr) 36px}}
 </style>
 </head>
 <body data-page="index">
 
-<section class="hero">
+<section class="hero" id="top">
 <div class="wrap">
 <div class="main">
-<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag" style="background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px">Harris County foreclosure auction</span><span class="tag" style="background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px" data-sale="date_full">Tuesday, November 3, 2026</span></div>
-<h1 class="disp">Every foreclosure going to auction. <span style="color:#FF5A5F">Researched before the gavel.</span></h1>
-<p class="lead">We read every notice filed with the Harris County Clerk and add photos, flood zones, appraisal values and an estimated loan balance. The full list is free.</p>
+<div class="htags"><span class="tag htag">Harris County, Texas · foreclosure auction</span><span class="tag htag" data-sale="date_full">Tuesday, November 3, 2026</span></div>
+<h1 class="disp">Every Harris County foreclosure going to auction. <span class="hl">Free, on one map.</span></h1>
+<p class="lead">AI-driven research on every notice filed with the County Clerk, with photos, flood zones and county data added. <strong>For investors, agents and first-time auction bidders.</strong></p>
 <div class="signup-card" id="signup">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><label for="email1" class="disp" style="font-size:26px;font-weight:800">Get the free list every Wednesday</label><span style="font-size:13px;color:var(--teal);font-weight:700">Free · no card</span></div>
-<div class="bh-form"></div>
-<div class="signup-note"><strong>The spreadsheet of every property for this sale lands in your inbox right away.</strong> Then every Wednesday: what's new, postponed and cancelled. Unsubscribe in one click.</div>
-<div class="signup-done"></div>
+<div id="zipAlerts"></div>
+<div class="signup-note">Just want the weekly list? <a href="#brief">Get the Brief and the spreadsheet</a>.</div>
 </div>
-<div style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:#B9C6D8"><a href="#map" style="color:#fff;font-weight:700">Or explore the map below</a><a href="/pricing" style="color:#FFC14D;font-weight:700">Members: founding price $39/month</a><span>Sources: County Clerk · HCAD · FEMA · HCTax</span></div>
+<ul class="proof" aria-label="This sale, from the data">
+<li><span><b data-s="total">795</b> properties</span></li>
+<li><span>Sale <b class="d" data-sale="date_short">Nov 3</b></span></li>
+<li><span><b data-s="new_this_week">236</b> new this week</span></li>
+<li><span class="live" aria-hidden="true"></span><span>checked with the county daily</span></li>
+</ul>
 </div>
-<aside class="cd" aria-label="Next sale">
-<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Next sale</span><span class="tag" style="background:#E8F4F1;color:var(--teal)" data-sale="phase">List complete</span></div>
-<div class="boxes"><div><b data-cd="d">--</b><span>days</span></div><div><b data-cd="h">--</b><span>hours</span></div><div><b data-cd="m">--</b><span>min</span></div></div>
-<div style="font-size:15px"><strong data-sale="when">Tue, Nov 3 · most sales 10 AM – 1 PM</strong><br><span data-sale="place">Bayou City Event Center, Magnolia South Ballroom</span><br><span style="color:var(--muted)" data-sale="street">9401 Knight Rd, Houston, TX 77045</span></div>
-<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
-<div class="stat"><b data-s="total">795</b><span>notices for this sale</span></div><div class="stat"><b data-s="new_this_week">236</b><span>new this week</span></div>
-<div class="stat"><b data-s="sfha">72</b><span>in a FEMA flood zone</span></div><div class="stat"><b data-s="hoa">72</b><span>HOA lien sales</span></div></div>
-<a class="btn btn-navy" href="#map">See them on the map</a>
+
+<div class="peek">
+<a class="mini" href="#map" aria-label="Every property of this sale as a dot on the map of Harris County. Go to the interactive map.">
+<svg id="miniMap" viewBox="0 0 480 300" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+<span class="cap"><b><span data-s="total">795</span> pins</b><span>The <span data-sale="date_short">Nov 3</span> sale, live from the list</span></span>
+<span class="go">Open the map ›</span>
+</a>
+<article class="prop-card hero-card" id="heroCard" hidden></article>
+</div>
+</div>
+</section>
+
+<section id="how" class="wrap sec">
+<div class="eyebrow">How it works</div>
+<h2 class="disp">From the county's notices to your inbox</h2>
+<ol class="steps">
+<li class="card"><div class="ic"><span class="n">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
+<h3>We read every notice</h3><p>AI-driven research reads each foreclosure notice filed with the Harris County Clerk: <b data-s="total">795</b> for the <span data-sale="date_short">Nov 3</span> sale, checked with the county daily.</p></li>
+<li class="card"><div class="ic"><span class="n">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="m2 13 10 5 10-5"/></svg></div>
+<h3>We add what it leaves out</h3><p>An aerial photo, the FEMA flood zone and Harris County appraisal data for each address. <b data-x="photos">795</b> have a photo; <b data-s="sfha">72</b> sit in a high-risk flood zone.</p></li>
+<li class="card"><div class="ic"><span class="n">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+<h3>You get the list</h3><p>The live map, the full spreadsheet by email and the First Tuesday Brief every Wednesday: what's new, postponed and cancelled. Free.</p></li>
+</ol>
+</section>
+
+<section id="map" class="wrap sec">
+<div class="map-head">
+<div><div class="eyebrow">See it for yourself · every notice for <span data-sale="date_short">Nov 3</span></div><h2 class="disp" style="margin:6px 0 4px;font-size:40px">Every property, on one map</h2><div style="color:#3A4A63">Click any pin for its photo, sale details and full property page.</div></div>
+<div class="card map-signup"><span style="font-size:13px;font-weight:700">Get the spreadsheet by email</span><div class="bh-form" data-source="home-map"></div></div>
+</div>
+<div id="homeMap"></div>
+<div class="card areas-card"><div class="areas-top"><b>Busiest ZIP codes this sale</b><a href="/areas">Every ZIP code and city ›</a></div>
+<div class="zips" id="zipList"><!--areas:zips--><a href="/zip/77449" title="Katy 77449 foreclosure auctions"><span><strong>77449</strong> <span style="color:var(--muted)">Katy</span></span><span class="mono">38</span></a><a href="/zip/77433" title="Cypress 77433 foreclosure auctions"><span><strong>77433</strong> <span style="color:var(--muted)">Cypress</span></span><span class="mono">30</span></a><a href="/zip/77373" title="Spring 77373 foreclosure auctions"><span><strong>77373</strong> <span style="color:var(--muted)">Spring</span></span><span class="mono">29</span></a><a href="/zip/77346" title="Humble 77346 foreclosure auctions"><span><strong>77346</strong> <span style="color:var(--muted)">Humble</span></span><span class="mono">22</span></a><a href="/zip/77044" title="Houston 77044 foreclosure auctions"><span><strong>77044</strong> <span style="color:var(--muted)">Houston</span></span><span class="mono">21</span></a><a href="/zip/77396" title="Humble 77396 foreclosure auctions"><span><strong>77396</strong> <span style="color:var(--muted)">Humble</span></span><span class="mono">18</span></a><a href="/zip/77379" title="Spring 77379 foreclosure auctions"><span><strong>77379</strong> <span style="color:var(--muted)">Spring</span></span><span class="mono">15</span></a><a href="/zip/77493" title="Katy 77493 foreclosure auctions"><span><strong>77493</strong> <span style="color:var(--muted)">Katy</span></span><span class="mono">15</span></a><a href="/zip/77521" title="Baytown 77521 foreclosure auctions"><span><strong>77521</strong> <span style="color:var(--muted)">Baytown</span></span><span class="mono">15</span></a><a href="/zip/77447" title="Hockley 77447 foreclosure auctions"><span><strong>77447</strong> <span style="color:var(--muted)">Hockley</span></span><span class="mono">14</span></a><!--/areas:zips--></div></div>
+</section>
+
+<section id="rent" class="wrap sec" aria-labelledby="rentH">
+<div class="eyebrow">Free for investors · HUD FY2027 rents</div>
+<h2 class="disp" id="rentH">Rent by ZIP: what this sale's areas rent for</h2>
+<div class="rz">
+<div class="card rz-main">
+<div class="rz-top"><div style="font-weight:700">Busiest ZIPs in the <span data-sale="date_short">Nov 3</span> sale, with HUD's 3-bedroom rent</div><span class="rz-hint">Sort by any column</span></div>
+<div class="rz-scroll"><table class="rz-table">
+<caption class="sr">ZIP codes in this sale with their property count and HUD fair market rent for a 3-bedroom home</caption>
+<thead><tr><th scope="col" aria-sort="none"><button type="button" data-sort="zip">ZIP</button></th><th scope="col" aria-sort="descending" class="n"><button type="button" data-sort="n">Properties</button></th><th scope="col" aria-sort="none" class="n"><button type="button" data-sort="rent">3 BR rent/mo</button></th><th scope="col" class="rz-barcol"><span class="sr">Rent compared</span></th><th scope="col"><span class="sr">Open on the map</span></th></tr></thead>
+<tbody id="rzBody"><tr><td colspan="5" style="color:var(--muted)">Loading rents…</td></tr></tbody>
+</table></div>
+<div class="rz-foot"><button type="button" class="chip" id="rzMore" aria-expanded="false" hidden>Show all ZIPs</button>
+<span class="rz-src">Source: <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank" rel="noopener">HUD Small Area Fair Market Rents, FY2027</a>. A typical rent for a modest home in the ZIP, utilities included. Area figures, not any property's rent.</span></div>
+</div>
+<aside class="card rz-side">
+<div class="disp" style="font-size:28px;font-weight:800">See rent on the map</div>
+<p>Turn on the <strong>Rent lens</strong> and every pin takes the color of its ZIP's HUD rent, for 1 to 4 BR. Click a ZIP above to open it there.</p>
+<div class="rz-ramp" aria-hidden="true"><i style="background:#E8B53A"></i><i style="background:#93BF73"></i><i style="background:#2E9E8F"></i><i style="background:#1F6688"></i><i style="background:#13294B"></i></div>
+<div class="rz-ramp-l" aria-hidden="true"><span>Lower rent</span><span>Higher rent</span></div>
+<a class="btn btn-red" href="/map?lens=rent&amp;br=3">Open the rent map</a>
+<a class="lock rz-lock" href="/pricing"><span class="t">Each home's estimated rent (from its bedroom count) and gross yield against its appraised value</span><span class="b"><span class="redact"><i></i></span><span class="redact"><i style="width:40px;--d:.22s"></i></span><strong>Members</strong></span></a>
 </aside>
 </div>
 </section>
 
-<section id="map" class="wrap sec">
-<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px">
-<div><div class="eyebrow">Live map · every notice for <span data-sale="date_short">Nov 3</span></div><h2 class="disp" style="margin:6px 0 4px;font-size:40px">Every property, on one map</h2><div style="color:#3A4A63">Click any pin for its photo, sale details and full property page. The list under the map follows what the map shows.</div></div>
-<div class="card map-signup"><span style="font-size:13px;font-weight:700">Get the spreadsheet by email</span><div class="bh-form"></div></div>
-</div>
-<div id="homeMap"></div>
-</section>
-
-<section class="wrap sec" aria-labelledby="glance">
-<div class="eyebrow">This sale at a glance</div>
-<h2 class="disp" id="glance"><span data-s="total">795</span> properties · $<span data-s="total_value_m">338</span>M in appraised value</h2>
-<div class="grid3">
-<div class="card"><div style="font-weight:700;margin-bottom:12px">By property type</div><div class="bars" id="typeBars"></div></div>
-<div class="card"><div style="font-weight:700;margin-bottom:12px">Busiest ZIP codes</div><div class="zips" id="zipList"></div></div>
-<div class="card" style="display:flex;flex-direction:column;gap:12px"><div style="font-weight:700">Estimated equity (members)</div><div class="eqbars" id="eqBars"></div>
-<div style="font-size:14px"><strong class="mono" data-s="equity_100k_plus">234</strong> properties show an estimated <strong>$100k+ equity</strong>. <a href="/pricing" style="font-weight:700">Members see which ones →</a></div>
-<div style="font-size:12px;color:var(--muted)">Based on <span data-s="equity_known">448</span> notices that state the loan amount.</div></div>
-</div>
-</section>
-
-<section class="wrap sec">
-<div class="eyebrow">New this week · <span data-s="new_this_week">236</span> notices</div>
-<h2 class="disp">Fresh on the list</h2>
-<div class="grid3" id="newCards"></div>
-</section>
-
-<section class="sec" style="background:#fff;border-top:1px solid #E2E7EF;border-bottom:1px solid #E2E7EF;margin-top:40px;padding-bottom:40px">
+<section class="sec fvm-sec" id="plans" aria-labelledby="fvmTitle">
 <div class="wrap">
-<div class="eyebrow">Built for investors, not for lead sellers</div>
-<h2 class="disp" style="font-size:38px">What the big portals get wrong, fixed</h2>
-<div class="grid3">
-<div class="card fix"><div class="bad"><b>Elsewhere:</b> listings show "for sale" weeks after a sale was postponed.</div><h3>Status checked daily</h3><p>Every notice carries the date we last checked it with the county.</p></div>
-<div class="card fix"><div class="bad"><b>Elsewhere:</b> addresses are paywalled, or your inquiry is sold to agents.</div><h3>Every address is free</h3><p>The full list, sale times and flood zones are public. We never sell your contact details.</p></div>
-<div class="card fix"><div class="bad"><b>Elsewhere:</b> one mystery number with no method behind it.</div><h3>Estimates with receipts</h3><p>Equity shows its inputs: value, original loan, deed date and the rate used.</p></div>
-<div class="card fix"><div class="bad"><b>Elsewhere:</b> a curated slice of foreclosures mixed with resale listings.</div><h3>Every notice filed</h3><p>If it was posted with the Harris County Clerk for this sale, it's on the list, HOA and commercial included.</p></div>
-<div class="card fix"><div class="bad"><b>Elsewhere:</b> buyer premiums and prices you learn at checkout.</div><h3>One honest price</h3><p>Free list for everyone. One membership for the numbers: $49 a month, or $39 for the first 100 founding members. <a href="/pricing">See pricing</a>.</p></div>
-<div class="card fix"><div class="bad"><b>Elsewhere:</b> old photos shown as if taken today.</div><h3>Photos with dates</h3><p>Every image says where it came from and when. One click to Street View.</p></div>
-</div></div>
-</section>
-
-<section id="how" class="wrap sec">
-<div class="eyebrow">How we research</div>
-<h2 class="disp">From the clerk's office to your inbox</h2>
-<div class="grid5">
-<div class="card step"><b>01 · daily</b><div style="font-weight:700;margin:4px 0">Collect</div><div style="font-size:14px;color:#3A4A63">Every new trustee and HOA sale notice on the County Clerk site.</div></div>
-<div class="card step"><b>02</b><div style="font-weight:700;margin:4px 0">Read</div><div style="font-size:14px;color:#3A4A63">Each notice PDF is read in full: lender, loan, deed date, trustee, sale window.</div></div>
-<div class="card step"><b>03</b><div style="font-weight:700;margin:4px 0">Enrich</div><div style="font-size:14px;color:#3A4A63">HCAD values and building facts, tax statement, FEMA flood zone, aerial photo.</div></div>
-<div class="card step"><b>04</b><div style="font-weight:700;margin:4px 0">Estimate</div><div style="font-size:14px;color:#3A4A63">Remaining balance from the loan, its date and that month's market rate.</div></div>
-<div class="card step"><b>05</b><div style="font-weight:700;margin:4px 0">Publish</div><div style="font-size:14px;color:#3A4A63">The site updates with the data. The Brief goes out every Wednesday.</div></div>
+<div class="eyebrow">Free vs member</div>
+<h2 class="disp" id="fvmTitle">The list is free. The numbers are for members.</h2>
+<div class="fvm">
+<div class="plan plan-free">
+<div><div class="who" style="color:var(--muted)">Free</div><div class="price">$0</div><div style="color:#3A4A63">Know what's going to auction, when and where.</div></div>
+<ul>
+<li>All <span data-s="total">795</span> properties going to auction <span data-sale="date_short">Nov 3</span></li>
+<li>Live map with aerial photos and Street View</li>
+<li>Sale date, time window and place</li>
+<li>FEMA flood zone and high-risk flag</li>
+<li>Notice PDF, Zillow and Realtor.com links</li>
+<li>The full spreadsheet, and the Brief every Wednesday</li>
+</ul>
+<div class="join"><b>Get the free list now</b><div class="bh-form" data-source="home-plans"></div><div class="signup-note">Free, no card. Unsubscribe in one click.</div></div>
+</div>
+<div class="plan plan-mem">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="who">Member</div><span class="tag" style="background:var(--red);color:#fff" data-x="memtag">Founding members</span></div>
+<div class="price"><span data-x="now">$39</span><small> / month</small><s data-x="was">$49</s></div>
+<div class="found" data-x="found"><b>Founding price for the first 100 members, kept for as long as you stay.</b></div>
+<ul class="locks" aria-label="What members see on every property">
+<li><span>Value and original loan</span><span class="redact"><span class="ico-lock"></span><i></i></span></li>
+<li><span>Estimated balance and equity, method shown</span><span class="redact"><span class="ico-lock"></span><i></i></span></li>
+<li><span>Estimated monthly rent and yield</span><span class="redact"><span class="ico-lock"></span><i></i></span></li>
+<li><span>Lender, servicer and trustee</span><span class="redact"><span class="ico-lock"></span><i></i></span></li>
+<li><span>Beds, baths, sq ft, year built</span><span class="redact"><span class="ico-lock"></span><i></i></span></li>
+</ul>
+<div class="teaser"><b data-s="equity_100k_plus">234</b> of the <b data-s="equity_known">448</b> notices that state the loan show an estimated <strong>$100k+ equity</strong>. Members see which ones, with the math.</div>
+<div class="acts"><a class="btn btn-red" href="/pricing#member" data-join>Join the waitlist</a><span>No contract. Cancel anytime. <a href="/pricing" style="color:#fff">Compare plans</a></span></div>
+</div>
+</div>
 </div>
 </section>
 
-<section class="wrap sec">
-<h2 class="disp" style="font-size:32px">Sale calendar · first Tuesday of every month</h2>
+<section class="wrap sec" aria-labelledby="whoTitle">
+<div class="eyebrow">Who it's for</div>
+<h2 class="disp" id="whoTitle">Built for people who bid, and the people who help them</h2>
+<div class="grid3">
+<div class="card who-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>
+<h3>Investors</h3><p>Every property going to auction in one place, weeks before sale day, so your research starts with the full list.</p></div>
+<div class="card who-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/></svg>
+<h3>Agents with investor clients</h3><p>A clean, mapped list to share with clients each month, with photos and flood zones. We never sell your contact details.</p></div>
+<div class="card who-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 4 6 6M11 7l6 6M8.5 9.5l6 6"/><path d="M11.5 12.5 4 20"/><path d="M3 21h8"/></svg>
+<h3>First-time auction bidders</h3><p>When and where the sale happens, what each notice says, and the questions to research before you ever bid.</p></div>
+</div>
+</section>
+
+<section class="wrap sec" aria-labelledby="calTitle">
+<h2 class="disp" id="calTitle" style="font-size:32px">Sale calendar · first Tuesday of every month</h2>
+<div class="when-line"><span><b data-sale="when">Tue, Nov 3 · most sales 10 AM – 1 PM</b></span><span><span data-sale="place">Bayou City Event Center, Magnolia South Ballroom</span>, <span data-sale="street">9401 Knight Rd, Houston, TX 77045</span></span><span class="cdn" data-x="countdown"></span></div>
 <div class="grid5 cal"><!--sale:calendar-->
 <div class="card"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)">Past</div><div class="disp" style="font-size:30px;font-weight:800">Oct 6</div><div style="font-size:14px">919 notices</div></div>
 <div class="card now"><div style="font-size:12px;font-weight:700;text-transform:uppercase;opacity:.8">Next sale</div><div class="disp" style="font-size:30px;font-weight:800">Nov 3</div><div style="font-size:14px">795 notices · list complete</div></div>
@@ -140,46 +368,237 @@
 <!--/sale:calendar--></div>
 </section>
 
-<section class="brief">
+<section class="wrap sec" id="faq" aria-labelledby="faqTitle">
+<div class="eyebrow">Questions</div>
+<h2 class="disp" id="faqTitle">Before you sign up</h2>
+<div class="faq">
+<details><summary>Is it really free?</summary><p>Yes. The map, every property page, the full spreadsheet of each sale and the weekly First Tuesday Brief are free, with no card. The optional membership adds the numbers: value, loan, estimated balance and equity, rent estimates and the lender.</p></details>
+<details><summary>Where do you get the data?</summary><p>Public records. Foreclosure notices come from the Harris County Clerk, property records and aerial photos from the Harris County Appraisal District (HCAD), flood zones from FEMA and tax statements from Harris County Tax. AI-driven research reads every notice, and each property page links the original notice PDF.</p></details>
+<details><summary>How often is it updated?</summary><p>We check the county every day. Notices for a sale can be filed until 21 days before it: for the <span data-sale="date_short">Nov 3</span> sale that was <span data-x="deadline">Oct 13</span>, so this list has <span data-x="phase">its final count</span>. The Brief every Wednesday says what's new, postponed and cancelled.</p></details>
+<details><summary>What's the catch?</summary><p>None. We earn from the optional membership, <span data-x="pricefaq">$49 a month, or $39 for the first 100 founding members</span>. We never sell your email or pass your inquiries to agents or lead buyers, and every email has a one-click unsubscribe.</p></details>
+<details><summary>Do you run the auction?</summary><p>No. Sales are held by each notice's substitute trustee at the county's sale location. We're not the auctioneer, a broker or a law firm, and we don't give advice. Compiled from public records. Not verified. Do your own title and lien research before bidding.</p></details>
+<details><summary>Which counties do you cover?</summary><p>Harris County today. Tell us which county you want next: <a href="mailto:leads@firsttuesdaylist.com">leads@firsttuesdaylist.com</a>.</p></details>
+</div>
+</section>
+
+<section class="brief" id="brief">
 <div class="wrap">
 <div style="flex:1 1 520px;min-width:0"><h2 class="disp" style="margin:0 0 8px;font-size:44px">The First Tuesday Brief</h2>
 <p style="margin:0;font-size:17px;color:#C9D3E0">Free every Wednesday: what was filed this week, what got postponed, the ZIP codes to watch, and the full list. No spam, and we never sell your email.</p></div>
 <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:8px">
-<div class="bh-form"></div>
-<div class="signup-done" style="color:#5FD3C1"></div>
+<div class="bh-form" data-source="home-final"></div>
 </div>
 </div>
 </section>
 
+<div class="sticky-cta" id="stickyCta" aria-hidden="true">
+<div class="t"><b class="disp">The free list</b><span><span data-s="total">795</span> properties · sale <span data-sale="date_short">Nov 3</span></span></div>
+<button class="btn btn-red" type="button" id="stickyOpen" aria-haspopup="dialog" aria-controls="signupSheet" tabindex="-1">Get the free list</button>
+</div>
+<dialog class="sheet" id="signupSheet" aria-labelledby="sheetTitle">
+<div class="in">
+<button class="x" type="button" aria-label="Close" data-close>×</button>
+<h2 class="disp" id="sheetTitle">Get the free list</h2>
+<p>The spreadsheet of all <b data-s="total">795</b> properties for the <span data-sale="date_short">Nov 3</span> sale, in your inbox right away. Then the Brief every Wednesday. Free, no card.</p>
+<div class="bh-form" data-source="home-sticky"></div>
+<div class="signup-note">Unsubscribe in one click. We never sell your email.</div>
+</div>
+</dialog>
+
 <script src="/config.js"></script>
-<script src="/assets/site.js?v=2"></script>
-<script src="/assets/mapapp.js"></script>
+<script src="/assets/site.js?v=3"></script>
+<script src="/assets/zipalerts.js"></script>
+<script src="/assets/mapapp.js?v=3"></script>
 <script>
 (async () => {
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const { stats } = await FTLMap.mount(document.getElementById('homeMap'), { layout: 'home', height: 600 });
-  document.querySelectorAll('[data-s]').forEach(el => { if (stats[el.dataset.s] != null) el.textContent = stats[el.dataset.s]; });
-  const max = Math.max(...stats.types.map(t => t[1]));
-  document.getElementById('typeBars').innerHTML = stats.types.map(([k, v]) => `<div><span>${esc(k)}</span><em><i style="width:${Math.max(2, v / max * 100)}%"></i></em><span class="mono" style="text-align:right">${v}</span></div>`).join('');
-  document.getElementById('zipList').innerHTML = stats.zips.map(([z, c, n]) => `<div><span><strong>${esc(z)}</strong> <span style="color:var(--muted)">${esc(c)}</span></span><span class="mono">${n}</span></div>`).join('');
-  const emax = Math.max(...stats.equity_buckets.map(b => b[1]));
-  document.getElementById('eqBars').innerHTML = stats.equity_buckets.map(([k, v], i) => `<div><span class="mono" style="color:var(--ink)">${v}</span><i style="height:${Math.round(v / emax * 88)}px;${i === 0 ? 'background:#9AA6B8' : ''}"></i><span>${esc(k)}</span></div>`).join('');
+  const $$ = (sel, f) => document.querySelectorAll(sel).forEach(f);
+  const setX = (k, t) => $$(`[data-x="${k}"]`, el => { el.textContent = t; });
+  const TYPE = { single_family: ['Single family', '#1E5BD8'], condo_townhome: ['Condo / townhome', '#8A4FD1'], multifamily: ['Multifamily', '#F28C1B'], commercial: ['Commercial', '#D2141C'], vacant_land: ['Vacant land', '#3E9B47'] };
+  const typeInfo = t => TYPE[t] || ['Other', '#8A97AA'];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // /?watch=77084,Katy pre-fills the alert (links from flyers, the Brief and the area pages)
+  FTLAlerts.mount(document.getElementById('zipAlerts'), { variant: 'hero', areas: (new URLSearchParams(location.search).get('watch') || '').split(',').filter(Boolean).slice(0, 8) });
+
+  // The map loads when it comes near the screen, so the hero (and its sign-up) shows first.
+  const mapEl = document.getElementById('homeMap');
+  const mountMap = () => FTLMap.mount(mapEl, { layout: 'home', height: innerWidth <= 760 ? 460 : 600 }).catch(() => {});
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); mountMap(); } }, { rootMargin: '700px 0px' });
+    io.observe(mapEl);
+  } else mountMap();
+
+  // Every number on this page comes from the sale's data files.
   const cur = await fetch('/data/current.json').then(r => r.json());
-  const data = await fetch('/data/sale-' + cur.current_sale + '.json').then(r => r.json());
-  const FAV = d => 'https://www.google.com/s2/favicons?sz=64&domain=' + d;
-  const fresh = data.rows.filter(r => r.first >= stats.new_since && r.photo && r.type === 'single_family').slice(0, 3)
-    .concat(data.rows.filter(r => r.first >= stats.new_since && r.photo && r.type !== 'single_family').slice(0, 3));
-  document.getElementById('newCards').innerHTML = fresh.map(r => {
-    const a = r.addr.replace('#', ''), z = 'https://www.zillow.com/homes/' + [a, r.city, 'TX', r.zip].join(',-').replace(/\s+/g, '-') + '_rb/';
-    const rl = 'https://www.realtor.com/realestateandhomes-search/' + [a, r.city, 'TX', r.zip].join('_').replace(/\s+/g, '-');
-    const sv = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + r.lat + ',' + r.lon;
-    const page = '/property/' + encodeURIComponent(r.id);
-    return `<article class="prop-card"><a class="ph" href="${page}"><img loading="lazy" src="${esc(r.photo)}" alt="Aerial photo of ${esc(r.addr)}"><span class="tag tag-new">New ${esc(r.first.slice(5).replace('-', '/'))}</span><span class="lbl">Aerial · HCAD 2026</span></a>
-    <div class="body"><a href="${page}" style="font-weight:700;font-size:16px;text-decoration:none;color:var(--ink)">${esc(r.addr)}</a><div style="font-size:14px;color:var(--muted)">${esc(r.city)} ${esc(r.zip)} · ${esc({single_family:'Single family',condo_townhome:'Condo / townhome',multifamily:'Multifamily',commercial:'Commercial',vacant_land:'Vacant land'}[r.type] || 'Other')}</div>
-    <div style="display:flex;gap:5px;flex-wrap:wrap"><span class="tag ${r.sfha ? 'tag-flood' : 'tag-plain'}">Flood zone ${esc(r.zone || '—')}</span><span class="tag tag-plain">${esc(r.window || '')}</span></div>
-    <div class="lock"><span>Value, est. equity and loan come with membership</span><a href="${page}" style="margin-left:auto;font-weight:700;white-space:nowrap">Full details ›</a></div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap"><a class="ext" href="${z}" target="_blank" rel="noopener"><img src="${FAV('zillow.com')}" alt="">Zillow</a><a class="ext" href="${rl}" target="_blank" rel="noopener"><img src="${FAV('realtor.com')}" alt="">Realtor.com</a><a class="ext" href="${sv}" target="_blank" rel="noopener"><img src="${FAV('maps.google.com')}" alt="">Street View</a></div></div></article>`;
-  }).join('');
+  const [stats, data] = await Promise.all([
+    fetch('/data/stats-' + cur.current_sale + '.json').then(r => r.json()),
+    fetch('/data/sale-' + cur.current_sale + '.json').then(r => r.json())
+  ]);
+  rentByZip(data.rows).catch(() => { document.getElementById('rent').hidden = true; });
+  const zl = document.getElementById('zipList');
+  if (!zl.querySelector('a')) zl.innerHTML = stats.zips.map(([z, c, n]) => `<a href="/zip/${esc(z)}" title="${esc(c)} ${esc(z)} foreclosure auctions"><span><strong>${esc(z)}</strong> <span style="color:var(--muted)">${esc(c)}</span></span><span class="mono">${n}</span></a>`).join('');
+  $$('[data-s]', el => { const v = stats[el.dataset.s]; if (v != null && typeof v !== 'object') el.textContent = v; });
+  const sd = new Date(cur.current_sale + 'T12:00:00Z');
+  const full = sd.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  $$('[data-sale="date_short"]', el => { el.textContent = cur.label; });
+  $$('[data-sale="date_full"]', el => { el.textContent = full; });
+  setX('photos', data.rows.filter(r => r.photo).length);
+  setX('deadline', cur.deadline_label);
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
+  setX('phase', today > cur.deadline ? 'its final count' : 'still growing until then');
+  const ms = new Date(cur.starts) - new Date();
+  if (ms > 0) setX('countdown', ms > 864e5 ? `Sale in ${Math.floor(ms / 864e5)} day${ms >= 1728e5 ? 's' : ''}` : 'Sale in under a day');
+
+  // The mini map: every property of the sale as a dot, one teardrop pin on the property shown in the card.
+  const rows = data.rows.filter(r => r.lat != null && r.lon != null);
+  const pool = rows.filter(r => r.photo && r.type === 'single_family' && r.first >= stats.new_since);
+  // a different new home each day
+  const list = pool.length ? pool : rows, pick = list[Math.floor(Date.now() / 864e5) % list.length];
+  const mini = document.querySelector('.mini'), svg = document.getElementById('miniMap');
+  const lons = rows.map(r => r.lon), lats = rows.map(r => r.lat), k = Math.cos(29.8 * Math.PI / 180);
+  const bx0 = Math.min(...lons) * k, bx1 = Math.max(...lons) * k, by0 = Math.min(...lats), by1 = Math.max(...lats);
+  function drawMini() {
+    // the SVG matches the box's shape, so 1 unit = 1 px; dots stay clear of the caption and of the card below
+    const W = Math.round(mini.clientWidth) || 480, H = Math.round(mini.clientHeight) || 300;
+    const card = document.getElementById('heroCard');
+    const under = card.hidden ? 0 : Math.max(0, mini.getBoundingClientRect().bottom - card.getBoundingClientRect().top);
+    const top = 60, bottom = H - under - 14, left = 16, right = W - 16;
+    const s = Math.min((right - left) / (bx1 - bx0), (bottom - top) / (by1 - by0));
+    const ox = left + (right - left - (bx1 - bx0) * s) / 2, oy = top + (bottom - top - (by1 - by0) * s) / 2;
+    const P = r => [ox + (r.lon * k - bx0) * s, oy + (by1 - r.lat) * s];
+    let grid = '';
+    for (let gx = 0; gx <= W; gx += 40) grid += `<path d="M${gx} 0V${H}"/>`;
+    for (let gy = 0; gy <= H; gy += 40) grid += `<path d="M0 ${gy}H${W}"/>`;
+    const rad = W < 420 ? 2.4 : 3;
+    const dots = rows.filter(r => r !== pick).map(r => { const [x, y] = P(r); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad}" fill="${typeInfo(r.type)[1]}"/>`; }).join('');
+    let pin = '';
+    if (pick) {
+      const [px, py] = P(pick), c = typeInfo(pick.type)[1];
+      pin = `<circle class="pulse" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="9" fill="${c}" opacity=".5"/>
+        <g transform="translate(${px.toFixed(1)} ${py.toFixed(1)})" style="filter:drop-shadow(0 2px 2px rgba(14,26,43,.5))"><path d="M0 0C-3 -6 -11 -11 -11 -19A11 11 0 1 1 11 -19C11 -11 3 -6 0 0Z" fill="${c}" stroke="#fff" stroke-width="2.5"/><circle cy="-19" r="4.2" fill="#fff"/></g>`;
+    }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = `<rect width="${W}" height="${H}" fill="#E9EDF0"/><g stroke="#DCE2E8" stroke-width="1">${grid}</g>
+      <g stroke="#fff" stroke-width=".7" opacity=".92">${dots}</g>${pin}`;
+  }
+
+  // The card: one real property from the list, with what's free and what members see as locked bars.
+  if (pick) {
+    const page = '/property/' + encodeURIComponent(pick.id);
+    const isNew = pick.first >= stats.new_since;
+    const notice = { mortgage: 'Mortgage notice', hoa: 'HOA lien notice', hud: 'HUD notice' }[pick.notice] || 'Sale notice';
+    const card = document.getElementById('heroCard');
+    card.innerHTML = `<a class="ph" href="${page}" tabindex="-1" aria-hidden="true"><img src="${esc(pick.photo)}" alt="" width="300" height="128" fetchpriority="high"><span class="tag ${isNew ? 'tag-new' : 'tag-plain'}">${isNew ? 'New ' + esc(pick.first.slice(5).replace('-', '/')) : 'On the list'}</span><span class="lbl">Aerial · HCAD 2026</span></a>
+      <div class="body"><a class="addr" href="${page}">${esc(pick.addr)}</a><div class="sub">${esc(pick.city)} ${esc(pick.zip)} · ${esc(typeInfo(pick.type)[0])}</div>
+      <div class="tags"><span class="tag ${pick.sfha ? 'tag-flood' : 'tag-plain'}">Flood zone ${esc(pick.zone || '—')}</span><span class="tag tag-plain">${esc(cur.label)} · ${esc(pick.window || '')}</span><span class="tag tag-plain">${esc(notice)}</span></div>
+      <div class="locked"><div class="lk"><span class="ico-lock" aria-hidden="true"></span>Members see</div>
+      <div><span>Value</span><span class="redact" aria-label="locked"><i></i></span></div><div><span>Est. equity</span><span class="redact" aria-label="locked"><i></i></span></div><div><span>Est. rent</span><span class="redact" aria-label="locked"><i></i></span></div></div>
+      <a class="more" href="${page}">Open its free property page ›</a></div>`;
+    card.hidden = false;
+  }
+  drawMini();
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawMini, 150); });
+  // the locked bars shine one after another, like on the property pages
+  $$('.locked, .locks', box => box.querySelectorAll('.redact i').forEach((bar, i) => bar.style.setProperty('--d', (i * 0.22).toFixed(2) + 's')));
+
+  // Member prices and founding seats from the live status.
+  FTL.status.then(st => {
+    const p = Object.assign({ monthly: 49, founding_monthly: 39 }, st.prices || {});
+    const f = st.founding !== false;
+    setX('now', '$' + (f ? p.founding_monthly : p.monthly));
+    $$('[data-x="was"]', el => { el.hidden = !f; el.textContent = '$' + p.monthly; });
+    $$('[data-x="found"]', el => {
+      el.hidden = !f;
+      el.innerHTML = `<b>Founding price for the first 100 members, kept for as long as you stay.</b>` + (st.open && st.founding_left != null ? ` ${esc(st.founding_left)} seats left.` : ' Join the free list to get the launch invitation.');
+    });
+    setX('memtag', st.member ? 'Your plan' : f ? 'Founding members' : 'Members');
+    setX('pricefaq', f ? `$${p.monthly} a month, or $${p.founding_monthly} for the first 100 founding members` : `$${p.monthly} a month`);
+  });
+})();
+
+// Rent by ZIP: HUD's public 3-bedroom fair market rent for each ZIP in this sale (area-level, never one home's rent)
+async function rentByZip(rows) {
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const H = await fetch('/data/hud-rent.json').then(r => r.json());
+  const RAMP = ['#E8B53A', '#93BF73', '#2E9E8F', '#1F6688', '#13294B'];
+  const BR = 3, TOP = 10;
+  const by = {};
+  rows.forEach(r => { if (!H.zips[r.zip]) return; const z = by[r.zip] = by[r.zip] || { zip: r.zip, n: 0, cities: {} }; z.n++; z.cities[r.city] = (z.cities[r.city] || 0) + 1; });
+  const Z = Object.values(by).map(z => ({ zip: z.zip, n: z.n, city: Object.entries(z.cities).sort((a, b) => b[1] - a[1])[0][0], rent: H.zips[z.zip][BR] }));
+  // the same five color steps as the map's rent lens: this sale's 20/40/60/80th percentiles by property, rounded to $50
+  const v = rows.filter(r => H.zips[r.zip]).map(r => H.zips[r.zip][BR]).sort((a, b) => a - b);
+  const cuts = [...new Set([0.2, 0.4, 0.6, 0.8].map(p => Math.round(v[Math.floor(v.length * p)] / 50) * 50))];
+  const color = x => RAMP[Math.round(cuts.filter(c => x >= c).length * (RAMP.length - 1) / Math.max(1, cuts.length))];
+  const max = Math.max(...Z.map(z => z.rent));
+  const S = { key: 'n', dir: -1, all: false };
+  const body = document.getElementById('rzBody'), more = document.getElementById('rzMore');
+  const ths = document.querySelectorAll('.rz-table th[aria-sort]');
+  function draw() {
+    // "top ZIPs" are the busiest ones; sorting reorders them, "Show all" lists every ZIP in the sale
+    const top = Z.slice().sort((a, b) => b.n - a.n || a.zip.localeCompare(b.zip));
+    const list = (S.all ? top : top.slice(0, TOP)).sort((a, b) => S.key === 'zip' ? S.dir * a.zip.localeCompare(b.zip) : S.dir * (a[S.key] - b[S.key]) || a.zip.localeCompare(b.zip));
+    body.innerHTML = list.map(z => {
+      const href = '/map?lens=rent&br=' + BR + '&q=' + encodeURIComponent(z.zip);
+      return `<tr><td class="z"><a href="${href}" style="text-decoration:none;color:var(--ink)">${esc(z.zip)}</a> <small>${esc(z.city)}</small></td><td class="n mono">${z.n}</td>
+      <td class="n r"><span class="dot" style="background:${color(z.rent)}"></span>$${z.rent.toLocaleString('en-US')}</td>
+      <td class="bar"><span class="rz-bar"><i style="width:${(z.rent / max * 100).toFixed(1)}%;background:${color(z.rent)}"></i></span></td>
+      <td class="go"><a href="${href}" aria-label="See ${esc(z.zip)} on the rent map">Map ›</a></td></tr>`;
+    }).join('');
+    ths.forEach(th => th.setAttribute('aria-sort', th.querySelector('button').dataset.sort === S.key ? (S.dir < 0 ? 'descending' : 'ascending') : 'none'));
+    more.hidden = Z.length <= TOP;
+    more.textContent = S.all ? 'Show the top ' + TOP : 'Show all ' + Z.length + ' ZIPs';
+    more.setAttribute('aria-expanded', S.all);
+  }
+  ths.forEach(th => { const b = th.querySelector('button'); b.onclick = () => {
+    const k = b.dataset.sort; S.dir = S.key === k ? -S.dir : (k === 'zip' ? 1 : -1); S.key = k; draw(); }; });
+  more.onclick = () => { S.all = !S.all; draw(); };
+  draw();
+}
+
+// Links to the hero sign-up put the cursor in its email box.
+document.querySelectorAll('a[href="/#signup"], a[href="#signup"]').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  const card = document.getElementById('signup');
+  card.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  const input = card.querySelector('input[type=email]');
+  if (input) setTimeout(() => input.focus({ preventScroll: true }), 350);
+}));
+
+// Phones: a sticky "Get the free list" bar opens the sign-up sheet. It hides while a sign-up form is on screen,
+// and for good once this device has signed up.
+(function () {
+  const bar = document.getElementById('stickyCta'), open = document.getElementById('stickyOpen'), sheet = document.getElementById('signupSheet');
+  const phone = matchMedia('(max-width: 760px)');
+  const forms = [...document.querySelectorAll('#signup, .map-signup, .plan-free .join, #brief .bh-form')];
+  let done = false, formOnScreen = true, queued = false;
+  try { done = localStorage.getItem('ftl_subscribed') === '1'; } catch (e) { /* private mode */ }
+  // a sign-up form counts as on screen when at least a quarter of it is visible
+  const visible = el => { const r = el.getBoundingClientRect(), h = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0); return r.height > 0 && h >= r.height / 4; };
+  function update() {
+    queued = false;
+    formOnScreen = forms.some(visible);
+    const show = phone.matches && !done && !formOnScreen && !sheet.open;
+    bar.classList.toggle('show', show);
+    bar.setAttribute('aria-hidden', String(!show));
+    open.tabIndex = show ? 0 : -1;
+    document.body.classList.toggle('has-sticky', phone.matches && !done);
+  }
+  const later = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+  addEventListener('scroll', later, { passive: true });
+  addEventListener('resize', later);
+  phone.addEventListener ? phone.addEventListener('change', update) : phone.addListener(update);
+  open.addEventListener('click', () => {
+    if (typeof sheet.showModal === 'function') { sheet.showModal(); update(); }
+    else document.querySelector('#signup input[type=email]').focus();
+  });
+  sheet.querySelector('[data-close]').addEventListener('click', () => sheet.close());
+  sheet.addEventListener('click', e => { if (e.target === sheet) sheet.close(); });
+  sheet.addEventListener('close', update);
+  document.addEventListener('ftl:subscribed', () => { done = true; update(); });
+  // a flyer or ad can link straight to the sign-up sheet: firsttuesdaylist.com/#get-the-list
+  if (location.hash === '#get-the-list' && typeof sheet.showModal === 'function') sheet.showModal();
+  update();
 })();
 </script>
 </body>

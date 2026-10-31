@@ -1,0 +1,98 @@
+/* Area pages: /zip/<zip>, /city/<slug> and the /areas index (written by _build/area_pages.py) */
+.crumbs{padding-top:14px;padding-bottom:10px;font-size:13px;color:var(--muted)}
+.crumbs a{color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.a-hero{background:var(--navy);color:#fff}
+.a-hero .wrap{display:flex;gap:32px;padding-top:28px;padding-bottom:34px;flex-wrap:wrap;align-items:flex-start}
+.a-hero .main{flex:1 1 600px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.a-hero .tag{background:rgba(255,255,255,.14);color:#fff;font-size:12px;padding:4px 10px}
+.a-hero h1{margin:0;font-size:56px;font-weight:800;overflow-wrap:anywhere}
+.a-hero h1 span{color:#FF5A5F}
+.a-hero .lead{margin:0;font-size:17px;line-height:1.6;color:#D5DEEA;max-width:760px}
+.a-hero .crumbs{padding:0;color:#B9C6D8}.a-hero .crumbs a{color:#DCE3EE}
+.a-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-width:760px}
+.a-stats div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:9px 12px}
+.a-stats b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;line-height:1}
+.a-stats span{font-size:12px;color:#C9D3E0;font-weight:600}
+.a-sign{flex:0 1 420px;min-width:0;background:#fff;color:var(--ink);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 20px 40px rgba(0,0,0,.25)}
+.a-sign .h{font-size:28px;font-weight:800}
+.a-sign p{margin:0;font-size:14px;color:#3A4A63}
+.a-sign .signup input[type=email]{flex-basis:100%}
+.a-sign .signup .btn{flex:1 1 100%}
+/* map and sale details */
+.a-mapgrid{display:flex;flex-wrap:wrap;gap:20px;align-items:stretch}
+.a-mapgrid>.fm{flex:999 1 620px;min-width:0;min-height:460px}
+.a-mapgrid>aside{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.a-static{position:absolute;inset:0;width:100%;height:100%;display:block;background:#E9EDF0;overflow:hidden}
+.a-static text{font:600 13px 'Public Sans',sans-serif;fill:#6B7A90}
+.a-maphint{position:absolute;left:12px;bottom:12px;z-index:2;background:rgba(14,26,43,.86);color:#fff;padding:6px 10px;border-radius:9px;font-size:12px;max-width:calc(100% - 24px)}
+.a-maphint a{color:#fff;font-weight:700}
+.a-legend{position:absolute;right:12px;top:12px;z-index:2;background:rgba(255,255,255,.95);border-radius:10px;padding:7px 10px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11px;color:#3A4A63;max-width:calc(100% - 24px);box-shadow:0 2px 8px rgba(14,26,43,.15)}
+.a-legend span{display:inline-flex;align-items:center;gap:5px}
+.fm .fm-card{width:320px}
+.sale{background:var(--navy);color:#fff;border:0}
+.sale .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#B9C6D8}
+.sale .when{font-size:32px;font-weight:800;line-height:1.05;margin-top:6px}
+.sale p{margin:8px 0 0;font-size:14px;color:#DCE3EE}
+.sale ul{margin:10px 0 0;padding:0;list-style:none;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.sale li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.14);padding-top:5px}
+.facts .h3,.a-mem .h3{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:17px;font-weight:700}
+.facts dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;font-size:14px}
+.facts dt{color:#3A4A63}.facts dd{margin:0;font-weight:700;text-align:right}
+.facts small{display:block;margin-top:10px;font-size:12px;color:var(--muted)}
+/* the list */
+.a-listhead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.a-listhead h2{margin:6px 0 0}
+.a-filter{display:flex;gap:6px;flex-wrap:wrap}
+.a-count{font-size:13px;color:var(--muted);font-weight:600;min-height:20px;margin:0 0 10px}
+.prop-card .meta{font-size:14px;color:var(--muted)}
+.prop-card .addr{font-weight:700;font-size:16px;text-decoration:none;color:var(--ink)}
+.prop-card .addr:hover{color:var(--red)}
+.prop-card .ph:focus-visible,.prop-card .addr:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.a-rows{display:flex;flex-direction:column;gap:22px}
+.a-rows h3{margin:0 0 8px;font-size:24px;font-weight:800;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.a-rows h3 a{font-family:'Public Sans',sans-serif;text-transform:none;font-size:14px;font-weight:700}
+.a-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) auto;gap:6px 14px;align-items:center;padding:10px 14px;background:#fff;border:1px solid #E2E7EF;border-radius:12px;margin-bottom:6px;text-decoration:none;color:var(--ink)}
+.a-row:hover{border-color:var(--navy);color:var(--ink)}
+.a-row strong{font-size:15px}
+.a-row .m{font-size:13px;color:var(--muted)}
+.a-row .t{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+/* member pitch */
+.a-mem{display:flex;gap:24px;flex-wrap:wrap;align-items:center;border:1px dashed #B8C2D3;background:linear-gradient(180deg,#fff,#F7F9FC)}
+.a-mem .txt{flex:1 1 380px;min-width:0}
+.a-mem .txt p{margin:0 0 12px;font-size:15px;color:#24324A}
+.a-mem .nums{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.a-mem .nums div{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.a-mem .nums .tot{border-top:1px solid #E2E7EF;padding-top:10px;font-weight:700}
+.a-mem .price{font-size:13px;color:var(--muted);margin-top:8px}
+/* nearby areas */
+.a-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.a-tiles a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:#fff;border:1px solid #E2E7EF;text-decoration:none;color:var(--ink);font-size:14px;min-height:44px}
+.a-tiles a:hover{border-color:var(--navy);color:var(--ink)}
+.a-tiles a:hover strong{color:var(--red)}
+.a-tiles small{color:var(--muted);font-size:12px;display:block}
+.a-tiles .mono{font-size:15px}
+.a-tiles .zero{opacity:.7}
+.a-find{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.a-find input{flex:0 1 360px;min-width:0;min-height:44px;border:2px solid #C5CEDB;border-radius:12px;font:inherit;font-size:16px;padding:0 14px;background:#fff}
+.a-find input:focus{outline:none;border-color:var(--navy)}
+.a-note{font-size:13px;color:var(--muted);margin:14px 0 0}
+.brief{background:var(--ink);color:#fff;margin-top:48px}
+.brief .wrap{display:flex;gap:30px;padding-top:40px;padding-bottom:40px;flex-wrap:wrap;align-items:center}
+body[data-page=areas] .site-footer{margin-top:0}
+.a-empty{padding:28px;text-align:center;font-size:16px;color:#3A4A63}
+@media (max-width:1000px){.a-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){
+  .a-hero h1{font-size:36px}.a-hero .lead{font-size:15px}.a-hero .wrap{padding-top:18px;gap:22px}
+  .a-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.a-stats b{font-size:28px}
+  .a-sign{flex:1 1 100%}
+  .a-mapgrid>.fm{min-height:0;height:360px;flex-basis:100%}
+  .a-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .a-row{grid-template-columns:minmax(0,1fr)}.a-row .t{justify-content:flex-start}
+}
+/* map.css turns the map card static on small screens; on area pages it stays a floating card inside the map */
+@media (max-width:820px){
+  .fm .fm-card{position:absolute;left:8px;right:8px;bottom:8px;width:auto;max-width:none;border-radius:14px;box-shadow:0 12px 30px rgba(14,26,43,.35)}
+  .fm .fm-card .ph{height:110px}
+}
+@media (prefers-reduced-motion:reduce){.fm-pin{transition:none}}

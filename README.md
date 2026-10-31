@@ -7,6 +7,10 @@ Public site for [firsttuesdaylist.com](https://firsttuesdaylist.com): every Harr
 - `site/`: the static site Cloudflare Pages serves (HTML, `assets/`, `data/`, `photos/`).
 - `tools/build_site.py`: builds `site/data/` (free columns only), the web photos and one page per property (`site/property/<id>.html`, via `tools/property_pages.py`) for a sale.
 - `tools/fetch_aerials.py`: fetches one aerial photo per property from HCAD imagery, framed on its lot.
+- `tools/area_pages.py`: one page per ZIP code and city in the sale (`site/zip/<zip>.html`, `site/city/<slug>.html`, `site/areas.html`)
+  for search engines, the home page's area links, the sitemap's area URLs, the ZIP index of the alert widget
+  (`data/zips-<sale>.json`) and the HUD rents of the map's rent lens (`data/hud-rent.json`). `data/areas-seen.json` keeps
+  every area ever listed so its URL never breaks: keep it committed.
 - `tools/fetch_sheet.py`, `tools/check_public.py`: the daily refresh's Drive export and member-data check (see below).
 - `tools/serve_site.py`: local preview on http://localhost:8787 (reads the Maps key from `.env`).
 - `tools/write_config.py`: writes `site/config.js` from the `GOOGLE_MAPS_KEY` environment variable (deploy build step).
@@ -34,6 +38,14 @@ Public data files contain only the free columns. Member fields (values, loans, e
 - The Brief: `tools/newsletter.py` builds `site/free-list/brief.html` every morning. On Wednesday the ftl-ops manager run
   reviews it and approves that exact version (ftl-ops `tools/brief_send.py`); the run then posts it to
   `functions/api/brief/send.js` (keyless, GitHub OIDC), which emails every active subscriber once per issue.
+- ZIP alerts, shortlists and comparisons (Nov 1, 2026): the alert widget (`assets/zipalerts.js`, home hero, map,
+  property and area pages) sends `zips`/`areas`; the shortlist (`assets/site.js`, star on any property) sends
+  `shortlist`; the compare page sends `compare`. They are saved on `sub:<email>`; the shortlist and comparison are
+  emailed right away. Every morning after the refresh, `tools/send_alerts.py` posts the public sale rows to
+  `functions/api/alerts/send.js` (keyless, GitHub OIDC), which emails each subscriber the new notices in their ZIPs and
+  any saved property that left the list (one email per person per day at most). The first run ever only records the
+  list. Changing areas: subscribers reply to an alert (no self-serve page yet).
+- `functions/compare.js` rewrites the title and preview image of shared `/compare?ids=...` links.
 - Resend's free plan sends 100 emails a day: past ~90 subscribers the Brief needs a paid Resend plan (the CEO's call).
 - Estimated rent for members: `tools/member_data.py` reads HUD's Small Area Fair Market Rents
   (`tools/assets/hud_safmr_fy2027_houston.csv`, by ZIP and bedrooms). Replace it each October with the new fiscal year.
@@ -87,6 +99,7 @@ Local test: `npx wrangler pages dev site --kv MEMBERS --binding STRIPE_SECRET_KE
 3. `tools/build_site.py` writes the free-only JSON, property pages, `notices.json`, `backdrop.svg`, `current.json`, and the sale date, deadline, countdown and calendar into `index.html` and `map.html`.
 4. `tools/check_public.py` scans everything under `site/` against the sheet's member columns and fails the run on any match.
 5. If `site/` changed, the job commits it and Cloudflare redeploys. The sheet export is deleted and never committed.
+6. `tools/send_alerts.py` asks the site to send the day's ZIP alerts and shortlist emails (skipped on dry runs).
 
 The bots must keep the tab named `Data`, its column names, and `YYYY-MM-DD` dates.
 

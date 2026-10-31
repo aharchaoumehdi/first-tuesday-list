@@ -9,8 +9,11 @@ import re
 import math
 import os
 import shutil
+from collections import Counter
 from datetime import date, timedelta
 from urllib.parse import quote, quote_plus
+
+from area_pages import jdump, slug
 
 TYPES = {"single_family": "Single family", "condo_townhome": "Condo / townhome", "multifamily": "Multifamily",
          "commercial": "Commercial", "vacant_land": "Vacant land"}
@@ -79,21 +82,23 @@ PAGE = """<!doctype html>
 <link rel="icon" href="/favicon.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css"><link rel="stylesheet" href="/assets/property.css">
+<link rel="stylesheet" href="/assets/site.css?v=3"><link rel="stylesheet" href="/assets/zipalerts.css"><link rel="stylesheet" href="/assets/property.css">
+<script type="application/ld+json">{crumbs_ld}</script>
 </head>
 <body data-page="property">
 <main id="prop" data-id="{id}" data-sale="{sale}" data-starts="{starts}" data-lat="{lat}" data-lon="{lon}" data-addr="{addr}">
 {body}
 </main>
 <script src="/config.js"></script>
-<script src="/assets/site.js?v=2"></script>
-<script src="/assets/property.js?v=2"></script>
+<script src="/assets/site.js?v=3"></script>
+<script src="/assets/zipalerts.js"></script>
+<script src="/assets/property.js?v=3"></script>
 </body>
 </html>
 """
 
 
-def body(r, sale, stats, nearby, prev, nxt):
+def body(r, sale, stats, nearby, prev, nxt, area_n):
     L = links(r)
     is_new = r["first"] >= stats["new_since"]
     hoa = r["notice"] == "hoa"
@@ -125,7 +130,7 @@ def body(r, sale, stats, nearby, prev, nxt):
 <a class="gutter gr" href="{back}" data-back aria-label="Back to the map"><span>Back to the map ›</span></a>
 <div class="sheet">
 <div class="backbar"><div class="wrap"><a class="btn btn-navy back" href="{back}" data-back><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back to the map</a><span class="hint">All {stats['total']} properties for {nice(sale)} · or press Esc</span></div></div>
-<div class="wrap crumbs"><a href="/map">{nice(sale, year=True)} sale</a> / <a href="/map?q={quote(r['zip'])}">{e(r['city'])} {e(r['zip'])}</a> / <span class="mono">{e(r['id'])}</span></div>
+<div class="wrap crumbs"><a href="/areas">{nice(sale, year=True)} sale</a> / <a href="/city/{slug(r['city'])}">{e(r['city'])}</a> / <a href="/zip/{e(r['zip'])}">{e(r['zip'])}</a> / <span class="mono">{e(r['id'])}</span></div>
 
 <div class="wrap p-title">
 <div style="min-width:0">
@@ -157,6 +162,7 @@ def body(r, sale, stats, nearby, prev, nxt):
 </div>
 </div>
 <p class="note">Foreclosures sell as-is and you usually can't go inside before the sale. Every photo says where it came from and when.</p>
+<div class="card signup-box za-card" id="signup"><div data-zip-alerts data-zip="{e(r['zip'])}"></div></div>
 </div>
 
 <aside class="p-side">
@@ -165,12 +171,6 @@ def body(r, sale, stats, nearby, prev, nxt):
 <div class="disp when">{nice(sale, weekday=True)} · {e(r['window'] or '10:00 AM - 1:00 PM')}</div>
 <div class="where">{e(loc)}</div>
 <div class="chips"><span class="tag" data-k="days"></span><span class="tag">{"HOA lien sale" if hoa else "Trustee sale"} · cash</span></div>
-</div>
-<div class="card signup-box" id="signup">
-<div class="disp" style="font-size:24px;font-weight:800">Get the free list every Wednesday</div>
-<div style="font-size:14px;color:#3A4A63">The spreadsheet of every property for this sale, emailed right away. Then what's new, postponed and cancelled every Wednesday.</div>
-<div class="bh-form"></div>
-<div class="signup-done"></div>
 </div>
 </aside>
 </div>
@@ -250,7 +250,7 @@ def body(r, sale, stats, nearby, prev, nxt):
 </div>
 <div class="card" data-k="tools">
 <div class="h3"><span class="ico-lock"></span>Member tools</div>
-<ul class="tools"><li>Max-bid calculator for this property</li><li>Watchlist with postponement and cancellation alerts</li><li>Your private notes</li><li>CSV and Excel export of the sale</li></ul>
+<ul class="tools"><li>Max-bid calculator for this property</li><li>Value and equity for every home on your shortlist</li><li>Your private notes</li><li>CSV and Excel export of the sale</li></ul>
 <a class="btn btn-ghost" href="/pricing" style="width:100%">See membership</a>
 </div>
 </aside>
@@ -258,6 +258,7 @@ def body(r, sale, stats, nearby, prev, nxt):
 
 <section class="wrap sec">
 <h2 class="disp" style="font-size:32px;margin:0 0 14px">Also at this sale, nearby</h2>
+<div class="pn" style="justify-content:flex-start;margin:0 0 16px"><a class="btn btn-ghost" href="/zip/{e(r['zip'])}">All {area_n[0]} foreclosure{'s' if area_n[0] > 1 else ''} in {e(r['zip'])} ›</a>{f'<a class="btn btn-ghost" href="/city/{slug(r["city"])}">All {area_n[1]} in {e(r["city"])} ›</a>' if area_n[1] != area_n[0] else ''}</div>
 <div class="nearby">{near}</div>
 <div class="pn">{pn}</div>
 </section>
@@ -271,6 +272,7 @@ def write_pages(site, sale, public, stats):
     os.makedirs(out)
     located = [r for r in public if r["lat"] is not None]
     order = sorted(public, key=lambda r: (r["zip"], r["addr"]))
+    n_zip, n_city = Counter(r["zip"] for r in public), Counter(slug(r["city"]) for r in public)
     for i, r in enumerate(order):
         nearby = sorted(((n, miles(r, n)) for n in located if n["id"] != r["id"]), key=lambda x: x[1])[:6] if r["lat"] is not None else []
         prev = order[i - 1] if i > 0 else None
@@ -278,9 +280,12 @@ def write_pages(site, sale, public, stats):
         title = f"{r['addr']}, {r['city']} TX {r['zip']} · Foreclosure auction {nice(sale, year=True)} · First Tuesday List"
         desc = (f"{kind(r)} at {r['addr']}, {r['city']}, TX {r['zip']} goes to foreclosure auction on {nice(sale, weekday=True, year=True)}, "
                 f"{r['window'] or ''}. Flood zone {r['zone'] or 'unknown'}. Aerial photo, Street View, map and the county notice.")
+        crumbs = [("Home", "/"), ("Areas", "/areas"), (r["city"], f"/city/{slug(r['city'])}"), (r["zip"], f"/zip/{r['zip']}"), (r["addr"], f"/property/{r['id']}")]
+        crumbs_ld = jdump({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE_URL + h} for i, (n, h) in enumerate(crumbs)]})
         page = PAGE.format(title=e(title), desc=e(desc), site=SITE_URL, id=e(r["id"]), photo=e(r["photo"] or "/assets/og.png"), sale=sale, starts=e(stats.get("starts", "")),
-                           lat=r["lat"] or "", lon=r["lon"] or "", addr=e(f"{r['addr']}, {r['city']}, TX {r['zip']}"),
-                           body=body(r, sale, stats, nearby, prev, nxt))
+                           lat=r["lat"] or "", lon=r["lon"] or "", addr=e(f"{r['addr']}, {r['city']}, TX {r['zip']}"), crumbs_ld=crumbs_ld,
+                           body=body(r, sale, stats, nearby, prev, nxt, (n_zip[r["zip"]], n_city[slug(r["city"])])))
         with open(os.path.join(out, r["id"] + ".html"), "w", encoding="utf-8") as f:
             f.write(page)
     return len(order)
