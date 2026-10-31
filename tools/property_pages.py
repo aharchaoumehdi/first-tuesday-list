@@ -86,8 +86,8 @@ PAGE = """<!doctype html>
 {body}
 </main>
 <script src="/config.js"></script>
-<script src="/assets/site.js"></script>
-<script src="/assets/property.js"></script>
+<script src="/assets/site.js?v=2"></script>
+<script src="/assets/property.js?v=2"></script>
 </body>
 </html>
 """
