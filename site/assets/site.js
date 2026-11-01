@@ -63,7 +63,7 @@
       }[phase];
       const set = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
       set('saleTop', head); set('saleNote', note);
-      set('cdTop', phase === 'open' || phase === 'complete' ? `Sale in ${Math.floor(ms / 864e5)} days.` : '');
+      set('cdTop', phase === 'open' || phase === 'complete' ? (days => days === 1 ? 'Sale tomorrow.' : `Sale in ${days} days.`)(Math.round((Date.parse(day) - Date.parse(today)) / 864e5)) : '');
       document.querySelectorAll('[data-sale="phase"]').forEach(el => { el.textContent = tag; });
       const d = Math.max(0, Math.floor(ms / 864e5)), h = Math.max(0, Math.floor(ms / 36e5) % 24), m = Math.max(0, Math.floor(ms / 6e4) % 60);
       document.querySelectorAll('[data-cd]').forEach(el => { el.textContent = String({ d, h, m }[el.dataset.cd]).padStart(2, '0'); });

@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=3"><link rel="stylesheet" href="/assets/map.css?v=3"><link rel="stylesheet" href="/assets/zipalerts.css">
+<link rel="stylesheet" href="/assets/site.css?v=3"><link rel="stylesheet" href="/assets/map.css?v=3"><link rel="stylesheet" href="/assets/zipalerts.css?v=2">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Is the First Tuesday List free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The map, every property page, the full spreadsheet of each sale and the weekly First Tuesday Brief are free, with no card. An optional membership adds the numbers: value, loan, estimated balance and equity, rent estimates and the lender."}},
@@ -51,13 +51,14 @@
 .mini{display:block;position:relative;border-radius:18px;overflow:hidden;background:#E9EDF0;box-shadow:0 20px 44px rgba(0,0,0,.32);text-decoration:none;color:var(--ink);aspect-ratio:16/10}
 .mini svg{display:block;width:100%;height:100%}
 .mini .cap{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.95);border-radius:12px;padding:8px 11px;box-shadow:0 6px 16px rgba(14,26,43,.18);display:flex;flex-direction:column;gap:2px;max-width:60%}
-.mini .cap b{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;line-height:1}
+.mini .cap b{font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;line-height:1}
 .mini .cap>span{font-size:12px;color:var(--muted);font-weight:600}
 .mini .go{position:absolute;right:12px;top:12px;background:var(--navy);color:#fff;border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700}
 .mini:hover .go,.mini:focus-visible .go{background:var(--red)}
 .mini .pulse{transform-box:fill-box;transform-origin:center;animation:ftl-pulse 2.6s ease-out infinite}
 @keyframes ftl-pulse{0%{transform:scale(.4);opacity:.75}80%,100%{transform:scale(2.4);opacity:0}}
 .hero-card{position:relative;margin:-64px 0 0 40px;display:grid;grid-template-columns:150px minmax(0,1fr);box-shadow:0 22px 48px rgba(0,0,0,.38);border:0}
+.hero-card:empty{visibility:hidden;min-height:233px}/* its space is kept until the data fills it, so the hero doesn't move */
 .hero-card .ph{height:auto;min-height:100%}
 .hero-card .ph img{position:absolute;inset:0}
 .hero-card .body{gap:6px;padding:12px 14px 13px;min-width:0}
@@ -74,9 +75,9 @@
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;counter-reset:s}
 .steps li{position:relative;display:flex;flex-direction:column;gap:8px}
 .steps .ic{display:flex;align-items:center;gap:12px}
-.steps .n{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;line-height:1;color:var(--red)}
+.steps .n{font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;font-weight:800;font-size:44px;line-height:1;color:var(--red)}
 .steps .ic svg{width:34px;height:34px;color:var(--navy)}
-.steps h3{margin:0;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:26px;line-height:1.05}
+.steps h3{margin:0;font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;text-transform:uppercase;font-size:26px;line-height:1.05}
 .steps p{margin:0;font-size:15px;color:#24324A}
 .steps p b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px}
 .steps li:not(:last-child)::after{content:'';position:absolute;right:-16px;top:34px;width:14px;height:14px;border-top:3px solid #C5CEDB;border-right:3px solid #C5CEDB;transform:rotate(45deg);z-index:1}
@@ -92,7 +93,7 @@
 .fvm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;align-items:stretch}
 .plan{border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px}
 .plan .who{font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px}
-.plan .price{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:800;line-height:1}
+.plan .price{font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;font-size:56px;font-weight:800;line-height:1}
 .plan .price small{font-family:'Public Sans',sans-serif;font-size:20px;font-weight:500}
 .plan .price s{font-size:26px;color:#8EA0B8;margin-left:8px}
 .plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:15px}
@@ -118,7 +119,7 @@
 /* ---------- who it's for ---------- */
 .who-card{display:flex;flex-direction:column;gap:6px}
 .who-card svg{width:36px;height:36px;color:var(--red)}
-.who-card h3{margin:4px 0 0;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:26px;line-height:1.05}
+.who-card h3{margin:4px 0 0;font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;text-transform:uppercase;font-size:26px;line-height:1.05}
 .who-card p{margin:0;font-size:15px;color:#24324A}
 
 /* ---------- sale calendar ---------- */
@@ -132,7 +133,7 @@
 .faq details{background:#fff;border:1px solid #E2E7EF;border-radius:var(--radius)}
 .faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;font-weight:700;font-size:16px;min-height:44px}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:'+';font-family:'Barlow Condensed',sans-serif;font-size:28px;line-height:1;color:var(--red);flex:0 0 auto}
+.faq summary::after{content:'+';font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;font-size:28px;line-height:1;color:var(--red);flex:0 0 auto}
 .faq details[open] summary::after{content:'–'}
 .faq summary:focus-visible{outline:3px solid var(--navy);outline-offset:-3px;border-radius:var(--radius)}
 .faq details p{margin:0;padding:0 18px 16px;color:#3A4A63;font-size:15px}
@@ -159,6 +160,7 @@ body[data-page=index] .site-footer{margin-top:0}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:minmax(0,1fr)}
   .peek{max-width:560px}
+  .hero-card:empty{min-height:207px}
   .steps{grid-template-columns:minmax(0,1fr)}.steps li:not(:last-child)::after{display:none}
   .fvm,.faq{grid-template-columns:minmax(0,1fr)}
 }
@@ -172,6 +174,7 @@ body[data-page=index] .site-footer{margin-top:0}
   .signup .btn{flex:1 1 100%}
   .hero-card{display:flex;margin:-48px 12px 0}
   .hero-card .ph{height:150px;min-height:0}
+  .hero-card:empty{min-height:383px}
   #homeMap:empty{min-height:584px}
   .plan{padding:20px}
   .plan .price{font-size:48px}
@@ -239,6 +242,12 @@ body[data-page=index] .site-footer{margin-top:0}
 <p class="lead">AI-driven research on every notice filed with the County Clerk, with photos, flood zones and county data added. <strong>For investors, agents and first-time auction bidders.</strong></p>
 <div class="signup-card" id="signup">
 <div id="zipAlerts"></div>
+<!-- mounted right here, not at the end of the page, so the card has its full height on first paint and nothing below it jumps -->
+<script src="/assets/zipalerts.js?v=2"></script>
+<script>
+// /?watch=77084,Katy pre-fills the alert (links from flyers, the Brief and the area pages)
+FTLAlerts.mount(document.getElementById('zipAlerts'), { variant: 'hero', areas: (new URLSearchParams(location.search).get('watch') || '').split(',').filter(Boolean).slice(0, 8) });
+</script>
 <div class="signup-note">Just want the weekly list? <a href="#brief">Get the Brief and the spreadsheet</a>.</div>
 </div>
 <ul class="proof" aria-label="This sale, from the data">
@@ -255,7 +264,7 @@ body[data-page=index] .site-footer{margin-top:0}
 <span class="cap"><b><span data-s="total">795</span> pins</b><span>The <span data-sale="date_short">Nov 3</span> sale, live from the list</span></span>
 <span class="go">Open the map ›</span>
 </a>
-<article class="prop-card hero-card" id="heroCard" hidden></article>
+<article class="prop-card hero-card" id="heroCard"></article>
 </div>
 </div>
 </section>
@@ -407,7 +416,6 @@ body[data-page=index] .site-footer{margin-top:0}
 
 <script src="/config.js"></script>
 <script src="/assets/site.js?v=3"></script>
-<script src="/assets/zipalerts.js"></script>
 <script src="/assets/mapapp.js?v=3"></script>
 <script>
 (async () => {
@@ -417,9 +425,6 @@ body[data-page=index] .site-footer{margin-top:0}
   const TYPE = { single_family: ['Single family', '#1E5BD8'], condo_townhome: ['Condo / townhome', '#8A4FD1'], multifamily: ['Multifamily', '#F28C1B'], commercial: ['Commercial', '#D2141C'], vacant_land: ['Vacant land', '#3E9B47'] };
   const typeInfo = t => TYPE[t] || ['Other', '#8A97AA'];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // /?watch=77084,Katy pre-fills the alert (links from flyers, the Brief and the area pages)
-  FTLAlerts.mount(document.getElementById('zipAlerts'), { variant: 'hero', areas: (new URLSearchParams(location.search).get('watch') || '').split(',').filter(Boolean).slice(0, 8) });
 
   // The map loads when it comes near the screen, so the hero (and its sign-up) shows first.
   const mapEl = document.getElementById('homeMap');
@@ -495,8 +500,7 @@ body[data-page=index] .site-footer{margin-top:0}
       <div class="locked"><div class="lk"><span class="ico-lock" aria-hidden="true"></span>Members see</div>
       <div><span>Value</span><span class="redact" aria-label="locked"><i></i></span></div><div><span>Est. equity</span><span class="redact" aria-label="locked"><i></i></span></div><div><span>Est. rent</span><span class="redact" aria-label="locked"><i></i></span></div></div>
       <a class="more" href="${page}">Open its free property page ›</a></div>`;
-    card.hidden = false;
-  }
+  } else document.getElementById('heroCard').hidden = true;
   drawMini();
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawMini, 150); });
   // the locked bars shine one after another, like on the property pages

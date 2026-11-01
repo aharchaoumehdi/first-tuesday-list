@@ -100,14 +100,23 @@ window.FTLAlerts = (function () {
     const q = $('.za-combo input'), lb = $('.za-lb'), email = $('.za-signup input[type=email]');
     if (saved && saved.email) email.value = saved.email;
     $('.za-title').textContent = o.title ? o.title(o.areas || []) : 'Watch my area';
-    $('.za-preview').innerHTML = '<div class="za-pv-empty">Loading the ZIP codes in this sale…</div>';
+    loading();
 
     data().then(ix => {
       (o.areas || []).forEach(a => add(ix, a, true));
       savedNote();
       wire(ix);
       render(ix);
-    }).catch(() => { $('.za-preview').innerHTML = '<div class="za-pv-empty">The ZIP list could not load. Type your ZIP and email anyway.</div>'; wire(null); });
+    }).catch(() => { $('.za-preview').innerHTML = '<div class="za-pv-empty">The ZIP list could not load. Type your ZIP and email anyway.</div>'; $('.za-picks').hidden = true; wire(null); });
+
+    // until the ZIP index arrives: the same rows as an empty pick, with stand-in chips, so the card keeps its height
+    function loading() {
+      const side = o.variant === 'prop';
+      $('.za-chosen').innerHTML = '<span class="za-empty">No areas yet. Type a ZIP or city, or tap one below.</span>';
+      $('.za-picks-l').textContent = o.picksLabel;
+      $('.za-picks-c').innerHTML = `<span class="chip za-add za-sk" aria-hidden="true">+ 77000<span>Spring${side ? '' : ' · 00'}</span></span>`.repeat(side ? 4 : 6);
+      $('.za-preview').innerHTML = '<div class="za-pv-empty"><strong>…</strong> properties across Harris County go to the coming sale. Pick an area to see what your alert would hold.</div>';
+    }
 
     // someone who signed up on this device: say what they already watch (a new sign-up adds to it)
     function savedNote() {

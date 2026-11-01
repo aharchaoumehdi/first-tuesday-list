@@ -1,12 +1,14 @@
 :root{--navy:#13294B;--ink:#0E1A2B;--red:#D2141C;--red-dark:#A80F16;--teal:#0B6E62;--muted:#4A5568;--line:#DDE2EA;--bg:#F4F6F9;--card:#fff;--radius:14px}
 *{box-sizing:border-box}
+/* until Barlow Condensed loads, headlines use bold Arial (Roboto on Android) shrunk to its width: they wrap the same, so nothing below them jumps */
+@font-face{font-family:'Barlow Condensed Fallback';src:local('Arial Bold'),local('Arial-BoldMT'),local('Roboto Bold'),local('Roboto-Bold');font-weight:700 800;size-adjust:69%;ascent-override:145%;descent-override:29%;line-gap-override:0%}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:'Public Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:var(--navy)}a:hover{color:var(--red)}
 img{max-width:100%}
 .wrap{max-width:1240px;margin:0 auto;padding:0 20px}
-.disp{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:1}
+.disp{font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:1}
 .mono{font-family:'IBM Plex Mono',monospace}
 .eyebrow{font-weight:700;color:var(--red);font-size:13px;text-transform:uppercase;letter-spacing:.08em}
 .sr{position:absolute;left:-9999px}
@@ -83,6 +85,7 @@ section{scroll-margin-top:80px}
   .grid3{grid-template-columns:minmax(0,1fr)}
   .sec h2{font-size:30px}
   .topbar .hide-sm{display:none}
+  .topbar .wrap{min-height:40px}/* room for the sale status's second line, which arrives after load */
 }
 /* ---- shortlist: save buttons, header button, drawer, /shortlist page ---- */
 .sl-ico{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}

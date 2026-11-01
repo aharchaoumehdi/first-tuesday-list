@@ -32,6 +32,8 @@
 .za-picks-c{display:contents}
 .za-add span{font-weight:500;color:var(--muted);margin-left:2px}
 .za-add:hover{border-color:var(--navy);background:#F4F7FD}
+.za-sk,.za-sk:hover{background:#EEF2F8;border-color:#E2E7EF;cursor:default}
+.za-sk,.za-sk span{color:transparent}
 .za-msg{font-size:13px;color:var(--teal);font-weight:600}
 .za-msg:empty{display:none}
 .za-msg.bad{color:#A80F16}

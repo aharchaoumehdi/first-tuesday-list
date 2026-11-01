@@ -12,7 +12,7 @@
 .a-hero .crumbs{padding:0;color:#B9C6D8}.a-hero .crumbs a{color:#DCE3EE}
 .a-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-width:760px}
 .a-stats div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:9px 12px}
-.a-stats b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;line-height:1}
+.a-stats b{display:block;font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;font-size:34px;font-weight:800;line-height:1}
 .a-stats span{font-size:12px;color:#C9D3E0;font-weight:600}
 .a-sign{flex:0 1 420px;min-width:0;background:#fff;color:var(--ink);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 20px 40px rgba(0,0,0,.25)}
 .a-sign .h{font-size:28px;font-weight:800}
