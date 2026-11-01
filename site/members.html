@@ -8,18 +8,18 @@
 <link rel="icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=3">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
 .mh-top{padding:34px 0 6px}.mh-top h1{font-size:52px;margin:6px 0 4px}
 .mh{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px;align-items:start}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
 .stats div{background:var(--bg);border-radius:12px;padding:12px;text-align:center}
-.stats b{display:block;font:800 32px 'Barlow Condensed','Barlow Condensed Fallback',sans-serif;color:var(--navy)}.stats .t b{color:var(--teal)}
+.stats b{display:block;font:800 32px 'Barlow Condensed',sans-serif;color:var(--navy)}.stats .t b{color:var(--teal)}
 .stats span{font-size:12px;color:var(--muted);font-weight:600}
 .dl{display:flex;flex-direction:column;gap:10px;margin-top:16px}
 .dl a{display:flex;gap:12px;align-items:center;text-decoration:none;border:1px solid #E2E7EF;border-radius:12px;padding:12px;color:var(--ink);background:#fff}
 .dl a:hover{border-color:var(--navy)}
-.dl .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font:800 14px 'Barlow Condensed','Barlow Condensed Fallback',sans-serif}
+.dl .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font:800 14px 'Barlow Condensed',sans-serif}
 .dl small{display:block;color:var(--muted)}
 .acct div{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #EEF1F6;font-size:14px}
 .acct .btn{width:100%;margin-top:10px}
@@ -82,7 +82,7 @@
 <button class="btn btn-red" data-k="billing2">Manage billing (Stripe)</button><a class="btn btn-ghost" href="/pricing">See membership</a></div>
 </main>
 <script src="/config.js"></script>
-<script src="/assets/site.js?v=3"></script>
+<script src="/assets/site.js?v=2"></script>
 <script>
 (async function () {
   const $ = k => document.querySelector(`[data-k="${k}"]`);

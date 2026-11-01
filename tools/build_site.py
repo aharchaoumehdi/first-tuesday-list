@@ -26,7 +26,6 @@ from datetime import date, datetime, timedelta, timezone
 
 from PIL import Image
 
-from area_pages import write_area_pages
 from free_list import write_free_list
 from newsletter import write_brief
 from property_pages import nice, notice_filename, write_pages, write_sitemap
@@ -246,10 +245,6 @@ def main(sale, data_csv, aerial_dir):
     pages = write_pages(SITE, sale, public, stats)
     print(f"{pages} property pages in site/property/")
     print(f"{write_sitemap(SITE, public, central_today().isoformat())} pages in site/sitemap.xml")
-    # after the sitemap: it adds the area pages to it, and stamps the home page's area links
-    areas = write_area_pages(SITE)
-    print(f"{areas['zips']} ZIP pages, {areas['cities']} city pages and /areas; sitemap now {areas['sitemap']} URLs; "
-          f"ZIP alert index {areas['zip_index']} ZIPs; HUD rents {areas['hud_zips']} ZIPs")
     print(f"{write_free_list(SITE, sale, public, info['label_year'])} rows in the free spreadsheet (site/free-list/)")
     issue, picks = write_brief(SITE, sale, public, stats, info, central_today())
     print(f"weekly brief for Wednesday {issue.isoformat()} with {picks} example properties (site/free-list/brief.html)")

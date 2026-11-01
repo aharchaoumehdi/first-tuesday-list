@@ -9,7 +9,7 @@
 <link rel="icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=3">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
 .ph{background:var(--navy);color:#fff;text-align:center;padding:44px 0 110px}
 .ph h1{margin:10px 0;font-size:62px}
@@ -19,7 +19,7 @@
 .plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:15px}
 .plan li::before{content:'✓';color:var(--teal);font-weight:700;margin-right:9px}
 .plan.dark li::before{color:#5FD3C1}
-.price{font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;font-size:60px;font-weight:800;line-height:1}
+.price{font-family:'Barlow Condensed',sans-serif;font-size:60px;font-weight:800;line-height:1}
 table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}
 th,td{padding:13px 16px;border-bottom:1px solid #EEF1F6;text-align:left;font-size:15px}
 th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
@@ -29,7 +29,7 @@ td.c{text-align:center;font-weight:700;color:var(--teal)}td.n{text-align:center;
 .toggle button[aria-pressed=true]{background:#fff;color:var(--navy)}
 .found{background:rgba(255,193,77,.14);border:1px solid rgba(255,193,77,.45);color:#FFE3A8;border-radius:12px;padding:12px;font-size:14px}
 .found b{color:#fff}
-.plan .was{font-size:24px;color:#8EA0B8;text-decoration:line-through;font-family:'Barlow Condensed','Barlow Condensed Fallback',sans-serif;margin-left:10px}
+.plan .was{font-size:24px;color:#8EA0B8;text-decoration:line-through;font-family:'Barlow Condensed',sans-serif;margin-left:10px}
 .plan .note{font-size:13px;color:#B9C6D8}.plan .note a{color:#fff}
 .plan .err{display:none;background:#FDECEC;color:#8A1016;border-radius:10px;padding:10px;font-size:14px}
 .plan li.soon::before{content:'+';color:#FFC14D}
@@ -87,7 +87,7 @@ td.c{text-align:center;font-weight:700;color:var(--teal)}td.n{text-align:center;
 </div></section>
 </div>
 <script src="/config.js"></script>
-<script src="/assets/site.js?v=3"></script>
+<script src="/assets/site.js?v=2"></script>
 <script>
 // The member card: monthly or yearly, founding price while seats last, checkout on Stripe once membership is open.
 (function () {

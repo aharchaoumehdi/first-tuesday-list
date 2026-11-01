@@ -35,10 +35,6 @@ NUM = re.compile(r"^\$?-?[\d,]+(\.\d+)?%?$")
 # placeholder words a bot writes when it doesn't know (sale_status "unknown"): they say nothing about a property,
 # and the pages use the same words for free fields ("Flood zone unknown")
 GENERIC = {"unknown", "not_stated", "not stated", "none", "n/a", "pending", "unverified", "not_found", "not found", "missing"}
-# phrases the pages write themselves (the area pages' property kinds): as a member value they only restate the free type
-SITE_PROSE = {"single family", "single-family home", "single-family homes", "condo or townhome", "condos or townhomes", "multifamily",
-              "multifamily property", "multifamily properties", "commercial", "commercial property", "commercial properties",
-              "vacant land", "vacant lot", "vacant lots"}
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$|^\d{1,2}/\d{1,2}/\d{2,4}$")
 
 
@@ -128,7 +124,7 @@ def main(data_csv, sale):
         page = files.get(f"property/{r['doc_id']}.html", "")
         for c in member:
             v = (r.get(c) or "").strip()
-            if not v or v.lower() in GENERIC or v.lower() in SITE_PROSE:
+            if not v or v.lower() in GENERIC:
                 continue
             if NUM.match(v) or DATE.match(v):
                 if NUM.match(v):
