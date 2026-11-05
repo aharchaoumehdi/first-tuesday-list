@@ -1,23 +1,23 @@
-FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-11-04 (Dec 1, 2026 sale)
-Built 2026-11-04 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
+FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-11-11 (Dec 1, 2026 sale)
+Built 2026-11-05 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
 Use template. Replace each [PLACEHOLDER] with the value below (keep the formatting), then save as a DRAFT. Never send.
 
-[SUBJECT]                  Dec 1 list: 401 properties so far
-[PREVIEW TEXT]             401 properties go to auction Dec 1. What changed, four to start with.
-[ISSUE DATE]               NOV 4
-[HEADLINE]                 DEC 1 LIST: 401 PROPERTIES SO FAR
-[LEDE]                     401 Harris County properties are scheduled for the Dec 1 sale so far. Notices can be filed until Nov 10, so the list is still growing. Here's what's new and four properties to start with.
-[ON THE LIST]              401
-[POSTPONED OR NEW]         401 new this week
-[FLOOD]                    28
+[SUBJECT]                  Dec 1 auction: 20 days out
+[PREVIEW TEXT]             405 properties go to auction Dec 1. What changed, four to start with.
+[ISSUE DATE]               NOV 11
+[HEADLINE]                 DEC 1 AUCTION: 20 DAYS OUT
+[LEDE]                     405 Harris County properties are scheduled for the Dec 1 sale. The list is final: filing closed Nov 10. Here's what changed this week, four properties to start with.
+[ON THE LIST]              405
+[POSTPONED OR NEW]         — postponed or cancelled (fill in when known)
+[FLOOD]                    29
 [HOA]                      0
-[NEW FILINGS]               401 this week: 6407 Elrington Heights Ln (https://firsttuesdaylist.com/property/FRCL-2026-8193); 12606 Twin Flower Dr (https://firsttuesdaylist.com/property/FRCL-2026-8195); 3102 Ashton Ln (https://firsttuesdaylist.com/property/FRCL-2026-8192); 2827 Hackamore Hollow Ln (https://firsttuesdaylist.com/property/FRCL-2026-8194); 6161 Reims Rd A118 (https://firsttuesdaylist.com/property/FRCL-2026-8191)
+[NEW FILINGS]               none. The Dec 1 list closed Nov 10.
 [POSTPONED AND CANCELLED]   EDIT: this week's counts and up to 5 property links each. No data? Write: we'll report them here as they're posted. Never guess.
 
-[PICK 1 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8192.jpg
-[PICK 1 ADDRESS]            3102 Ashton Ln
-[PICK 1 CITY ZIP · TYPE · FLOOD ZONE]  La Porte 77571 · Single family · Flood zone X
-[PICK 1 ID] (in the link)   FRCL-2026-8192   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8192
+[PICK 1 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8200.jpg
+[PICK 1 ADDRESS]            2405 Hardwood Ln
+[PICK 1 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77093 · Single family · Flood zone X
+[PICK 1 ID] (in the link)   FRCL-2026-8200   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8200
 
 [PICK 2 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8191.jpg
 [PICK 2 ADDRESS]            6161 Reims Rd A118
