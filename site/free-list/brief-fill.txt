@@ -1,44 +1,44 @@
 FIRST TUESDAY BRIEF — fill-in sheet for Wednesday 2026-11-18 (Dec 1, 2026 sale)
-Built 2026-11-13 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
+Built 2026-11-14 from the site's data. In beehiiv: Posts > Template library > First Tuesday Brief (weekly) >
 Use template. Replace each [PLACEHOLDER] with the value below (keep the formatting), then save as a DRAFT. Never send.
 
 [SUBJECT]                  Dec 1 auction: 13 days out
-[PREVIEW TEXT]             485 properties go to auction Dec 1. What changed, four to start with, and your sale-day checklist.
+[PREVIEW TEXT]             572 properties go to auction Dec 1. What changed, four to start with, and your sale-day checklist.
 [ISSUE DATE]               NOV 18
 [HEADLINE]                 DEC 1 AUCTION: 13 DAYS OUT
-[LEDE]                     485 Harris County properties are scheduled for the Dec 1 sale. The list is final: filing closed Nov 10. Here's what changed this week, four properties to start with, and your sale-day checklist.
-[ON THE LIST]              485
+[LEDE]                     572 Harris County properties are scheduled for the Dec 1 sale. The list is final: filing closed Nov 10. Here's what changed this week, four properties to start with, and your sale-day checklist.
+[ON THE LIST]              572
 [POSTPONED OR NEW]         — postponed or cancelled (fill in when known)
-[FLOOD]                    34
+[FLOOD]                    42
 [HOA]                      0
 [NEW FILINGS]               none. The Dec 1 list closed Nov 10.
 [POSTPONED AND CANCELLED]   EDIT: this week's counts and up to 5 property links each. No data? Write: we'll report them here as they're posted. Never guess.
 
-[PICK 1 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8353.jpg
-[PICK 1 ADDRESS]            2213 Pomona Dr
+[PICK 1 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8562.jpg
+[PICK 1 ADDRESS]            118 Alastair Dr
 [PICK 1 CITY ZIP · TYPE · FLOOD ZONE]  Pasadena 77506 · Single family · Flood zone X
-[PICK 1 ID] (in the link)   FRCL-2026-8353   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8353
+[PICK 1 ID] (in the link)   FRCL-2026-8562   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8562
 
-[PICK 2 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8361.jpg
-[PICK 2 ADDRESS]            6000 Reims Rd 3506
-[PICK 2 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77036 · Condo / townhome · Flood zone X
-[PICK 2 ID] (in the link)   FRCL-2026-8361   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8361
+[PICK 2 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8375.jpg
+[PICK 2 ADDRESS]            17577 Red Oak Dr 7577
+[PICK 2 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77090 · Condo / townhome · Flood zone X
+[PICK 2 ID] (in the link)   FRCL-2026-8375   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8375
 
-[PICK 3 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8315.jpg
-[PICK 3 ADDRESS]            5331 Higgins St A
-[PICK 3 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77033 · Multifamily · Flood zone X
-[PICK 3 ID] (in the link)   FRCL-2026-8315   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8315
+[PICK 3 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8522.jpg
+[PICK 3 ADDRESS]            4251 Reed Rd
+[PICK 3 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77051 · Multifamily · Flood zone X
+[PICK 3 ID] (in the link)   FRCL-2026-8522   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8522
 
-[PICK 4 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8351.jpg
-[PICK 4 ADDRESS]            5929 Schumacher Ln
-[PICK 4 CITY ZIP · TYPE · FLOOD ZONE]  Houston 77057 · Commercial · Flood zone X
-[PICK 4 ID] (in the link)   FRCL-2026-8351   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8351
+[PICK 4 PHOTO]              replace the image (click it > Replace > Upload from URL): https://firsttuesdaylist.com/photos/2026-12-01/FRCL-2026-8435.jpg
+[PICK 4 ADDRESS]            106 E San Augustine St
+[PICK 4 CITY ZIP · TYPE · FLOOD ZONE]  Deer Park 77536 · Commercial · Flood zone X
+[PICK 4 ID] (in the link)   FRCL-2026-8435   → link becomes https://firsttuesdaylist.com/property/FRCL-2026-8435
 
-[ZIP 1] [CITY 1] [COUNT 1]   77346 · Humble · 25   (ZIP link: https://firsttuesdaylist.com/map?q=77346)
+[ZIP 1] [CITY 1] [COUNT 1]   77346 · Humble · 27   (ZIP link: https://firsttuesdaylist.com/map?q=77346)
 [ZIP 2] [CITY 2] [COUNT 2]   77373 · Spring · 24   (ZIP link: https://firsttuesdaylist.com/map?q=77373)
-[ZIP 3] [CITY 3] [COUNT 3]   77449 · Katy · 19   (ZIP link: https://firsttuesdaylist.com/map?q=77449)
-[ZIP 4] [CITY 4] [COUNT 4]   77493 · Katy · 16   (ZIP link: https://firsttuesdaylist.com/map?q=77493)
-[ZIP 5] [CITY 5] [COUNT 5]   77396 · Humble · 13   (ZIP link: https://firsttuesdaylist.com/map?q=77396)
+[ZIP 3] [CITY 3] [COUNT 3]   77449 · Katy · 21   (ZIP link: https://firsttuesdaylist.com/map?q=77449)
+[ZIP 4] [CITY 4] [COUNT 4]   77493 · Katy · 17   (ZIP link: https://firsttuesdaylist.com/map?q=77493)
+[ZIP 5] [CITY 5] [COUNT 5]   77338 · Humble · 13   (ZIP link: https://firsttuesdaylist.com/map?q=77338)
 
 [SALE DAY AND WINDOW]       Tuesday, Dec 1, most sales 10 AM – 1 PM
 [SALE LOCATION]             Bayou City Event Center, Magnolia South Ballroom, 9401 Knight Rd, Houston, TX 77045
