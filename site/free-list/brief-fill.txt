@@ -1,14 +1,14 @@
-FIRST TUESDAY BRIEF — Wednesday 2026-11-18 (Dec 1, 2026 sale), as text
-Built 2026-11-18 from the site's data. This is free-list/brief.html in plain text, for checking it.
+FIRST TUESDAY BRIEF — Wednesday 2026-11-25 (Dec 1, 2026 sale), as text
+Built 2026-11-19 from the site's data. This is free-list/brief.html in plain text, for checking it.
 Nothing is pasted anywhere: Claude's Wednesday review approves brief.html and the run emails it to every subscriber.
 
-[SUBJECT]                  Dec 1 auction: 13 days out
-[PREVIEW TEXT]             572 properties go to auction Dec 1. What changed, four to start with, and your sale-day checklist.
-[ISSUE DATE]               NOV 18
-[HEADLINE]                 DEC 1 AUCTION: 13 DAYS OUT
-[LEDE]                     572 Harris County properties are scheduled for the Dec 1 sale. The list is final: filing closed Nov 10. Here's what changed this week, four properties to start with, and your sale-day checklist.
+[SUBJECT]                  Dec 1 auction: 6 days out
+[PREVIEW TEXT]             572 properties go to auction Tuesday. What changed, four to start with, and your sale-day checklist.
+[ISSUE DATE]               NOV 25
+[HEADLINE]                 DEC 1 AUCTION: 6 DAYS OUT
+[LEDE]                     572 Harris County properties are scheduled for Tuesday's sale. The list is final: filing closed Nov 10. Here's what changed this week, four properties to start with, and your sale-day checklist.
 [ON THE LIST]              572
-[SECOND NUMBER]            13 days to the sale
+[SECOND NUMBER]            6 days to the sale
 [FLOOD]                    42
 [HOA]                      0
 [NEW FILINGS]               none. The Dec 1 list closed Nov 10.
