@@ -1,14 +1,14 @@
-FIRST TUESDAY BRIEF — Wednesday 2026-11-25 (Dec 1, 2026 sale), as text
-Built 2026-11-25 from the site's data. This is free-list/brief.html in plain text, for checking it.
+FIRST TUESDAY BRIEF — Wednesday 2026-12-02 (Dec 1, 2026 sale), as text
+Built 2026-11-26 from the site's data. This is free-list/brief.html in plain text, for checking it.
 Nothing is pasted anywhere: Claude's Wednesday review approves brief.html and the run emails it to every subscriber.
 
-[SUBJECT]                  Dec 1 auction: 6 days out
-[PREVIEW TEXT]             572 properties go to auction Tuesday. What changed, four to start with, and your sale-day checklist.
-[ISSUE DATE]               NOV 25
-[HEADLINE]                 DEC 1 AUCTION: 6 DAYS OUT
-[LEDE]                     572 Harris County properties are scheduled for Tuesday's sale. The list is final: filing closed Nov 10. Here's what changed this week, four properties to start with, and your sale-day checklist.
+[SUBJECT]                  Jan 5 list is building
+[PREVIEW TEXT]             572 properties go to auction Dec 1. What changed, four to start with.
+[ISSUE DATE]               DEC 2
+[HEADLINE]                 JAN 5 LIST IS BUILDING
+[LEDE]                     The Dec 1 sale is over. Notices for the Jan 5 sale are being filed now; the spreadsheet and map switch to them as soon as the first list is ready.
 [ON THE LIST]              572
-[SECOND NUMBER]            6 days to the sale
+[SECOND NUMBER]            — postponed or cancelled
 [FLOOD]                    42
 [HOA]                      0
 [NEW FILINGS]               none. The Dec 1 list closed Nov 10.
@@ -40,7 +40,6 @@ Nothing is pasted anywhere: Claude's Wednesday review approves brief.html and th
 [ZIP 4] [CITY 4] [COUNT 4]   77493 · Katy · 17   (ZIP link: https://firsttuesdaylist.com/map?q=77493)
 [ZIP 5] [CITY 5] [COUNT 5]   77338 · Humble · 13   (ZIP link: https://firsttuesdaylist.com/map?q=77338)
 
-[SALE DAY AND WINDOW]       Tuesday, Dec 1, most sales 10 AM – 1 PM
-[SALE LOCATION]             Bayou City Event Center, Magnolia South Ballroom, 9401 Knight Rd, Houston, TX 77045
+SALE-DAY CHECKLIST          not in this week's Brief (more than 2 weeks before the sale)
 
 Review: every link opens, all 4 photos show, the numbers match the site, the subject fits the week.
